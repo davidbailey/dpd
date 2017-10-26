@@ -26,6 +26,6 @@ US Census
 Wikipedia
 * get_wikipedia_table
 
-* import url2gtfs
-* import get_rail_stops
-* import plot_stops
+* url2gtfs
+* get_rail_stops
+* plot_stops
