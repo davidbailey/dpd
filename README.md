@@ -1,5 +1,7 @@
 # dpd
 
+dpd is a library of functions.
+
 Install
 --------
 
