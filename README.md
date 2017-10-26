@@ -30,6 +30,8 @@ Wikipedia
     * Returns a pandas.DataFrame
 
 GTFS
-* url2gtfs
+* url2gtfs(string: url)
+   * url is the URL of a GFTS file
+   * Currently broken :/
 * get_rail_stops
 * plot_stops
