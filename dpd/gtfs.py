@@ -13,6 +13,7 @@ def url2gtfs(url):
     r = requests.get(url)
     with tempfile.NamedTemporaryFile() as f:
       f.write(r._content)
+      f.seek(0) # https://stackoverflow.com/questions/10478242/temp-readline-empty
       return gtfstk.read_gtfs(f.name, dist_units='mi')
 
 
