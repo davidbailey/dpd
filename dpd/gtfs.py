@@ -41,17 +41,8 @@ def contour_plot(ax, point, resolution, number):
     ax.contour(x, y, z, levels=[300, 600, 900])
 
 
-def xy2locations(xy):
-    x = xy[0]
-    y = xy[1]
-    locations = []
-    for i in range(len(x)):
-        locations.append((y[i], x[i]))
-    return locations
-
-
 def plot_linestring(foliumMap, row):
-    folium.PolyLine(locations=xy2locations(row['geometry'].xy), color=row['color']).add_to(foliumMap)
+    folium.PolyLine(locations=zip(row['geometry'].xy[1], row['geometry'].xy[0]), color=row['color']).add_to(foliumMap)
 
 
 def plot_stops(foliumMap, stops, markercolor):
