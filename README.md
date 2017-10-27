@@ -27,11 +27,18 @@ Wikipedia
 * get_wikipedia_table(string: url, int: number)
     * url is the URL of the Wikipedia page that contains the table
     * number is the number of the table on the page. e.g. if it is the first (or only) table on the page, number is 0.
-    * Returns a pandas.DataFrame
+    * Returns a pandas.core.frame.DataFrame
 
 GTFS
 * url2gtfs(string: url)
-   * url is the URL of a GFTS file
-   * Currently broken :/
-* get_rail_stops
-* plot_stops
+    * url is the URL of a GFTS file
+    * Returns a gtfstk.feed.Feed
+* get_rail_stops(gtfstk.feed.Feed: gtfs)
+    * gtfs is the the FTFS object from url2gtfs (or gtfstk) that you would like to get only the rail stops from
+    * Returns a pandas.core.frame.DataFrame
+* plot_stops(folium.folium.Map: foliumMap, pandas.core.frame.DataFrame: stops, string: markercolor)
+    * foliumMap is the map to plot the stops on
+    * stops is the DataFrame that contains the stops from url2gtfs().stops or get_rail_stops
+    * color is a string of the marker color for the stops
+    * Returns pandas.core.series.Series of folium.map.Marker
+    * This method requires a OSRM server of the area running on http://localhost:5000
