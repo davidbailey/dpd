@@ -2,6 +2,7 @@ import requests
 from shapely.geometry import LineString
 from shapely.geometry import MultiLineString
 from shapely.ops import polygonize
+from functools import partial
 
 def elements2nodes(elements):
   nodes = {}
@@ -19,7 +20,7 @@ def elements2ways(elements, nodes):
   return ways
 
 
-def wayid2way(way):
+def wayid2way(way, ways):
   if way['type'] == 'way':
     if way['role'] == 'outer':
       return(ways[way['ref']])
@@ -30,7 +31,7 @@ def elements2rels(elements, ways):
   for element in elements:
     if element['type'] == "relation":
       if element['tags']['type'] == 'boundary':
-        multilinestring = MultiLineString(list(filter(bool, map(wayid2way, element['members']))))
+        multilinestring = MultiLineString(list(filter(bool, map(partial(wayid2way, ways), element['members']))))
         rels[element['id']] = {}
         rels[element['id']]['name'] = element['tags']['name']
         rels[element['id']]['geometry'] = list(polygonize(multilinestring))[0]
