@@ -11,7 +11,7 @@ def elements2nodes(elements):
   return nodes
 
 
-def elements2ways(elements):
+def elements2ways(elements, nodes):
   ways = {}
   for element in elements:
     if element['type'] == "way":
@@ -25,7 +25,7 @@ def wayid2way(way):
       return(ways[way['ref']])
 
 
-def elements2rels(elements):
+def elements2rels(elements, ways):
   rels = {}
   for element in elements:
     if element['type'] == "relation":
@@ -41,5 +41,5 @@ def query2rels(query, endpoint='http://overpass-api.de/api/interpreter'):
     r = requests.post(endpoint, data=payload)
     elements = r.json()['elements']
     nodes = elements2nodes(elements)
-    ways = elements2ways(elements)
-    return elements2rels(elements)
+    ways = elements2ways(elements, nodes)
+    return elements2rels(elements, ways)
