@@ -9,7 +9,7 @@ def elements2nodes(elements):
   nodes = {}
   for element in elements:
     if element['type'] == "node":
-      nodes[element['id']] = {'geometry': Point(element['lat'], element['lon']), 'name': element.get('name', '')}
+      nodes[element['id']] = {'geometry': Point(element['lat'], element['lon']), 'name': element.get('tags', {}).get('name', '')}
   return nodes
 
 
@@ -17,7 +17,7 @@ def elements2ways(elements, nodes):
   ways = {}
   for element in elements:
     if element['type'] == "way":
-      ways[element['id']] = (LineString([nodes[nodeid]['geometry'].coords[0] for nodeid in element['nodes']]))
+      ways[element['id']] = (LineString([(nodes[nodeid]['geometry'].y, nodes[nodeid]['geometry'].x) for nodeid in element['nodes']]))
   return ways
 
 
