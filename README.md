@@ -17,18 +17,6 @@ http://nbviewer.jupyter.org/github/davidbailey/dpd/blob/master/dpd.ipynb
 Documentation
 --------
 
-US Census
-* get_uscensus_population_by_tract
-* get_uscensus_geometry
-* add_density_to_tracts
-* get_uscensus_density_by_tract
-
-Wikipedia
-* get_wikipedia_table(string: url, int: number)
-    * url is the URL of the Wikipedia page that contains the table
-    * number is the number of the table on the page. e.g. if it is the first (or only) table on the page, number is 0.
-    * Returns a pandas.core.frame.DataFrame
-
 GTFS
 * url2gtfs(string: url)
     * url is the URL of a GFTS file
@@ -42,3 +30,22 @@ GTFS
     * color is a string of the marker color for the stops
     * Returns pandas.core.series.Series of folium.map.Marker
     * This method requires a OSRM server of the area running on http://localhost:5000
+
+Overpass
+* query2rels(string: query, [string: endpoint])
+  * string is an [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide) [wiki.openstreetmap.org] query string
+  * endpoint is an Overpass API endpoint
+  * Test queries at [overpass turbo](http://overpass-turbo.eu) [overpass-turbo.eu]
+  * Returns dict
+
+US Census
+* get_uscensus_population_by_tract
+* get_uscensus_geometry
+* add_density_to_tracts
+* get_uscensus_density_by_tract
+
+Wikipedia
+* get_wikipedia_table(string: url, int: number)
+    * url is the URL of the Wikipedia page that contains the table
+    * number is the number of the table on the page. e.g. if it is the first (or only) table on the page, number is 0.
+    * Returns a pandas.core.frame.DataFrame
