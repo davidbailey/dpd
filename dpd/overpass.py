@@ -20,7 +20,7 @@ def elements2ways(elements, nodes):
   return ways
 
 
-def wayid2way(way, ways):
+def wayid2way(ways, way):
   if way['type'] == 'way':
     if way['role'] == 'outer':
       return(ways[way['ref']])
