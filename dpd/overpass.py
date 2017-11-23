@@ -1,4 +1,5 @@
 import requests
+from shapely.geometry import Point
 from shapely.geometry import LineString
 from shapely.geometry import MultiLineString
 from shapely.ops import polygonize
@@ -8,7 +9,7 @@ def elements2nodes(elements):
   nodes = {}
   for element in elements:
     if element['type'] == "node":
-      nodes[element['id']] = (element['lon'], element['lat'])
+      nodes[element['id']] = {'geometry': Point(element['lat'], element['lon']), 'name': element.get('name', '')}
   return nodes
 
 
@@ -16,7 +17,7 @@ def elements2ways(elements, nodes):
   ways = {}
   for element in elements:
     if element['type'] == "way":
-      ways[element['id']] = (LineString([nodes[nodeid] for nodeid in element['nodes']]))
+      ways[element['id']] = (LineString([nodes[nodeid]['geometry'].coords[0] for nodeid in element['nodes']]))
   return ways
 
 
