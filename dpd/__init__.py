@@ -4,7 +4,7 @@ from .gtfs import url2gtfs
 from .gtfs import get_rail_stops
 from .gtfs import plot_stops
 
-from .overpass import query2rels
+from .overpass import query2elements
 
 from .uscensus import get_uscensus_population_by_tract
 from .uscensus import get_uscensus_geometry
