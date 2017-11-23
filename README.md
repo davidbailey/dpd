@@ -32,7 +32,7 @@ GTFS
     * This method requires a OSRM server of the area running on http://localhost:5000
 
 Overpass
-* query2rels(string: query, [string: endpoint])
+* query2elements(string: query, [string: endpoint])
   * string is an [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide) [wiki.openstreetmap.org] query string
   * endpoint is an Overpass API endpoint
   * Test queries at [overpass turbo](http://overpass-turbo.eu) [overpass-turbo.eu]
