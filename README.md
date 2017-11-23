@@ -48,5 +48,6 @@ US Census
 Wikipedia
 * get_wikipedia_table(string: url, int: number)
     * url is the URL of the Wikipedia page that contains the table
+    * this function should also work for any page with a table
     * number is the number of the table on the page. e.g. if it is the first (or only) table on the page, number is 0.
     * Returns a pandas.core.frame.DataFrame
