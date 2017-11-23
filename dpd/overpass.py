@@ -37,10 +37,14 @@ def elements2rels(elements, ways):
         rels[element['id']]['geometry'] = list(polygonize(multilinestring))[0]
   return rels
 
-def query2elements(query, endpoint='http://overpass-api.de/api/interpreter'):
+def query2elements(query, element_type='rels', endpoint='http://overpass-api.de/api/interpreter'):
     payload = {"data": query}
     r = requests.post(endpoint, data=payload)
     elements = r.json()['elements']
     nodes = elements2nodes(elements)
+    if element_type == 'nodes':
+      return nodes
     ways = elements2ways(elements, nodes)
+    if element_type == 'ways':
+      return ways
     return elements2rels(elements, ways)
