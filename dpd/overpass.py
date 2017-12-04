@@ -2,7 +2,7 @@ import requests
 from shapely.geometry import Point
 from shapely.geometry import LineString
 from shapely.geometry import MultiLineString
-from shapely.ops import polygonize
+from shapely.ops import polygonize, linemerge
 from functools import partial
 
 def elements2nodes(elements):
@@ -49,3 +49,22 @@ def query2elements(query, element_type='rels', endpoint='http://overpass-api.de/
     if element_type == 'ways':
       return ways
     return elements2rels(elements, ways)
+
+
+def get_railway(area, name, railway):
+    if railway == 'stop':
+        element_type = 'nodes'
+    else:
+        element_type = 'ways'
+    query = '''
+    [out:json][timeout:60];area(%s)->.searchArea;
+    rel["name"="%s"](area.searchArea);
+    %s(r);
+    %s._["railway"="%s"];
+    out;>;out skel qt;
+    ''' % (area, name, element_type[:-1], element_type[:-1], railway)
+    elements = query2elements(query, element_type=element_type)
+    if railway == 'stop':
+        return list(elements.values())
+    else:
+        return [{'geometry': linemerge(list(elements.values())), 'name': name}]
