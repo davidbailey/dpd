@@ -1,5 +1,3 @@
-from ._version import __version__
-
 from .gtfs import url2gtfs
 from .gtfs import get_rail_stops
 from .gtfs import plot_stops
