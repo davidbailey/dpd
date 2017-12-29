@@ -14,6 +14,9 @@ Examples
 
 http://nbviewer.jupyter.org/github/davidbailey/dpd/blob/master/dpd.ipynb
 
+data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_0060E', 'Indian': 'DP05_0061E', 'Asian': 'DP05_0062E', 'Islander': 'DP05_0063E', 'Other': 'DP05_0064E', 'Hispanic': 'DP05_0066E'}
+df = dpd.get_uscensus_data_by_tract('2016', '06', '037', data)
+
 Documentation
 --------
 
