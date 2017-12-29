@@ -40,7 +40,7 @@ Overpass
   * Returns dict
 
 US Census
-* get_uscensus_population_by_tract
+* get_uscensus_data_by_tract
 * get_uscensus_geometry
 * add_density_to_tracts
 * get_uscensus_density_by_tract
