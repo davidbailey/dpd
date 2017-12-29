@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='DPD',
-      version='0.13',
+      version='0.14',
       description='A Python Transportation Toolkit',
       author='David Bailey',
       author_email='david@davidabailey.com',
