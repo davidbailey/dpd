@@ -7,14 +7,14 @@ import pyproj
 import concurrent.futures
 import pandas
 
-def get_uscensus_population_by_tract(year, state, county):
-    # DP02_0086E is "Total Population" https://api.census.gov/data/2012/acs1/profile/variables/DP02_0086E.json
-    url = 'http://api.census.gov/data/' + year + '/acs5/profile?get=NAME,DP02_0086E&for=tract:*&in=state:' + state + '&in=county:' + county
+def get_uscensus_data_by_tract(year, state, county, data={}):
+    url = 'https://api.census.gov/data/' + year + '/acs/acs5/profile?get=NAME'
+    for datum in data.values():
+        url += ',' + datum
+    url += '&for=tract:*&in=state:' + state + '&in=county:' + county
     r = requests.get(url)
-    tracts = geopandas.GeoDataFrame(r.json()[1:], columns = r.json()[0], dtype='int')
-    tracts.index = tracts.NAME
+    tracts = geopandas.GeoDataFrame(r.json()[1:], columns = ['NAME'] + list(data.keys()) + ['state', 'county', 'tract'], dtype='int')
     return tracts
-
 
 def get_uscensus_geometry(state, county, tract):
     url = 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Tracts_Blocks/MapServer/0/query?f=geojson&where=state%3D' + state + '+and+county%3D' + county + '+and+tract%3D' + str(tract)
@@ -26,7 +26,7 @@ def get_uscensus_geometry(state, county, tract):
 
 def add_density_to_tracts(row):
     polygon = ops.transform(partial(pyproj.transform, pyproj.Proj(init='EPSG:4326'), pyproj.Proj(proj='aea')), row['geometry'])
-    density = 1000000 * row['DP02_0086E'] / polygon.area
+    density = 1000000 * row['Total Population'] / polygon.area
     return density
 
 
