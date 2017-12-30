@@ -4,7 +4,6 @@ from functools import partial
 
 class CostBenefitAnalysis:
     def __init__(self, start_year, duration):
-        self.discount_rate = discount_rate
         self.start_year = start_year
         self.duration = duration
         self.costs = pandas.DataFrame(index=range(start_year, start_year + duration))
