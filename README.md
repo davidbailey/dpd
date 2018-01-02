@@ -1,6 +1,6 @@
 # dpd
 
-dpd is a growing library of quality functions. Currently it is useful for plotting population, employee, and job densities and public transportation accessibility.
+dpd is a growing library of transportation-related functions. Currently it is useful for plotting population, employee, and job densities and public transportation accessibility. There are also functions for computing a cost-benefit analysis and multiple-criteria analysis.
 
 Install
 --------
