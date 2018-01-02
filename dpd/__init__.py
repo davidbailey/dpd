@@ -4,6 +4,8 @@ from .gtfs import url2gtfs
 from .gtfs import get_rail_stops
 from .gtfs import plot_stops
 
+from .mca import MultipleCriteriaAnalysis
+
 from .overpass import query2elements
 from .overpass import get_railway
 
