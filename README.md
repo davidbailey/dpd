@@ -19,6 +19,7 @@ data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_
 df = dpd.get_uscensus_data_by_tract('2016', '06', '037', data)
 ```
 
+Cost-benefit Analysis
 ```
 from dpd import CostBenefitAnalysis
 
@@ -36,6 +37,16 @@ cba.add_benefit(name='benefit 2', value=20, start_year=start_year + 1, duration=
 cba_table = cba.discount(start_year, discount_rate).T
 print('Benefit-cost ratio: ', cba_table['Sum']['Benefits Total'] / cba_table['Sum']['Costs Total'])
 cba_table
+```
+
+Multiple-criteria Analysis
+```
+attributes = ['Construction Cost', 'Travel Time']
+alternatives = ['Tram 1', 'Tram 2', 'Bus']
+mca = MultipleCriteriaAnalysis(attributes, alternatives)
+mca.mca['Tram 1']['Construction Cost'] = 100
+#...
+mca.to_d3()
 ```
 
 Documentation
