@@ -12,6 +12,6 @@ from .overpass import get_railway
 from .uscensus import get_uscensus_data_by_tract
 from .uscensus import get_uscensus_geometry
 from .uscensus import add_density_to_tracts
-from .uscensus import get_uscensus_density_by_tract
+from .uscensus import get_uscensus_data_with_geometry
 
 from .wikipedia import get_wikipedia_table
