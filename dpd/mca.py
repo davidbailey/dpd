@@ -16,6 +16,26 @@ class MultipleCriteriaAnalysis:
                                         index=attributes, columns=alternatives)
         self.weights = pandas.Series(numpy.ones(len(attributes)), index=attributes)
 
+    def from_csvs(mca_file='mca.csv', weights_file='weights.csv', monte_carlo=False):
+        mca = MultipleCriteriaAnalysis([], [])
+        if monte_carlo == True:
+            mca.mca = pandas.read_csv(mca_file, index_col=[0,1])
+            mca.mca.index.names = [None] * len(mca.mca.index.names)
+            mca.attributes = list(mca.mca.index[0])
+            mca.monte_carlo = True
+        else:
+            mca.mca = pandas.DataFrame.from_csv(mca_file)
+            mca.attributes = list(mca.mca.index)
+            mca.monte_carlo = False
+        mca.alternatives = list(mca.mca.columns)
+        mca.weights = pandas.Series.from_csv(weights_file)
+        return mca
+
+
+    def to_csvs(self, mca_file='mca.csv', weights_file='weights.csv'):
+        self.mca.to_csv(mca_file)
+        self.weights.to_csv(weights_file)
+
 
     def to_d3(self):
         data = {"name": "Multiple Criteria Analysis", "children": []}
