@@ -31,7 +31,7 @@ def add_density_to_tracts(row):
     return density
 
 
-def get_uscensus_data(year, state, county, data):
+def get_uscensus_data_with_geometry(year, state, county, data):
     tracts = get_uscensus_data_by_tract(year=year, state=state, county=county, data=data)
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor: # The API is a bit slow so we parallelize
         geometry = executor.map(partial(get_uscensus_geometry, state, county), tracts['tract'])
