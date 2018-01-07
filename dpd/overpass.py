@@ -72,20 +72,20 @@ def get_railway(area, name, railway):
 def get_key_value_in_area(area, key, value, endpoint='http://overpass-api.de/api/interpreter'):
     query = '''
     [out:json][timeout:60];
-    {{geocodeArea:"%s"}}->.searchArea;
+    area(%d)->.searchArea;
     (
-      node["%s"="%s"](area.searchArea);
-      way["%s"="%s"](area.searchArea);
-      relation["%s"="%s"](area.searchArea);
-    );
+    node["%s"="%s"](area.searchArea);
+    way["%s"="%s"](area.searchArea);
+    relation["%s"="%s"](area.searchArea););
     out body;
     >;
     out skel qt;
     ''' % (area, key, value, key, value, key, value)
-    payload = {"data": query}
-    r = requests.post(endpoint, data=payload)
+    data = {"data": query}
+    r = requests.post(endpoint, data=data)
     elements = r.json()['elements']
     nodes = elements2nodes(elements)
     ways = elements2ways(elements, nodes)
     rels = elements2rels(elements, ways)
     return (nodes, ways, rels)
+
