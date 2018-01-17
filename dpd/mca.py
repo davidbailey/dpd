@@ -116,4 +116,4 @@ class MultipleCriteriaAnalysis:
                 .text(function(d) { return d; });
         </script>
         ''')
-HTML(template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': 'Alternative'}))
+        HTML(template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': 'Alternative'}))
