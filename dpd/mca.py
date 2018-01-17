@@ -2,7 +2,6 @@ import pandas
 import numpy
 import json
 from string import Template
-from IPython.core.display import HTML
 
 class MultipleCriteriaAnalysis:
     def __init__(self, attributes, alternatives, monte_carlo=False):
@@ -63,7 +62,6 @@ class MultipleCriteriaAnalysis:
             for attribute in self.attributes:
                 alternative_d.append({'axis': attribute, 'value': self.mca[alternative][attribute]})
             d.append(alternative_d)
-
         template = Template('''
         <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="https://raw.githubusercontent.com/davidbailey/dpd/master/js/RadarChart.js"></script>
@@ -116,4 +114,4 @@ class MultipleCriteriaAnalysis:
                 .text(function(d) { return d; });
         </script>
         ''')
-        HTML(template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': 'Alternative'}))
+        return template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': 'Alternative'})
