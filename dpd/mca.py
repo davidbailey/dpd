@@ -1,5 +1,8 @@
 import pandas
 import numpy
+import json
+from string import Template
+from IPython.core.display import HTML
 
 class MultipleCriteriaAnalysis:
     def __init__(self, attributes, alternatives, monte_carlo=False):
