@@ -1,6 +1,6 @@
 from .cba import CostBenefitAnalysis
 
-fro .d3 import radar_chart
+from .d3 import radar_chart
 
 from .gtfs import url2gtfs
 from .gtfs import get_rail_stops
