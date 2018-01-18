@@ -41,12 +41,19 @@ cba_table
 
 Multiple-criteria Analysis
 ```
-attributes = ['Construction Cost', 'Travel Time']
-alternatives = ['Tram 1', 'Tram 2', 'Bus']
+from dpd import MultipleCriteriaAnalysis, radar_chart
+from IPython.core.display import HTML
+attributes = ['Cost', 'Time', 'Comfort']
+alternatives = ['Tram', 'Bus']
 mca = MultipleCriteriaAnalysis(attributes, alternatives)
-mca.mca['Tram 1']['Construction Cost'] = 100
-#...
-mca.to_d3()
+mca.mca['Tram']['Cost'] = 200
+mca.mca['Bus']['Cost'] = 100
+mca.mca['Tram']['Time'] =50
+mca.mca['Bus']['Time'] = 100
+mca.mca['Tram']['Comfort'] = 800
+mca.mca['Bus']['Comfort'] = 500
+legend_options, d, title = mca.to_d3_radar_chart()
+HTML(radar_chart(legend_options, d, title))
 ```
 
 Documentation
