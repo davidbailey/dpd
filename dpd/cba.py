@@ -1,6 +1,7 @@
 import pandas
 import numpy
 from functools import partial
+from matplotlib import pyplot as plt
 
 class CostBenefitAnalysis:
     def __init__(self, start_year, duration):
@@ -46,3 +47,13 @@ class CostBenefitAnalysis:
         df = df.apply(partial(apply_discount1, discount_year), axis=1)
         df.loc['Sum'] = df.sum()
         return df
+
+    def cash_flow_diagram(self, title='', ylabel='Millions ($)', xlabel='Year'):
+        fig, ax = plt.subplots()
+        fig.suptitle(title)
+        self.costs['Costs Total'].apply(lambda x: -x).plot(ax=ax, kind='bar', color='red')
+        self.benefits['Benefits Total'].plot(ax=ax, kind='bar', color='green')
+        plt.xlabel(xlabel)
+        plt.xticks(rotation=0)
+        plt.ylabel(ylabel)
+        return fig, ax
