@@ -92,7 +92,7 @@ def get_key_value_in_area(area, key, value, endpoint='http://overpass-api.de/api
             nodes[element['id']] = {'geometry': Point(element['lon'], element['lat']), 'element': element}
     for element in elements:
         if element['type'] == "way":
-            ways[element['id']] = {'geometry': LineString([(nodes[nodeid]['geometry'].coords[0]) for nodeid in element['nodes']
+            ways[element['id']] = {'geometry': LineString([(nodes[nodeid]['geometry'].coords[0]) for nodeid in element['nodes']]), 'element': element}
     for element in elements:
         if element['type'] == "relation":
             if element['tags']['type'] == 'boundary':
