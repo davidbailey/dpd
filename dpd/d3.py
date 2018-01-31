@@ -4,7 +4,7 @@ from string import Template
 def radar_chart(legend_options, d, title):
     template = Template('''
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://raw.githubusercontent.com/davidbailey/dpd/master/js/RadarChart.js"></script>
+    <script src="https://cdn.rawgit.com/davidbailey/dpd/master/js/RadarChart.js"></script>
     <div id="body">
         <div id="chart"></div>
     </div>
