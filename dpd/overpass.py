@@ -102,3 +102,25 @@ def get_key_value_in_area(area, key, value, endpoint='http://overpass-api.de/api
                 relations[element['id']] = {'element': element}
     return {'nodes': nodes, 'ways': ways, 'relations': relations}
 
+def query(query, endpoint='http://overpass-api.de/api/interpreter'):
+    data = {"data": query}
+    r = requests.post(endpoint, data=data)
+    elements = r.json()['elements']
+    nodes = {}
+    ways = {}
+    relations = {}
+    for element in elements:
+        if element['type'] == "node":
+            nodes[element['id']] = {'geometry': Point(element['lon'], element['lat']), 'element': element}
+    for element in elements:
+        if element['type'] == "way":
+            ways[element['id']] = {'geometry': LineString([(nodes[nodeid]['geometry'].coords[0]) for nodeid in element['nodes']]), 'element': element}
+    for element in elements:
+        if element['type'] == "relation":
+            if element['tags']['type'] == 'boundary':
+                multilinestring = MultiLineString(list(filter(bool, map(partial(wayid2way, ways), element['members']))))
+                relations[element['id']] = {'geometry': list(polygonize(multilinestring))[0], 'element': element}
+            else:
+                relations[element['id']] = {'element': element}
+    return {'nodes': nodes, 'ways': ways, 'relations': relations}
+
