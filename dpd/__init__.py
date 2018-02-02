@@ -11,6 +11,7 @@ from .mca import MultipleCriteriaAnalysis
 from .overpass import query2elements
 from .overpass import get_railway
 from .overpass import get_key_value_in_area
+from .overpass import query
 
 from .uscensus import get_uscensus_data_by_tract
 from .uscensus import get_uscensus_geometry
