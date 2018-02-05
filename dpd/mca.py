@@ -41,16 +41,18 @@ class MultipleCriteriaAnalysis:
         return self.weights.T.dot(self.mca.div(self.mca.sum(axis=1), axis=0)).sort_values(ascending=False)
 
     def to_d3(self):
+        normalized_mca = self.mca.div(self.mca.sum(axis=1), axis=0)
+        normalized_mca_with_inverse = normalized_mca.apply(lambda x: (1-x)/(len(self.alternatives)-1) if self.weights[x.name] < 0 else x, axis=1)
         data = {"name": "Multiple Criteria Analysis", "children": []}
         for attribute in self.attributes:
             children = []
             for alternative in self.alternatives:
                 if self.monte_carlo:
-                    children.append({'name': alternative, 'mean': self.mca[alternative][attribute]['Mean'],
-                                     'stddev': self.mca[alternative][attribute]['Standard Deviation'],
-                                     'distribution': self.mca[alternative][attribute]['Distribution']})
+                    children.append({'name': alternative, 'mean': normalized_mca_with_inverse[alternative][attribute]['Mean'],
+                                     'stddev': normalized_mca_with_inverse[alternative][attribute]['Standard Deviation'],
+                                     'distribution': normalized_mca_with_inverse[alternative][attribute]['Distribution']})
                 else:
-                    children.append({'name': alternative, 'mean': self.mca[alternative][attribute]})
+                    children.append({'name': alternative, 'mean': normalized_mca_with_inverse[alternative][attribute]})
             data['children'].append({'name': attribute, 'weight': self.weights[attribute], 'alternatives': children})
         return data
 
