@@ -58,7 +58,7 @@ def radar_chart(legend_options, d, title):
 
 def dendrogram(d):
     template = Template('''
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
     <svg id="svg" width="1400" height="1000">
       <style>
 
