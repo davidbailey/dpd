@@ -56,7 +56,7 @@ def radar_chart(legend_options, d, title):
     ''')
     return template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': title})
 
-def radar_chart(d):
+def dendrogram(d):
     template = Template('''
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
