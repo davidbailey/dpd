@@ -134,7 +134,7 @@ def dendrogram(d):
             .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
             .style("font-size", "18px")
             .text(function(d) { return d.data.name});
-        }
+        })
     </script>
     ''')
     return template.substitute({'d': json.dumps(d)})
