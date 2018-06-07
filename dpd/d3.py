@@ -3,7 +3,7 @@ from string import Template
 
 def radar_chart(legend_options, d, title):
     template = Template('''
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdn.rawgit.com/davidbailey/dpd/master/js/RadarChart.js"></script>
     <div id="body">
         <div id="chart"></div>
@@ -87,7 +87,7 @@ def dendrogram(d):
   </style>
 </svg>
 <a id="link">download .svg</a>
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
