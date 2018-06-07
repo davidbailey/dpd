@@ -55,3 +55,60 @@ def radar_chart(legend_options, d, title):
     </script>
     ''')
     return template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': title})
+
+def radar_chart(d):
+    template = Template('''
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    g = svg.append("g").attr("transform", "translate(440,0)");
+
+var tree = d3.cluster()
+    .size([height, width - 800]);
+
+var root = d3.hierarchy($d);
+
+tree(root);
+
+var link = g.selectAll(".link")
+    .data(root.descendants().slice(1))
+  .enter().append("path")
+    .attr("class", "link")
+    .attr("d", function(d) {
+      return "M" + d.y + "," + d.x
+	  + "C" + (d.parent.y + 100) + "," + d.x
+	  + " " + (d.parent.y + 100) + "," + d.parent.x
+	  + " " + d.parent.y + "," + d.parent.x;
+    });
+
+var node = g.selectAll(".node")
+    .data(root.descendants())
+  .enter().append("g")
+    .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+
+node.append("circle")
+    .attr("r", 5);
+
+node.append("text")
+    .attr("dy", 8)
+    .attr("x", function(d) { return d.children ? -8 : 8; })
+    .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+    .style("font-size", "18px")
+    .text(function(d) { return d.data.name});
+
+
+var svg = document.getElementById("svg");
+var serializer = new XMLSerializer();
+var source = serializer.serializeToString(svg);
+if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+}
+if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+}
+source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+document.getElementById("link").href = url;
+    ''')
+    return template.substitute({'d': json.dumps(d)})
