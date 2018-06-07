@@ -58,6 +58,37 @@ def radar_chart(legend_options, d, title):
 
 def dendrogram(d):
     template = Template('''
+<svg id="svg" width="1400" height="1000">
+  <style>
+
+  .node circle {
+    fill: #999;
+  }
+
+  .node text {
+    font: 10px sans-serif;
+  }
+
+  .node--internal circle {
+    fill: #555;
+  }
+
+  .node--internal text {
+    text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  }
+
+  .link {
+    fill: none;
+    stroke: #555;
+    stroke-opacity: 0.4;
+    stroke-width: 1.5px;
+  }
+
+  </style>
+</svg>
+<a id="link">download .svg</a>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script>
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height"),
@@ -110,5 +141,6 @@ if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
 source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
 document.getElementById("link").href = url;
+</script>
     ''')
     return template.substitute({'d': json.dumps(d)})
