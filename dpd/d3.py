@@ -141,7 +141,7 @@ def dendrogram(d):
     if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
-    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+    source = '<?xml version="1.0" standalone="no"?>' + source;
     var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
     document.getElementById("link").href = url;
     </script>
