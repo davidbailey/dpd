@@ -58,7 +58,7 @@ def radar_chart(legend_options, d, title):
 
 def dendrogram(d):
     template = Template('''
-    <script src="http://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
     <svg id="svg" width="1400" height="1000">
       <style>
 
@@ -87,54 +87,46 @@ def dendrogram(d):
 
       </style>
     </svg>
+    <a id="link">download .svg</a>
     <script>
-    require.config({
-        paths: {
-            d3: "https://d3js.org/d3.v4.min"
-        }
-    });
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height"),
+        g = svg.append("g").attr("transform", "translate(440,0)");
 
-    require(["d3"], function(d3) {
+    var tree = d3.cluster()
+        .size([height, width - 800]);
 
-        var svg = d3.select("svg"),
-            width = +svg.attr("width"),
-            height = +svg.attr("height"),
-            g = svg.append("g").attr("transform", "translate(440,0)");
+    var root = d3.hierarchy($d);
 
-        var tree = d3.cluster()
-            .size([height, width - 800]);
+    tree(root);
 
-        var root = d3.hierarchy($d);
+    var link = g.selectAll(".link")
+        .data(root.descendants().slice(1))
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", function(d) {
+          return "M" + d.y + "," + d.x
+              + "C" + (d.parent.y + 100) + "," + d.x
+              + " " + (d.parent.y + 100) + "," + d.parent.x
+              + " " + d.parent.y + "," + d.parent.x;
+        });
 
-        tree(root);
+    var node = g.selectAll(".node")
+        .data(root.descendants())
+      .enter().append("g")
+        .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-        var link = g.selectAll(".link")
-            .data(root.descendants().slice(1))
-          .enter().append("path")
-            .attr("class", "link")
-            .attr("d", function(d) {
-              return "M" + d.y + "," + d.x
-                  + "C" + (d.parent.y + 100) + "," + d.x
-                  + " " + (d.parent.y + 100) + "," + d.parent.x
-                  + " " + d.parent.y + "," + d.parent.x;
-            });
+    node.append("circle")
+        .attr("r", 5);
 
-        var node = g.selectAll(".node")
-            .data(root.descendants())
-          .enter().append("g")
-            .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-
-        node.append("circle")
-            .attr("r", 5);
-
-        node.append("text")
-            .attr("dy", 8)
-            .attr("x", function(d) { return d.children ? -8 : 8; })
-            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-            .style("font-size", "18px")
-            .text(function(d) { return d.data.name});
-        })
+    node.append("text")
+        .attr("dy", 8)
+        .attr("x", function(d) { return d.children ? -8 : 8; })
+        .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+        .style("font-size", "18px")
+        .text(function(d) { return d.data.name});
     </script>
     ''')
     return template.substitute({'d': json.dumps(d)})
