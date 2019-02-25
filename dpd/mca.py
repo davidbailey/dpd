@@ -1,7 +1,14 @@
+"""
+A module to create a multiple-criteria analysis
+"""
+
 import pandas
 import numpy
 
 class MultipleCriteriaAnalysis:
+    """
+    A module to create a multiple-criteria analysis
+    """
     def __init__(self, attributes, alternatives, monte_carlo=False):
         self.attributes = attributes
         self.alternatives = alternatives
@@ -16,9 +23,9 @@ class MultipleCriteriaAnalysis:
                                         index=attributes, columns=alternatives)
         self.weights = pandas.Series(numpy.ones(len(attributes)), index=attributes)
 
-    def from_csvs(mca_file='mca.csv', weights_file='weights.csv', monte_carlo=False):
+    def from_csvs(self, mca_file='mca.csv', weights_file='weights.csv', monte_carlo=False):
         mca = MultipleCriteriaAnalysis([], [])
-        if monte_carlo == True:
+        if monte_carlo:
             mca.mca = pandas.read_csv(mca_file, index_col=[0,1])
             mca.mca.index.names = [None] * len(mca.mca.index.names)
             mca.attributes = list(mca.mca.index[0])
