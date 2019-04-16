@@ -10,7 +10,7 @@ OSMObject = namedtuple("OSMObject", "osm, geo")
 
 class OSM:
     def __init__(self):
-        self.url = url="http://overpass-api.de/api/interpreter"
+        self.url = "http://overpass-api.de/api/interpreter"
         self.nodes = {}
         self.ways = {}
         self.relations = {}
