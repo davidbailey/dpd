@@ -16,12 +16,12 @@ from matplotlib import pyplot
 from shapely.geometry import Point
 from functools import partial, lru_cache
 
-def url2gtfs(url):
+def url2gtfs(url, dist_units="mi"):
     r = requests.get(url)
     with tempfile.NamedTemporaryFile() as f:
       f.write(r._content)
       f.seek(0) # https://stackoverflow.com/questions/10478242/temp-readline-empty
-      return gtfstk.read_gtfs(f.name, dist_units='mi')
+      return gtfstk.read_gtfs(f.name, dist_units=dist_units)
 
 
 def get_rail_stops(gtfs):
