@@ -1,3 +1,10 @@
+import datetime
+import pyproj
+import shapely
+from shapely.ops import transform
+from dpd.utils.epsg4326_to_aea import epsg4326_to_aea
+import matplotlib.pyplot as plt
+
 import requests
 import gtfstk
 import tempfile
@@ -7,7 +14,7 @@ import geopandas
 import numpy
 from matplotlib import pyplot
 from shapely.geometry import Point
-from functools import partial
+from functools import partial, lru_cache
 
 def url2gtfs(url):
     r = requests.get(url)
@@ -52,3 +59,46 @@ def plot_stops(foliumMap, stops, markercolor):
     features = geopandas.GeoDataFrame.from_features(geojson['features'])
     features.apply(partial(plot_linestring, foliumMap), axis=1)
     stops.apply(lambda row: folium.Marker([row['stop_lat'], row['stop_lon']], popup=row['stop_name'], icon=folium.Icon(color=markercolor)).add_to(foliumMap), axis=1)
+
+def timestring2timeobject(timestring):
+    # handle the case where hours go past midnight...
+    days = 0
+    hours = int(timestring[0:2])
+    while hours > 23:
+        days += 1
+        hours -= 24
+    timestring = str(hours) + timestring[2:]
+    return datetime.datetime.strptime(timestring, '%H:%M:%S') + datetime.timedelta(days=days)
+
+
+def stop_id_to_distance(feed, aea_line, stop_id):
+    stop = feed.stops[feed.stops.stop_id == stop_id]
+    stop_point = shapely.geometry.point.Point(
+        stop.stop_lon,
+        stop.stop_lat
+    )
+    stop_point_aea = epsg4326_to_aea(stop_point)
+    distance = aea_line.project(stop_point_aea)
+    return distance
+
+
+def plot_schedule(feed, route_id, service_id, shape_id=None):
+    trips = feed.trips[(feed.trips['route_id'] == route_id) & (feed.trips['service_id'] == service_id)]['trip_id']
+    if not shape_id:
+        shape_id = feed.trips[feed.trips['trip_id'] == trips.iloc[0]].shape_id.iloc[0]
+    line = feed.build_geometry_by_shape([shape_id])[shape_id]
+    aea_line = epsg4326_to_aea(line)
+    
+    @lru_cache(maxsize=128) # adds a little complexity, but reduces runtime by half :)
+    def stop_id_to_distance_cached(stop_id):
+        return stop_id_to_distance(feed, aea_line, stop_id)
+
+    for trip_id in trips:
+        d = feed.stop_times[feed.stop_times['trip_id'] == trip_id].copy()
+        d['arrival_time_object'] = d.arrival_time.map(timestring2timeobject)
+        d['departure_time_object'] = d.departure_time.map(timestring2timeobject)
+        d['distance'] = d.stop_id.map(stop_id_to_distance_cached)
+        plt.plot(d.arrival_time_object, d.distance/1000)
+    plt.xlabel("Time of Day")
+    plt.ylabel("Distance on Route")
+    plt.show()
