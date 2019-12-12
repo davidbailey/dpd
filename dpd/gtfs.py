@@ -2,7 +2,7 @@ import datetime
 import pyproj
 import shapely
 from shapely.ops import transform
-from dpd.utils.epsg4326_to_aea import epsg4326_to_aea
+from dpd.utils import epsg4326_to_aea
 import matplotlib.pyplot as plt
 
 import requests
