@@ -1,0 +1,14 @@
+black
+coveralls
+pytest
+pytest-cov
+geopandas
+requests
+shapely
+bs4
+pandas
+gtfstk
+pyproj
+folium
+matplotlib
+mplleaflet
