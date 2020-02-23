@@ -11,4 +11,5 @@ setup(name='DPD',
       packages=find_packages(),
       license='Public Domain',
       install_requires=['geopandas', 'requests', 'shapely', 'bs4', 'pandas', 'gtfstk', 'pyproj', 'folium', 'matplotlib', 'mplleaflet']
+      tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )
