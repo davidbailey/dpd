@@ -1,6 +1,7 @@
 # dpd
 
 [![Build Status](https://travis-ci.com/davidbailey/dpd.svg?branch=master)](https://travis-ci.com/davidbailey/dpd)
+[![Coverage](https://coveralls.io/repos/github/davidbailey/RAIL/badge.svg)](https://coveralls.io/github/davidbailey/RAIL)
 
 dpd is a growing library of transportation-related functions. Currently it is useful for plotting population, employee, and job densities and public transportation accessibility. There are also functions for computing a cost-benefit analysis and multiple-criteria analysis.
 
