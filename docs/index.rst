@@ -1,16 +1,12 @@
 dpd
 ================================
 
-.. automodule:: dpd
-    :members:
-    :imported-members:
-    :undoc-members:
-    :show-inheritance:
-
-
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   notebooks/plot_schedule.ipynb
+   notebooks/dpd.ipynb
+   api
 
 
 Indices and tables
