@@ -22,6 +22,9 @@ Documentation is available at https://dpd.readthedocs.io/en/latest/.
 Examples
 --------
 
+[Cost-benefit Analysis](https://dpd.readthedocs.io/en/latest/notebooks/cba.html)
+
+
 http://nbviewer.jupyter.org/github/davidbailey/dpd/blob/master/dpd.ipynb
 
 ```
