@@ -6,12 +6,18 @@
 
 dpd is a growing library of transportation-related functions. Currently it is useful for plotting population, employee, and job densities and public transportation accessibility. There are also functions for computing a cost-benefit analysis and multiple-criteria analysis.
 
-Install
+Installation
 --------
 
 ```bash
 pip install git+https://github.com/davidbailey/dpd.git
 ```
+
+Documentation
+--------
+
+Documentation is available at https://dpd.readthedocs.io/en/latest/.
+
 
 Examples
 --------
@@ -68,9 +74,6 @@ from dpd.wikipedia import get_wikipedia_table
 
 df = get_wikipedia_table('https://en.wikipedia.org/wiki/List_of_10-meter_diving_platforms_in_the_United_States', 0)
 ```
-
-Documentation
---------
 
 GTFS
 * url2gtfs(string: url)
