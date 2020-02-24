@@ -33,25 +33,6 @@ data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_
 df = dpd.get_uscensus_data_by_tract('2016', '06', '037', data)
 ```
 
-Multiple-criteria Analysis
-```
-from dpd.mca import MultipleCriteriaAnalysis
-from dpd.d3 import radar_chart
-from IPython.core.display import HTML
-
-attributes = ['Cost', 'Time', 'Comfort']
-alternatives = ['Tram', 'Bus']
-mca = MultipleCriteriaAnalysis(attributes, alternatives)
-mca.mca['Tram']['Cost'] = 200
-mca.mca['Bus']['Cost'] = 100
-mca.mca['Tram']['Time'] =50
-mca.mca['Bus']['Time'] = 100
-mca.mca['Tram']['Comfort'] = 800
-mca.mca['Bus']['Comfort'] = 500
-legend_options, d, title = mca.to_d3_radar_chart()
-HTML(radar_chart(legend_options, d, title))
-```
-
 Get a table from a Wikipedia article:
 ```
 from dpd.wikipedia import get_wikipedia_table
