@@ -23,6 +23,7 @@ Examples
 --------
 
 [Cost-benefit Analysis](https://dpd.readthedocs.io/en/latest/notebooks/cba.html)
+[Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
 
 
 http://nbviewer.jupyter.org/github/davidbailey/dpd/blob/master/dpd.ipynb

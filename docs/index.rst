@@ -3,10 +3,9 @@ dpd
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
-   notebooks/cba.ipynb
-   notebooks/plot_schedule.ipynb
-   notebooks/dpd.ipynb
+   notebooks/*.ipynb
    api
 
 
