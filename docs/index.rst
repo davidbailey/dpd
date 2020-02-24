@@ -4,6 +4,7 @@ dpd
 .. toctree::
    :maxdepth: 2
 
+   notebooks/cba.ipynb
    notebooks/plot_schedule.ipynb
    notebooks/dpd.ipynb
    api
