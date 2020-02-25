@@ -5,7 +5,7 @@ dpd
    :maxdepth: 2
 
    notebooks/cba.ipynb
-   notebooks/dpd.ipynb
+   notebooks/density_and_public_transportation.ipynb
    notebooks/mca.ipynb
    notebooks/plot_schedule.ipynb
    api

@@ -52,13 +52,18 @@ def plot_linestring(foliumMap, row):
     folium.PolyLine(locations=zip(row['geometry'].xy[1], row['geometry'].xy[0]), color=row['color']).add_to(foliumMap)
 
 
-def plot_stops(foliumMap, stops, markercolor):
+def plot_stops_with_contour(foliumMap, stops, markercolor):
     fig, ax = pyplot.subplots()
     stops.apply(lambda row: contour_plot(ax, Point(float(row['stop_lon']), float(row['stop_lat'])), .025, 15), axis=1)
     geojson = mplleaflet.fig_to_geojson(fig=fig)
     features = geopandas.GeoDataFrame.from_features(geojson['features'])
     features.apply(partial(plot_linestring, foliumMap), axis=1)
     stops.apply(lambda row: folium.Marker([row['stop_lat'], row['stop_lon']], popup=row['stop_name'], icon=folium.Icon(color=markercolor)).add_to(foliumMap), axis=1)
+
+
+def plot_stops(foliumMap, stops, markercolor):
+    stops.apply(lambda row: folium.Marker([row['stop_lat'], row['stop_lon']], popup=row['stop_name'], icon=folium.Icon(color=markercolor)).add_to(foliumMap), axis=1)
+
 
 def timestring2timeobject(timestring):
     # handle the case where hours go past midnight...
