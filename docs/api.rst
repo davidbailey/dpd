@@ -1,6 +1,17 @@
 api
 ===
 
+.. automodule:: dpd.cba
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: dpd.mca
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
 
 .. automodule:: dpd.utils
     :members:
