@@ -5,16 +5,17 @@ import pandas
 import geopandas
 import requests
 
+
 def get_uscensus_data_by_tract(year, state, county, data):
-    url = 'https://api.census.gov/data/' + year + '/acs/acs5?get=NAME'
+    url = "https://api.census.gov/data/" + year + "/acs/acs5?get=NAME"
     for datum in data.values():
-        url += ',' + datum
-    url += '&for=tract:*&in=state:' + state + '&in=county:' + county
+        url += "," + datum
+    url += "&for=tract:*&in=state:" + state + "&in=county:" + county
     request = requests.get(url)
     tracts = pandas.DataFrame(
         request.json()[1:],
-        columns=['NAME'] + list(data.keys()) + ['state', 'county', 'tract'],
-        dtype='int'
+        columns=["NAME"] + list(data.keys()) + ["state", "county", "tract"],
+        dtype="int",
     )
     return tracts
 
@@ -22,12 +23,7 @@ def get_uscensus_data_by_tract(year, state, county, data):
 def get_uscensus_data_for_states(year, states, data):
     return pandas.concat(
         [
-            get_uscensus_data_by_tract(
-                year=year,
-                state=state,
-                county="*",
-                data=data,
-            )
+            get_uscensus_data_by_tract(year=year, state=state, county="*", data=data)
             for state in states
         ]
     )

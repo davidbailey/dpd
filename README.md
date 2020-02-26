@@ -21,14 +21,13 @@ Documentation is available at https://dpd.readthedocs.io/en/latest/.
 
 Examples
 --------
-
 [Cost-benefit Analysis](https://dpd.readthedocs.io/en/latest/notebooks/cba.html)
 
+[Density and public transportation](https://dpd.readthedocs.io/en/latest/notebooks/density_and_public_transportation.html)
 
 [Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
 
-
-[Density and public transportation](https://dpd.readthedocs.io/en/latest/notebooks/density_and_public_transportation.html)
+[plot_schedule](https://dpd.readthedocs.io/en/latest/notebooks/plot_schedule.html)
 
 ```
 data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_0060E', 'Indian': 'DP05_0061E', 'Asian': 'DP05_0062E', 'Islander': 'DP05_0063E', 'Other': 'DP05_0064E', 'Hispanic': 'DP05_0066E'}

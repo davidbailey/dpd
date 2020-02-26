@@ -1,8 +1,10 @@
 import json
 from string import Template
 
+
 def radar_chart(legend_options, d, title):
-    template = Template('''
+    template = Template(
+        """
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/davidbailey/dpd@master/js/RadarChart.js"></script>
     <div id="body">
@@ -53,11 +55,20 @@ def radar_chart(legend_options, d, title):
             .attr("fill", "#737373")
             .text(function(d) { return d; });
     </script>
-    ''')
-    return template.substitute({'legend_options': json.dumps(legend_options), 'd': json.dumps(d), 'title': title})
+    """
+    )
+    return template.substitute(
+        {
+            "legend_options": json.dumps(legend_options),
+            "d": json.dumps(d),
+            "title": title,
+        }
+    )
+
 
 def dendrogram(d):
-    template = Template('''
+    template = Template(
+        """
     <script src="https://d3js.org/d3.v4.js"></script>
     <svg id="svg" width="1400" height="1000">
       <style>
@@ -129,8 +140,9 @@ def dendrogram(d):
         .text(function(d) { return d.data.name});
     </script>
     
-    ''')
-    svg = '''
+    """
+    )
+    svg = """
     <script>
     var svg = document.getElementById("svg");
     var serializer = new XMLSerializer();
@@ -145,5 +157,5 @@ def dendrogram(d):
     var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
     document.getElementById("link").href = url;
     </script>
-    '''
-    return template.substitute({'d': json.dumps(d)}) + svg
+    """
+    return template.substitute({"d": json.dumps(d)}) + svg
