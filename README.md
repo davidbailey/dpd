@@ -29,16 +29,11 @@ Examples
 
 [plot_schedule](https://dpd.readthedocs.io/en/latest/notebooks/plot_schedule.html)
 
+[Wikipedia](https://dpd.readthedocs.io/en/latest/notebooks/wikipedia.html)
+
 ```
 data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_0060E', 'Indian': 'DP05_0061E', 'Asian': 'DP05_0062E', 'Islander': 'DP05_0063E', 'Other': 'DP05_0064E', 'Hispanic': 'DP05_0066E'}
 df = dpd.get_uscensus_data_by_tract('2016', '06', '037', data)
-```
-
-Get a table from a Wikipedia article:
-```
-from dpd.wikipedia import get_wikipedia_table
-
-df = get_wikipedia_table('https://en.wikipedia.org/wiki/List_of_10-meter_diving_platforms_in_the_United_States', 0)
 ```
 
 GTFS
