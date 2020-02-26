@@ -1,7 +1,8 @@
 api
 ===
 
-.. automodule:: dpd
+
+.. automodule:: dpd.utils
     :members:
     :imported-members:
     :undoc-members:

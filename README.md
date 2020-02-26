@@ -42,9 +42,6 @@ df = get_wikipedia_table('https://en.wikipedia.org/wiki/List_of_10-meter_diving_
 ```
 
 GTFS
-* url2gtfs(string: url)
-    * url is the URL of a GFTS file
-    * Returns a gtfstk.feed.Feed
 * get_rail_stops(gtfstk.feed.Feed: gtfs)
     * gtfs is the the FTFS object from url2gtfs (or gtfstk) that you would like to get only the rail stops from
     * Returns a pandas.core.frame.DataFrame
