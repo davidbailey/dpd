@@ -30,19 +30,3 @@ Examples
 [plot_schedule](https://dpd.readthedocs.io/en/latest/notebooks/plot_schedule.html)
 
 [Wikipedia](https://dpd.readthedocs.io/en/latest/notebooks/wikipedia.html)
-
-```
-data = {'Total Population': 'DP02_0086E', 'White': 'DP05_0059E', 'Black': 'DP05_0060E', 'Indian': 'DP05_0061E', 'Asian': 'DP05_0062E', 'Islander': 'DP05_0063E', 'Other': 'DP05_0064E', 'Hispanic': 'DP05_0066E'}
-df = dpd.get_uscensus_data_by_tract('2016', '06', '037', data)
-```
-
-GTFS
-* get_rail_stops(gtfstk.feed.Feed: gtfs)
-    * gtfs is the the FTFS object from url2gtfs (or gtfstk) that you would like to get only the rail stops from
-    * Returns a pandas.core.frame.DataFrame
-* plot_stops(folium.folium.Map: foliumMap, pandas.core.frame.DataFrame: stops, string: markercolor)
-    * foliumMap is the map to plot the stops on
-    * stops is the DataFrame that contains the stops from url2gtfs().stops or get_rail_stops
-    * color is a string of the marker color for the stops
-    * Returns pandas.core.series.Series of folium.map.Marker
-    * This method requires a OSRM server of the area running on http://localhost:5000

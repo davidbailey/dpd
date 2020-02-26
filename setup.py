@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-setup(name='DPD',
+setup(name='dpd',
       version='0.57',
       description='A Python Transportation Toolkit',
       author='David Bailey',

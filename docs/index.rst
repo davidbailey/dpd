@@ -1,6 +1,8 @@
 dpd
 ================================
 
+https://github.com/davidbailey/dpd
+
 .. toctree::
    :maxdepth: 2
 
