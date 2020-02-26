@@ -1,1 +1,1 @@
-from get_wikipedia_table import get_wikipedia_table
+from .get_wikipedia_table import get_wikipedia_table
