@@ -19,6 +19,12 @@ api
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: dpd.osm
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+
 .. automodule:: dpd.utils
     :members:
     :imported-members:

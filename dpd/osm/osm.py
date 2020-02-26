@@ -1,5 +1,5 @@
 """
-A class to query the Overpass API.
+A class to query the Overpass API
 """
 from collections import namedtuple
 
@@ -10,6 +10,9 @@ OSMObject = namedtuple("OSMObject", "osm, geo")
 
 
 class OSM:
+    """
+    A class to query the Overpass API
+    """
     def __init__(self):
         self.url = "http://overpass-api.de/api/interpreter"
         self.nodes = {}
