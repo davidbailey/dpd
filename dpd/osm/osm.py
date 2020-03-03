@@ -13,6 +13,7 @@ class OSM:
     """
     A class to query the Overpass API
     """
+
     def __init__(self):
         self.url = "http://overpass-api.de/api/interpreter"
         self.nodes = {}
