@@ -1,13 +1,15 @@
 import unittest
 
-from dpd.uscensus import get_geometry_for_states
+from dpd.uscensus import get_uscensus_data
 
+YEAR = "2016"
+STATE = "11"
 
 class TestUSCensus(unittest.TestCase):
     def test_uscensus(self):
-        self.geometry = get_geometry_for_states("2016", ["11"])
+        self.dataframe = get_uscensus_data(YEAR, STATE, with_geometry=True)
         self.assertEqual(
-            self.geometry[self.geometry["GEOID"] == "11001010900"]["AWATER"], 2936613
+            self.dataframe[self.dataframe["GEOID"] == "11001010900"]["AWATER"].values[0], 2936613
         )
 
 
