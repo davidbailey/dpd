@@ -10,6 +10,6 @@ setup(name='dpd',
       url='https://github.com/davidbailey/dpd',
       packages=find_packages(),
       license='Public Domain',
-      install_requires=['geopandas', 'requests', 'shapely', 'bs4', 'pandas', 'gtfstk', 'pyproj', 'folium', 'matplotlib', 'mplleaflet'],
+      install_requires=['geopandas', 'requests', 'shapely', 'bs4', 'pandas', 'gtfs_kit', 'pyproj', 'folium', 'matplotlib', 'mplleaflet'],
       tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )

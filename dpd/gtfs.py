@@ -5,7 +5,7 @@ from dpd.utils import epsg4326_to_aea
 import matplotlib.pyplot as plt
 
 import requests
-import gtfstk
+import gtfs_kit
 import tempfile
 import folium
 import mplleaflet
@@ -19,13 +19,13 @@ from dpd.utils import timestring_to_timeobject
 
 def url2gtfs(url, dist_units="mi"):
     """
-    Downloads a gtfs zip into a temp file and returns it as a gtfstk object.
+    Downloads a gtfs zip into a temp file and returns it as a gtfs_kit object.
     """
     r = requests.get(url)
     with tempfile.NamedTemporaryFile() as f:
         f.write(r._content)
         f.seek(0)  # https://stackoverflow.com/questions/10478242/temp-readline-empty
-        return gtfstk.read_gtfs(f.name, dist_units=dist_units)
+        return gtfs_kit.read_gtfs(f.name, dist_units=dist_units)
 
 
 def get_rail_stops(gtfs):
