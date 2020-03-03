@@ -28,21 +28,6 @@ def url2gtfs(url, dist_units="mi"):
         return gtfs_kit.read_gtfs(f.name, dist_units=dist_units)
 
 
-def get_rail_stops(gtfs):
-    """
-    Filters a GTFS object for routes of route_type 0 and returns a unique list of stops.
-    """
-    rail_stops = []
-    for route_id in gtfs.routes[gtfs.routes["route_type"] == 0]["route_id"]:
-        for trip_id in gtfs.trips[gtfs.trips["route_id"] == route_id]["trip_id"]:
-            for stop_id in gtfs.stop_times[gtfs.stop_times["trip_id"] == trip_id][
-                "stop_id"
-            ]:
-                rail_stops.append(stop_id)
-    rail_stops = set(rail_stops)
-    return gtfs.stops[gtfs.stops["stop_id"].isin(rail_stops)]
-
-
 def contour_plot(ax, point, resolution, number):
     x = numpy.linspace(point.x - resolution, point.x + resolution, number)
     y = numpy.linspace(point.y - resolution, point.y + resolution, number)
