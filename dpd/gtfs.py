@@ -1,4 +1,3 @@
-import datetime
 import pyproj
 import shapely
 from shapely.ops import transform
@@ -16,6 +15,7 @@ from matplotlib import pyplot
 from shapely.geometry import Point
 from functools import partial, lru_cache
 
+from dpd.utils import timestring_to_timeobject
 
 def url2gtfs(url, dist_units="mi"):
     """
@@ -103,19 +103,6 @@ def plot_stops(foliumMap, stops, markercolor):
     )
 
 
-def timestring2timeobject(timestring):
-    # handle the case where hours go past midnight...
-    days = 0
-    hours = int(timestring[0:2])
-    while hours > 23:
-        days += 1
-        hours -= 24
-    timestring = str(hours) + timestring[2:]
-    return datetime.datetime.strptime(timestring, "%H:%M:%S") + datetime.timedelta(
-        days=days
-    )
-
-
 def stop_id_to_distance(feed, aea_line, stop_id):
     stop = feed.stops[feed.stops.stop_id == stop_id]
     stop_point = shapely.geometry.point.Point(stop.stop_lon, stop.stop_lat)
@@ -139,8 +126,8 @@ def plot_schedule(feed, route_id, service_id, shape_id=None):
 
     for trip_id in trips:
         d = feed.stop_times[feed.stop_times["trip_id"] == trip_id].copy()
-        d["arrival_time_object"] = d.arrival_time.map(timestring2timeobject)
-        d["departure_time_object"] = d.departure_time.map(timestring2timeobject)
+        d["arrival_time_object"] = d.arrival_time.map(timestring_to_timeobject)
+        d["departure_time_object"] = d.departure_time.map(timestring_to_timeobject)
         d["distance"] = d.stop_id.map(stop_id_to_distance_cached)
         plt.plot(d.arrival_time_object, d.distance / 1000)
     plt.xlabel("Time of Day")
