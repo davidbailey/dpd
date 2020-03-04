@@ -3,7 +3,7 @@ from functools import lru_cache
 import matplotlib.pyplot as plt
 import shapely
 
-from dpd.utils import epsg4326_to_aea
+from dpd.utils import epsg4326_to_aea, timestring_to_timeobject
 
 
 def _stop_id_to_distance(feed, aea_line, stop_id):
