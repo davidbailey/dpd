@@ -15,7 +15,7 @@ def _plot_linestring(foliumMap, row):
     ).add_to(foliumMap)
 
 
-def plot_stops(foliumMap, stops, markercolor="red", with_contour=False):
+def plot_stops(foliumMap, stops, markercolor="red", with_contour=False, mode="walking"):
     """
     Plot a table of stops on a Folium map.
     
@@ -29,7 +29,7 @@ def plot_stops(foliumMap, stops, markercolor="red", with_contour=False):
         fig, ax = plt.subplots()
         stops.apply(
             lambda row: contour_plot(
-                ax, Point(float(row["stop_lon"]), float(row["stop_lat"])), 0.025, 15
+                ax, Point(float(row["stop_lon"]), float(row["stop_lat"])), 0.025, 15, mode=mode
             ),
             axis=1,
         )
