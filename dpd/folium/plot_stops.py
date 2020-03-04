@@ -29,7 +29,11 @@ def plot_stops(foliumMap, stops, markercolor="red", with_contour=False, mode="wa
         fig, ax = plt.subplots()
         stops.apply(
             lambda row: contour_plot(
-                ax, Point(float(row["stop_lon"]), float(row["stop_lat"])), 0.025, 15, mode=mode
+                ax,
+                Point(float(row["stop_lon"]), float(row["stop_lat"])),
+                0.025,
+                15,
+                mode=mode,
             ),
             axis=1,
         )
