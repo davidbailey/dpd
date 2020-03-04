@@ -5,6 +5,7 @@ import shapely
 
 from dpd.utils import epsg4326_to_aea
 
+
 def _stop_id_to_distance(feed, aea_line, stop_id):
     stop = feed.stops[feed.stops.stop_id == stop_id]
     stop_point = shapely.geometry.point.Point(stop.stop_lon, stop.stop_lat)

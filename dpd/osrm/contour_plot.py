@@ -2,7 +2,15 @@ import numpy
 import requests
 
 
-def contour_plot(ax, point, resolution, number_of_points, levels=[300, 600, 900], mode="walking", url_base="http://router.project-osrm.org/route/v1/"):
+def contour_plot(
+    ax,
+    point,
+    resolution,
+    number_of_points,
+    levels=[300, 600, 900],
+    mode="walking",
+    url_base="http://router.project-osrm.org/route/v1/",
+):
     """
     Plots contour lines denoting access times to a point (e.g. public transportation station) from a region around the point
     """

@@ -1,5 +1,6 @@
 import datetime
 
+
 def timestring_to_timeobject(timestring):
     """
     handle the case where hours go past midnight

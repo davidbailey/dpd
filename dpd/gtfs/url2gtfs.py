@@ -3,6 +3,7 @@ import tempfile
 import gtfs_kit
 import requests
 
+
 def url2gtfs(url, dist_units="mi"):
     """ 
     Downloads a gtfs zip into a temp file and returns it as a gtfs_kit object.
