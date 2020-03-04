@@ -6,6 +6,8 @@ from matplotlib import pyplot as plt
 import mplleaflet
 from shapely.geometry import Point
 
+from dpd.osrm import contour_plot
+
 
 def _plot_linestring(foliumMap, row):
     folium.PolyLine(
