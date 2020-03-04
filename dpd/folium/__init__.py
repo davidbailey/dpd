@@ -1,1 +1,1 @@
-from .gtfs import plot_stops
+from .plot_stops import plot_stops

@@ -7,7 +7,8 @@ import pandas
 
 
 def get_wikipedia_table(url, number=0):
-    """Get a table from wikipedia and return it as a Pandas DataFrame.
+    """
+    Get a table from wikipedia and return it as a Pandas DataFrame.
 
     Args:
         url (str): the url of the wikipedia page from which to get the table
