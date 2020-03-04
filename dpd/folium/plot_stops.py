@@ -25,7 +25,7 @@ def plot_stops(foliumMap, stops, markercolor="red", with_contour=False):
         color (str): marker color for the stops
         with_contour (bool): if the stops should include a contour_plot representing walk times
     """
-    if with_coutour:
+    if with_contour:
         fig, ax = plt.subplots()
         stops.apply(
             lambda row: contour_plot(
