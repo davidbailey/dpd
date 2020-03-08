@@ -3,6 +3,9 @@ import pandas as pd
 
 
 class Vehicle:
+    """
+    Describes a rail or road vehicle and includes methods to drive it along a "Line"
+    """
     def __init__(self, max_speed, max_acceleration, max_deceleration, name=""):
         self.max_speed = max_speed
         self.acceleration = max_acceleration
@@ -83,6 +86,9 @@ class Vehicle:
             self.fix_overspeed(speed_limit, distance)
 
     def drive_line_gdf(self, line_gdf):
+        """
+        Kicks off a drive down a line.
+        """
         self.speed = 0
         self.segments = []
         list(
