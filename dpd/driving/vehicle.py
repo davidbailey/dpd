@@ -6,6 +6,7 @@ class Vehicle:
     """
     Describes a rail or road vehicle and includes methods to drive it along a "Line"
     """
+
     def __init__(self, max_speed, max_acceleration, max_deceleration, name=""):
         self.max_speed = max_speed
         self.acceleration = max_acceleration
