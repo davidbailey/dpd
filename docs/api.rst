@@ -13,6 +13,30 @@ api
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: dpd.driving
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+    
+.. automodule:: dpd.folium
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+    
+.. automodule:: dpd.geometry
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+    
+.. automodule:: dpd.gtfs
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+    
 .. automodule:: dpd.mca
     :members:
     :imported-members:
@@ -20,6 +44,24 @@ api
     :show-inheritance:
 
 .. automodule:: dpd.osm
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: dpd.osrm
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: dpd.shapely
+    :members:
+    :imported-members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: dpd.uscensus
     :members:
     :imported-members:
     :undoc-members:

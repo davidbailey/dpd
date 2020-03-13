@@ -99,3 +99,6 @@ class Vehicle:
             )
         )
         self.result = pd.DataFrame(self.segments)
+        return self.result
+
+
