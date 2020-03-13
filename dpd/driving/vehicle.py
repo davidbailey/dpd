@@ -4,7 +4,7 @@ import pandas as pd
 
 class Vehicle:
     """
-    Describes a rail or road vehicle and includes methods to drive it along a "Line"
+    Describes a rail or road vehicle and includes methods to drive it along a line
     """
 
     def __init__(self, max_speed, max_acceleration, max_deceleration, name=""):
@@ -86,17 +86,16 @@ class Vehicle:
         if self.speed > speed_limit:
             self.fix_overspeed(speed_limit, distance)
 
-    def drive_line_gdf(self, line_gdf):
+    def drive_between_stops(self, speed_limits, lengths):
         """
-        Kicks off a drive down a line.
+        Kicks off a drive.
         """
         self.speed = 0
         self.segments = []
         list(
             map(
                 lambda x: self.drive_single_segment(x[0], x[1]),
-                zip(line_gdf["speed_limit"], line_gdf["length"]),
+                zip(speed_limits, lengths),
             )
         )
         self.result = pd.DataFrame(self.segments)
-        return self.result

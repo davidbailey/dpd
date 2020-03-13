@@ -9,7 +9,7 @@ def contour_plot(
     number_of_points,
     levels=[300, 600, 900],
     mode="walking",
-    url_base="https://router.project-osrm.org/table/v1/",
+    url_base="http://router.project-osrm.org/table/v1/",
 ):
     """
     Plots contour lines denoting access times to a point (e.g. public transportation station) from a region around the point
