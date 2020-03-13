@@ -12,7 +12,16 @@ class Route(geopandas.GeoDataFrame):
     """
     A way to keep track of all the points that make up a LineString, their radius of curvature, and their speed limit.
     """
-    def __init__(self, way, stops, tolerance=None, max_cant=.1524, max_cant_deficiency=.075, gague=1.435):
+
+    def __init__(
+        self,
+        way,
+        stops,
+        tolerance=None,
+        max_cant=0.1524,
+        max_cant_deficiency=0.075,
+        gague=1.435,
+    ):
         """
         Args:
             way (shapely.geometry.LineString): a LineString that contains the route the vehicle follows
@@ -29,30 +38,57 @@ class Route(geopandas.GeoDataFrame):
         index = list(map(str, zip(way.xy[0], way.xy[1])))
         geometry = list(map(Point, zip(aea_way.xy[0], aea_way.xy[1])))
         super().__init__(geometry, columns=["geometry"], index=index)
-        self.crs="North America Albers Equal Area Conic"
-        self['stop_name'] = ""
+        self.crs = "North America Albers Equal Area Conic"
+        self["stop_name"] = ""
         for stop in stops:
-            self.at[stop['geo'], "stop_name"] = stop['name']
-        self['after_geometry'] = self['geometry'].shift(-1)
-        self['distance_to_next_point'] = self.apply(lambda row: None if not row['after_geometry'] else LineString([row['geometry'], row['after_geometry']]).length, axis=1)
-        if tolerance: # not perfect (e.g. it is possible we will compeltely remove a segment where there are many close points when we really wanted to keep one or two)
-            self.drop(self[(self['distance_to_next_point'] < tolerance) & (self['stop_name'] == "")].index, inplace=True)
-            self['after_geometry'] = self['geometry'].shift(-1)
-            self['distance_to_next_point'] = self.apply(lambda row: None if not row['after_geometry'] else LineString([row['geometry'], row['after_geometry']]).length, axis=1)
-        self['before_geometry'] = self['geometry'].shift(1)
-        self['radius_of_curvature'] = self.apply(lambda row: 5000 if row['before_geometry'] is None or row['after_geometry'] is None else radius_of_curvature(
-                (row['before_geometry'].x, row['before_geometry'].y),
-                (row['geometry'].x, row['geometry'].y),
-                (row['after_geometry'].x, row['after_geometry'].y)
-            ), axis=1)
-        self['speed_limit'] = self['radius_of_curvature'].apply(
-        lambda radius_of_curvature: np.sqrt(9.8 * (max_cant + max_cant_deficiency) * radius_of_curvature / gague)
+            self.at[stop["geo"], "stop_name"] = stop["name"]
+        self["after_geometry"] = self["geometry"].shift(-1)
+        self["distance_to_next_point"] = self.apply(
+            lambda row: None
+            if not row["after_geometry"]
+            else LineString([row["geometry"], row["after_geometry"]]).length,
+            axis=1,
         )
-        self.max_cant:float = max_cant
-        self.max_cant_deficiency:float = max_cant_deficiency
-        self.gague:float = gague
-        self["dwell_time"] = self.apply(lambda row: 0 if row['stop_name'] == "" else 45, axis=1)
-    
+        if (
+            tolerance
+        ):  # not perfect (e.g. it is possible we will compeltely remove a segment where there are many close points when we really wanted to keep one or two)
+            self.drop(
+                self[
+                    (self["distance_to_next_point"] < tolerance)
+                    & (self["stop_name"] == "")
+                ].index,
+                inplace=True,
+            )
+            self["after_geometry"] = self["geometry"].shift(-1)
+            self["distance_to_next_point"] = self.apply(
+                lambda row: None
+                if not row["after_geometry"]
+                else LineString([row["geometry"], row["after_geometry"]]).length,
+                axis=1,
+            )
+        self["before_geometry"] = self["geometry"].shift(1)
+        self["radius_of_curvature"] = self.apply(
+            lambda row: 5000
+            if row["before_geometry"] is None or row["after_geometry"] is None
+            else radius_of_curvature(
+                (row["before_geometry"].x, row["before_geometry"].y),
+                (row["geometry"].x, row["geometry"].y),
+                (row["after_geometry"].x, row["after_geometry"].y),
+            ),
+            axis=1,
+        )
+        self["speed_limit"] = self["radius_of_curvature"].apply(
+            lambda radius_of_curvature: np.sqrt(
+                9.8 * (max_cant + max_cant_deficiency) * radius_of_curvature / gague
+            )
+        )
+        self.max_cant: float = max_cant
+        self.max_cant_deficiency: float = max_cant_deficiency
+        self.gague: float = gague
+        self["dwell_time"] = self.apply(
+            lambda row: 0 if row["stop_name"] == "" else 45, axis=1
+        )
+
     def from_osm(osm, relation, *args, **kwargs):
         """
         A way to build a route from OpenStreetMaps data
@@ -64,18 +100,27 @@ class Route(geopandas.GeoDataFrame):
             dpd.driving.Route: a route table 
         """
 
-
-        ways = [osm.ways[member['ref']].geo for member in osm.relations[relation]['members'] if member['type'] == 'way' and member['role'] == '']    
+        ways = [
+            osm.ways[member["ref"]].geo
+            for member in osm.relations[relation]["members"]
+            if member["type"] == "way" and member["role"] == ""
+        ]
         way = linemerge(ways)
         stops = []
-        for member in osm.relations[relation]['members']:
-            if member['type'] == 'node':
-                stops.append({
-                    "geo": str((osm.nodes[member['ref']].geo.xy[0][0], osm.nodes[member['ref']].geo.xy[1][0])),
-                    "name": osm.nodes[member['ref']].osm['tags']['name']
-                })
+        for member in osm.relations[relation]["members"]:
+            if member["type"] == "node":
+                stops.append(
+                    {
+                        "geo": str(
+                            (
+                                osm.nodes[member["ref"]].geo.xy[0][0],
+                                osm.nodes[member["ref"]].geo.xy[1][0],
+                            )
+                        ),
+                        "name": osm.nodes[member["ref"]].osm["tags"]["name"],
+                    }
+                )
         return Route(way, stops, *args, **kwargs)
-
 
     def add_vehicle(self, vehicle, buffer=0.0):
         """
@@ -85,19 +130,21 @@ class Route(geopandas.GeoDataFrame):
             vehicle (dpd.driving.Vehicle): the vehicle to drive along the route
             buffer (float): a multiplier to control for timetable padding
         """
-        self['time_to_next_stop'] = 0
+        self["time_to_next_stop"] = 0
         stops = self[self.stop_name != ""].index.values.tolist()
         stop = stops.pop(0)
         for next_stop in stops:
-            speed_limits = list(self[stop: next_stop].speed_limit)
+            speed_limits = list(self[stop:next_stop].speed_limit)
             speed_limits.pop()
             speed_limits.append(0.00001)
-            lengths = list(self[stop: next_stop].distance_to_next_point)
+            lengths = list(self[stop:next_stop].distance_to_next_point)
             lengths.pop()
             lengths.append(0.00001)
-            self.at[stop, 'time_to_next_stop'] = vehicle.drive_between_stops(speed_limits, lengths)['time'].sum()
+            self.at[stop, "time_to_next_stop"] = vehicle.drive_between_stops(
+                speed_limits, lengths
+            )["time"].sum()
             stop = next_stop
-        
+
     def folium_map(self, map=None):
         """
         A shortcut to
@@ -109,6 +156,13 @@ class Route(geopandas.GeoDataFrame):
             map (folium.Map): the map with the route on it
         """
         if not map:
-            map = folium.Map(location=[self['geometry'].to_crs(epsg='4326')[0].xy[1][0], self['geometry'].to_crs(epsg='4326')[0].xy[0][0]])
-        map.add_children(folium.features.GeoJson(self['geometry'].to_crs(epsg='4326').to_json()))
+            map = folium.Map(
+                location=[
+                    self["geometry"].to_crs(epsg="4326")[0].xy[1][0],
+                    self["geometry"].to_crs(epsg="4326")[0].xy[0][0],
+                ]
+            )
+        map.add_children(
+            folium.features.GeoJson(self["geometry"].to_crs(epsg="4326").to_json())
+        )
         return map

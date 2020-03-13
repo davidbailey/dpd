@@ -8,6 +8,7 @@ https://github.com/davidbailey/dpd
 
    notebooks/cba.ipynb
    notebooks/density_and_public_transportation.ipynb
+   notebooks/driving.ipynb
    notebooks/mca.ipynb
    notebooks/plot_schedule.ipynb
    notebooks/wikipedia.ipynb

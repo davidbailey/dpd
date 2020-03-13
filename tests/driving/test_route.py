@@ -8,6 +8,7 @@ relation = 2351006
 osm = OSM()
 osm.download_relation(relation)
 
+
 class TestRoute(unittest.TestCase):
     def test_route(self):
         self.vehicle = Vehicle(24.5872, 1.3, -1.3, name="max_speed_55_mph_vehicle")
