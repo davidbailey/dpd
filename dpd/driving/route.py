@@ -137,12 +137,14 @@ class Route(geopandas.GeoDataFrame):
         stop = stops.pop(0)
         for next_stop in stops:
             speed_limits = list(self[stop:next_stop].speed_limit)[:-1]
-            speed_limits.append(0.00001) # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
+            speed_limits.append(
+                0.00001
+            )  # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
             lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
-            self.at[stop, "time_to_next_stop"] = vehicle.drive_between_stops(
-                speed_limits, lengths
-            )["time"].sum() - 1 # subtract 1 to cancel out adding the extra speed limit and length
+            self.at[stop, "time_to_next_stop"] = (
+                vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
+            )  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
 
     def folium_map(self, map=None):
