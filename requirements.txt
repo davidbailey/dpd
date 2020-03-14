@@ -1,0 +1,15 @@
+black
+bs4
+coveralls
+flask
+folium
+geopandas
+gtfs_kit
+matplotlib
+mplleaflet
+pandas==0.25.3
+pyproj
+pytest
+pytest-cov
+requests
+shapely
