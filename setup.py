@@ -22,6 +22,7 @@ setup(
         "folium",
         "matplotlib",
         "mplleaflet",
+        "flask",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )
