@@ -10,26 +10,28 @@ from dpd.utils import epsg4326_to_aea
 
 class Route(geopandas.GeoDataFrame):
     """
-    A way to keep track of all the points that make up a LineString, their radius of curvature, and their speed limit.
+    A way to keep track of all the points that make up a route. We can then calculate their radius of curvature and their speed limit. Then we can have a vehicle drive the route to give us an idea of travel time.
     """
 
     def __init__(
         self,
         way,
-        stops,
+        stops=[],
         tolerance=None,
         max_cant=0.1524,
         max_cant_deficiency=0.075,
         gague=1.435,
+        dwell_time=45,
     ):
         """
         Args:
-            way (shapely.geometry.LineString): a LineString that contains the route the vehicle follows
-            stops ():
+            way (shapely.geometry.LineString): a LineString that contains the route the vehicle follows in EPSG:4326
+            stops ([{"geo": shapely.geometry.Point, "name": str}]): a list of "stops" that have a name and a geometry
             tolerance (int): the minimum distance (in meters) for which to keep neighboring stops so they do not create unrealistic curves
             max_cant: (float): the maximum allowable cant (in meters)
             max_cant_deficiency (float): the maximum allowable cant deficiency (in meters)
             gague (float): the track gague (in meters)
+            dwell_time (int): the dwell time for each stop (in seconds)
 
         Returns:
             dpd.driving.Route: a route table 
@@ -51,7 +53,7 @@ class Route(geopandas.GeoDataFrame):
         )
         if (
             tolerance
-        ):  # not perfect (e.g. it is possible we will compeltely remove a segment where there are many close points when we really wanted to keep one or two)
+        ):  # not perfect (e.g. it is possible we will compeltely remove a segment where there are many close points and we really wanted to keep one or two)
             self.drop(
                 self[
                     (self["distance_to_next_point"] < tolerance)
@@ -86,7 +88,7 @@ class Route(geopandas.GeoDataFrame):
         self.max_cant_deficiency: float = max_cant_deficiency
         self.gague: float = gague
         self["dwell_time"] = self.apply(
-            lambda row: 0 if row["stop_name"] == "" else 45, axis=1
+            lambda row: 0 if row["stop_name"] == "" else dwell_time, axis=1
         )
 
     def from_osm(osm, relation, *args, **kwargs):
@@ -134,20 +136,18 @@ class Route(geopandas.GeoDataFrame):
         stops = self[self.stop_name != ""].index.values.tolist()
         stop = stops.pop(0)
         for next_stop in stops:
-            speed_limits = list(self[stop:next_stop].speed_limit)
-            speed_limits.pop()
-            speed_limits.append(0.00001)
-            lengths = list(self[stop:next_stop].distance_to_next_point)
-            lengths.pop()
+            speed_limits = list(self[stop:next_stop].speed_limit)[:-1]
+            speed_limits.append(0.00001) # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
+            lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
             self.at[stop, "time_to_next_stop"] = vehicle.drive_between_stops(
                 speed_limits, lengths
-            )["time"].sum()
+            )["time"].sum() - 1 # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
 
     def folium_map(self, map=None):
         """
-        A shortcut to
+        A shortcut to create a folium map of the route.
 
         Args:
             map (folium.Map): an existing map to add the route to
