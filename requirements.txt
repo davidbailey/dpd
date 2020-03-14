@@ -6,7 +6,7 @@ geopandas
 requests
 shapely
 bs4
-pandas
+pandas==0.25.3
 gtfs_kit
 pyproj
 folium
