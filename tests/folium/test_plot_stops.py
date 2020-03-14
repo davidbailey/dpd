@@ -6,8 +6,8 @@ import pandas
 from dpd.folium import plot_stops
 
 
-class TestFolium(unittest.TestCase):
-    def test_folium(self):
+class TestPlotStops(unittest.TestCase):
+    def test_plot_stops(self):
         self.stops = {
             "stop_lat": 38.6258,
             "stop_lon": -121.475,
