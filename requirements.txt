@@ -7,7 +7,7 @@ geopandas
 gtfs_kit
 matplotlib
 mplleaflet
-pandas==0.25.3
+pandas
 pyproj
 pytest
 pytest-cov
