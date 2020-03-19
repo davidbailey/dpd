@@ -14,7 +14,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
 
     @staticmethod
     def from_ipfn(zones, cost_dataframe):
-        cost_dataframe["origin_zone"] = cost_dataframe.columns
+        cost_dataframe["origin_zone"] = cost_dataframe.index
         cost_dataframe = cost_dataframe.melt(id_vars=["origin_zone"])
         cost_dataframe.columns = ["origin_zone", "destination_zone", "total"]
         production = zones["Production"]
