@@ -23,6 +23,7 @@ setup(
         "matplotlib",
         "mplleaflet",
         "flask",
+        "ipfn",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )

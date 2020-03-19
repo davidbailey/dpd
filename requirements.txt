@@ -5,6 +5,7 @@ flask
 folium
 geopandas
 gtfs_kit
+ipfn
 matplotlib
 mplleaflet
 pandas==0.25.3
