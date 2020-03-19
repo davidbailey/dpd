@@ -11,7 +11,7 @@ class TestZones(unittest.TestCase):
     def test_zones(self):
         zones = Zones.from_uscensus(ST, YEAR)
         zones["Attraction"] = zones["Production"]
-        od = zones.calculate_origin_destination_dataframe(beta=beta)
+        od = zones.calculate_origin_destination_dataframe(beta=BETA)
 
 
 if __name__ == "__main__":
