@@ -1,4 +1,5 @@
 from ipfn import ipfn
+import networkx
 import pandas
 
 from dpd.uscensus import download_lodes_od, download_lodes_xwalk
@@ -48,3 +49,15 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         )
         od_xwalk = od_xwalk.groupby(["trct_w", "trct_h"]).sum()
         return OriginDestinationDataFrame(od_xwalk)
+
+    def route_assignment(self, zones):
+        for origin in self.index:
+            for destination in self.columns:
+                path = networkx.shortest_path(zones.graph, origin, destination)
+                # TODO this fails when there is no path (e.g. islands). But these people still get to work somehow.
+                for i in range(len(path) - 1):
+                    zones.graph[path[i]][path[i + 1]]["volume"] = (
+                        zones.graph[path[i]][path[i + 1]]["volume"]
+                        + self.loc[origin][destination]
+                    )
+        return zones.graph

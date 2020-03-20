@@ -4,6 +4,7 @@ A function to get data from the US Census API
 import pandas
 import geopandas
 import requests
+from pyproj import CRS
 
 
 def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
@@ -40,6 +41,8 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
             + state
             + "_tract.zip"
         )
+        geometry.crs = CRS.from_epsg(4326)
+
         dataframe = pandas.merge(
             dataframe,
             geometry,

@@ -24,6 +24,7 @@ setup(
         "mplleaflet",
         "flask",
         "ipfn",
+        "networkx",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )

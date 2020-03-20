@@ -1,4 +1,7 @@
 import geopandas
+from matplotlib import pyplot
+from matplotlib import patheffects
+import networkx
 from shapely.geometry import Point
 
 from dpd.uscensus import get_uscensus_data
@@ -61,3 +64,42 @@ class Zones(geopandas.GeoDataFrame):
                 beta=beta, centroid_distance_dataframe=centroid_distance_dataframe
             )
         return OriginDestinationDataFrame.from_ipfn(self, cost_dataframe)
+
+    def build_graph(self, centroid_distance_dataframe=None):
+        if centroid_distance_dataframe is None:
+            centroid_distance_dataframe = self.calculate_centroid_distance_dataframe()
+        self.graph = networkx.Graph()
+        self.graph.add_nodes_from(self.index)
+        for zone1 in self.index:
+            for zone2 in self.index:
+                if self.loc[zone1]["geometry"].touches(self.loc[zone2]["geometry"]):
+                    self.graph.add_edge(
+                        zone1,
+                        zone2,
+                        distance=centroid_distance_dataframe.loc[zone1][zone2],
+                        volume=0.0,
+                    )
+        return self.graph
+
+    def visualize_route_assignment(self, linewidth=.0001, ax=None):
+        if not self.graph:
+            raise AttributeError("Graph not built yet. Please run Zones.buid_graph and OriginDestinationDataFrame.route_assignment() first.")
+        if not "centroid" in self.columns:
+            self["centroid"] = self.geometry.map(
+                lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
+            )
+        if ax is None:
+            ax = plt.subplot(111)
+        self.plot(ax=ax)
+        for edge in self.graph.edges:
+            volume = self.graph.edges[edge]["volume"]
+            y = [self.loc[edge[0]]["centroid"].x, self.loc[edge[1]]["centroid"].x]
+            x = [self.loc[edge[0]]["centroid"].y, self.loc[edge[1]]["centroid"].y]
+            ax.plot(
+                x,
+                y,
+                color="#444444",
+                linewidth=volume * linewidth,
+                solid_capstyle="round",
+                zorder=1,
+            )

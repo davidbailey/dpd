@@ -8,6 +8,7 @@ gtfs_kit
 ipfn
 matplotlib
 mplleaflet
+networkx
 pandas
 pyproj
 pytest
