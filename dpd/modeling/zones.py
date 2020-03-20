@@ -1,5 +1,5 @@
 import geopandas
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 from matplotlib import patheffects
 import networkx
 from shapely.geometry import Point
