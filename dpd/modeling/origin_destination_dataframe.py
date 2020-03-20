@@ -28,7 +28,9 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         IPF = ipfn.ipfn(cost_dataframe, aggregates, dimensions)
         trips = IPF.iteration()
         return OriginDestinationDataFrame(
-            trips.pivot(index="origin_zone", columns="destination_zone", values="total").stack()
+            trips.pivot(
+                index="origin_zone", columns="destination_zone", values="total"
+            ).stack()
         )
 
     @staticmethod
@@ -57,7 +59,6 @@ class OriginDestinationDataFrame(pandas.DataFrame):
             # TODO this fails when there is no path (e.g. islands). But these people still get to work somehow.
             for i in range(len(path) - 1):
                 zones.graph[path[i]][path[i + 1]]["volume"] = (
-                    zones.graph[path[i]][path[i + 1]]["volume"]
-                    + row["S000"]
+                    zones.graph[path[i]][path[i + 1]]["volume"] + row["S000"]
                 )
         return zones.graph
