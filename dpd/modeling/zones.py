@@ -81,9 +81,11 @@ class Zones(geopandas.GeoDataFrame):
                     )
         return self.graph
 
-    def visualize_route_assignment(self, linewidth=.0001, ax=None):
+    def visualize_route_assignment(self, linewidth=0.0001, ax=None):
         if not self.graph:
-            raise AttributeError("Graph not built yet. Please run Zones.buid_graph and OriginDestinationDataFrame.route_assignment() first.")
+            raise AttributeError(
+                "Graph not built yet. Please run Zones.buid_graph and OriginDestinationDataFrame.route_assignment() first."
+            )
         if not "centroid" in self.columns:
             self["centroid"] = self.geometry.map(
                 lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
