@@ -15,6 +15,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
 
     @staticmethod
     def from_ipfn(zones, cost_dataframe):
+        # TODO fix this method
         cost_dataframe["origin_zone"] = cost_dataframe.index
         cost_dataframe = cost_dataframe.melt(id_vars=["origin_zone"])
         cost_dataframe.columns = ["origin_zone", "destination_zone", "total"]
@@ -27,7 +28,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         IPF = ipfn.ipfn(cost_dataframe, aggregates, dimensions)
         trips = IPF.iteration()
         return OriginDestinationDataFrame(
-            trips.pivot(index="origin_zone", columns="destination_zone", values="total")
+            trips.pivot(index="origin_zone", columns="destination_zone", values="total").stack()
         )
 
     @staticmethod
@@ -50,14 +51,13 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         od_xwalk = od_xwalk.groupby(["trct_w", "trct_h"]).sum()
         return OriginDestinationDataFrame(od_xwalk)
 
-    def route_assignment(self, zones):
-        for origin in self.index:
-            for destination in self.columns:
-                path = networkx.shortest_path(zones.graph, origin, destination)
-                # TODO this fails when there is no path (e.g. islands). But these people still get to work somehow.
-                for i in range(len(path) - 1):
-                    zones.graph[path[i]][path[i + 1]]["volume"] = (
-                        zones.graph[path[i]][path[i + 1]]["volume"]
-                        + self.loc[origin][destination]
-                    )
+    def route_assignment(self, zones, column="S000"):
+        for (origin, destination), row in self.iterrows():
+            path = networkx.shortest_path(zones.graph, origin, destination)
+            # TODO this fails when there is no path (e.g. islands). But these people still get to work somehow.
+            for i in range(len(path) - 1):
+                zones.graph[path[i]][path[i + 1]]["volume"] = (
+                    zones.graph[path[i]][path[i + 1]]["volume"]
+                    + row["S000"]
+                )
         return zones.graph
