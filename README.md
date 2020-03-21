@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=master)](https://coveralls.io/github/davidbailey/dpd?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/dpd/badge/?version=latest)](https://dpd.readthedocs.io/en/latest/?badge=latest)
 
-dpd is a growing library of transportation-related tools sorted into following submodules:
+dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
 
 * Cost-benefit analysis (CBA) - a class for performing a cost-beneift analysis. E.g. [Cost-benefit analysis](https://dpd.readthedocs.io/en/latest/notebooks/cba.html)
 * D3.js - functions for generating D3.js documents from python code. Supports radar charts and dendrogram. E.g. [Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
