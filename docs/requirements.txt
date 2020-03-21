@@ -6,7 +6,6 @@ bs4
 coveralls
 flask
 folium
-gtfs_kit
 ipfn
 matplotlib
 mplleaflet

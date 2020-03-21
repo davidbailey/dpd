@@ -19,12 +19,6 @@ api
     :undoc-members:
     :show-inheritance:
     
-.. automodule:: dpd.gtfs
-    :members:
-    :imported-members:
-    :undoc-members:
-    :show-inheritance:
-    
 .. automodule:: dpd.mca
     :members:
     :imported-members:
