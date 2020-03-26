@@ -1,6 +1,6 @@
 import unittest
 
-from dpd.uscensus import download_lodes_od, download_lodes_xwalk
+from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 
 YEAR = "2017"
 ST = "ri"
@@ -10,7 +10,7 @@ PART = "main"
 
 class TestDownloadLODES(unittest.TestCase):
     def test_download_lodes(self):
-        download_lodes_od(ST, PART, TYPE_, YEAR)
+        download_lodes_data("od", ST, PART, TYPE_, YEAR)
         download_lodes_xwalk(ST)
 
 
