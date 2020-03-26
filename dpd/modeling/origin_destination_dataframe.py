@@ -2,7 +2,7 @@ from ipfn import ipfn
 import networkx
 import pandas
 
-from dpd.uscensus import download_lodes_od, download_lodes_xwalk
+from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 
 
 class OriginDestinationDataFrame(pandas.DataFrame):

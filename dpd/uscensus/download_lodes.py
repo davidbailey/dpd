@@ -26,11 +26,29 @@ def download_lodes_data(data, st, part_or_seg, type_, year):
     if data == "od":
         part_values = ["main", "aux"]
         if part_or_seg not in part_values:
-            raise ValueError("part_or_seg must be one of " + str(part_values) + "when data is " + data)
+            raise ValueError(
+                "part_or_seg must be one of "
+                + str(part_values)
+                + "when data is "
+                + data
+            )
     elif data in ["rac", "wac"]:
-        seg_values = ["S000", "SA01", "SA02", "SA03", "SE01", "SE02", "SE03", "SI01", "SI02", "SI03"]
+        seg_values = [
+            "S000",
+            "SA01",
+            "SA02",
+            "SA03",
+            "SE01",
+            "SE02",
+            "SE03",
+            "SI01",
+            "SI02",
+            "SI03",
+        ]
         if part_or_seg not in seg_values:
-            raise ValueError("part_or_seg must be one of " + str(seg_values) + "when data is " + data)
+            raise ValueError(
+                "part_or_seg must be one of " + str(seg_values) + "when data is " + data
+            )
     type_values = ["JT00", "JT01", "JT02", "JT03", "JT04", "JT05"]
     if type_ not in type_values:
         raise ValueError("type_ must be one of " + str(type_values))
