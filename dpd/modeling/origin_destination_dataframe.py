@@ -36,7 +36,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
     @staticmethod
     def from_lodes(st, year):
         print("Downloading origin-destination data")
-        od = pandas.read_csv(download_lodes_od(st, "main", "JT00", year))
+        od = pandas.read_csv(download_lodes_data("od", st, "main", "JT00", year))
         print("Downloading crosswalk data")
         xwalk = pandas.read_csv(download_lodes_xwalk(st))
         xwalk.set_index("tabblk2010", inplace=True)
