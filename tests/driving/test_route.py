@@ -15,7 +15,7 @@ class TestRoute(unittest.TestCase):
         self.route = Route.from_osm(osm, relation, tolerance=10)
         self.route.add_vehicle(self.vehicle)
         self.assertEqual(
-            49.46666666666667,
+            51.0,
             (
                 self.route[self.route.stop_name != ""]["time_to_next_stop"].sum()
                 + self.route.dwell_time.sum()
