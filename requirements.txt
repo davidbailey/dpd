@@ -7,6 +7,7 @@ geopandas
 gtfs_kit
 ipfn
 matplotlib
+mesa
 mplleaflet
 networkx
 pandas

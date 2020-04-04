@@ -25,6 +25,7 @@ setup(
         "flask",
         "ipfn",
         "networkx",
+        "mesa",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )
