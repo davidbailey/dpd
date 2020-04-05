@@ -14,7 +14,7 @@ class TestRoute(unittest.TestCase):
         self.vehicle = Vehicle(24.5872, 1.3, -1.3, name="max_speed_55_mph_vehicle")
         self.route = Route.from_osm(osm, relation, tolerance=10)
         self.route.add_vehicle(self.vehicle)
-        self.assertEqual(
+        self.assertAlmostEqual(
             51.0,
             (
                 self.route[self.route.stop_name != ""]["time_to_next_stop"].sum()
@@ -22,6 +22,7 @@ class TestRoute(unittest.TestCase):
                 - 45
             )
             / 60,
+            delta=1,
         )
 
 
