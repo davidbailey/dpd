@@ -6,6 +6,7 @@ https://github.com/davidbailey/dpd
 .. toctree::
    :maxdepth: 2
 
+   notebooks/agent-based_transportation_model.ipynb
    notebooks/cba.ipynb
    notebooks/density_and_public_transportation.ipynb
    notebooks/driving.ipynb
