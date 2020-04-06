@@ -37,11 +37,22 @@ class Zones(geopandas.GeoDataFrame):
         )
         return Zones(zones)
 
+    def calculate_centroids(self):
+        """
+        Calculate the centroid of each zones.
+        """
+        self["centroid"] = self.geometry.map(
+            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
+        )
+
     def calculate_centroid_distance_dataframe(self):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
-        return CentroidDistanceDataFrame.from_geometries(self.geometry)
+        if not "centroid" in self.columns:
+            self.calculate_centroids()
+        self["aea_centroid"] = self.centroid.map(epsg4326_to_aea)
+        return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
 
     def calculate_cost_dataframe(self, beta=None, centroid_distance_dataframe=None):
         """

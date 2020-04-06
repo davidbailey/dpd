@@ -12,13 +12,9 @@ class CentroidDistanceDataFrame(pandas.DataFrame):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def from_geometries(geometries):
+    def from_centroids(centroids):
         """
         """
-        aea_geometries = geometries.map(epsg4326_to_aea)
-        centroids = aea_geometries.map(
-            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
-        )
         origin_list = []
         for origin_point in centroids:
             destination_list = []
