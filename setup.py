@@ -23,6 +23,7 @@ setup(
         "mplleaflet",
         "networkx",
         "pandas",
+        "polyline",
         "pyproj",
         "requests",
         "shapely",

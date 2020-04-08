@@ -37,6 +37,14 @@ class Zones(geopandas.GeoDataFrame):
         )
         return Zones(zones)
 
+    def calculate_aea_geometry(self):
+        """
+        Calculate an aea_geometry column.
+        """
+        self["aea_geometry"] = self.geometry.map(
+            lambda geometry: epsg4326_to_aea(geometry)
+        )
+
     def calculate_centroids(self):
         """
         Calculate the centroid of each zones.
