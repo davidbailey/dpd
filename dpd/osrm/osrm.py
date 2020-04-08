@@ -30,12 +30,12 @@ class OSRM:
         )
 
     def contract(self, *args, **kwargs):
-        if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm.hsgr"):
-            self.contract()
+        if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm"):
+            self.extract()
         print("Contracting " + self.filename)
         return subprocess.run(["osrm-contract", self.filename], *args, **kwargs)
 
     def routed(self, *args, **kwargs):
-        if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm"):
-            self.extract()
+        if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm.hsgr"):
+            self.contract()
         return subprocess.Popen(["osrm-routed", self.filename], *args, **kwargs)
