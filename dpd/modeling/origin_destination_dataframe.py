@@ -55,11 +55,18 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         return OriginDestinationDataFrame(od_xwalk)
 
     def add_geometry_from_zones(self, zones, method=random_point_in_polygon):
-        (self["home_geometry"], self["work_geometry"]) = self.index.map(
-            lambda index: [
-                method(zones.loc[index[1]]["geometry"]),
-                method(zones.loc[index[0]]["geometry"]),
-            ]
+        (self["home_geometry"], self["work_geometry"]) = list(
+            map(
+                list,
+                zip(
+                    *self.index.map(
+                        lambda index: [
+                            method(zones.loc[index[1]]["geometry"]),
+                            method(zones.loc[index[0]]["geometry"]),
+                        ]
+                    )
+                ),
+            )
         )
 
     def route_assignment(self, zones, column="S000"):
