@@ -2,7 +2,10 @@ from ipfn import ipfn
 import networkx
 import pandas
 
+from dpd.osrm import route
 from dpd.uscensus import download_lodes_data, download_lodes_xwalk
+from dpd.shapely import random_point_in_polygon
+from dpd.utils import epsg4326_to_aea
 
 
 class OriginDestinationDataFrame(pandas.DataFrame):
@@ -51,6 +54,14 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         od_xwalk = od_xwalk.groupby(["trct_w", "trct_h"]).sum()
         return OriginDestinationDataFrame(od_xwalk)
 
+    def add_geometry_from_zones(self, zones, method=random_point_in_polygon):
+        (self["home_geometry"], self["work_geometry"]) = self.index.map(
+            lambda index: [
+                method(zones.loc[index[1]]["geometry"]),
+                method(zones.loc[index[0]]["geometry"]),
+            ]
+        )
+
     def route_assignment(self, zones, column="S000"):
         for (origin, destination), row in self.iterrows():
             path = networkx.shortest_path(zones.graph, origin, destination)
@@ -60,3 +71,16 @@ class OriginDestinationDataFrame(pandas.DataFrame):
                     zones.graph[path[i]][path[i + 1]]["volume"] + row["S000"]
                 )
         return zones.graph
+
+    def add_route_hw_from_osrm(self, url_base, mode):
+        # check if home and work exist, if not, create them
+        if not "home_geometry" in self.columns and "work_geometry" in self.columns:
+            raise RuntimeError(
+                "No home_geometry and/or work_geometry. Please run add_geometry_from_zones first"
+            )
+        self["routes"] = self.apply(
+            lambda row: route(
+                row["home_geometry"], row["work_geometry"], url_base, mode
+            )["routes"],
+            axis=1,
+        )

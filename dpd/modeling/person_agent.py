@@ -19,11 +19,15 @@ class PersonAgent(Agent):
         self.speed = 30  # meters / step
         self.travel_time = 0
         self.distance = 0
+        self.vehicle = None
 
     def step(self):
         if self.pos != self.work:
             self.travel_time += 1
-            self.walk()
+            if self.vehicle:
+                self.drive()
+            else:
+                self.walk()
             if self.distance >= self.route_geometry.length:
                 self.pos = self.work
                 self.distance = self.route_geometry.length
@@ -40,3 +44,6 @@ class PersonAgent(Agent):
 
     def walk(self):
         self.distance += self.speed
+
+    def drive(self):
+        self.distance += self.vehicle.max_speed
