@@ -15,7 +15,7 @@ class TestPlotStops(unittest.TestCase):
         }
         self.stops = pandas.DataFrame(self.stops, index=[0])
         self.m = folium.Map()
-        plot_stops(self.m, self.stops, with_contour=True, mode="driving")
+        plot_stops(self.m, self.stops, with_contour=False, mode="driving")
 
 
 if __name__ == "__main__":
