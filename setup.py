@@ -25,7 +25,6 @@ setup(
         "pandas",
         "polyline",
         "pyproj",
-        "pytest",
         "requests",
         "shapely",
     ],
