@@ -1,6 +1,8 @@
 """
 A function to get data from the US Census API
 """
+import logging
+
 import pandas
 import geopandas
 import requests
@@ -27,6 +29,7 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
         + "&for=tract:*&in=state:"
         + state
     )
+    logging.debug("url: " + url):
     request = requests.get(url)
     dataframe = pandas.DataFrame(
         request.json()[1:], columns=request.json()[0], dtype="int"
