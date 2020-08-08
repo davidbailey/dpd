@@ -27,6 +27,7 @@ setup(
         "pyproj",
         "requests",
         "shapely",
+        "us",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )
