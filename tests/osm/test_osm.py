@@ -3,7 +3,7 @@ import unittest
 from dpd.osm import OSM
 
 relation = 2351006
-name = "Expo Line: 7th Street / Metro Center => Downtown Santa Monica"
+name = "E Line (Expo): 7th Street / Metro Center → Downtown Santa Monica"
 
 
 class TestOSM(unittest.TestCase):
