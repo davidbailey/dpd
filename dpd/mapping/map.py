@@ -2,6 +2,10 @@ import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
+from .intersection import Intersection
+from .lane import Lane
+from .road import Road
+
 
 class Map:
     def __init__(self):
