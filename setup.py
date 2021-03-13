@@ -22,6 +22,7 @@ setup(
         "mesa",
         "mplleaflet",
         "networkx",
+        "numpy",
         "pandas",
         "polyline",
         "pyproj",
