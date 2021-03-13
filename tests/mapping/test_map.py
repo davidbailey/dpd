@@ -23,7 +23,7 @@ class TestMap(unittest.TestCase):
                 Road(name, geometry, input_intersection, output_intersection, 1)
             )
         self.map_.plot()
-        self.map_.plot_folium()
+        self.map_.plot_folium(include_intersections=True)
 
 
 if __name__ == "__main__":
