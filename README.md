@@ -1,7 +1,7 @@
 # dpd
 
-[![Build Status](https://travis-ci.com/davidbailey/dpd.svg?branch=master)](https://travis-ci.com/davidbailey/dpd)
-[![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=master)](https://coveralls.io/github/davidbailey/dpd?branch=master)
+[![Build Status](https://travis-ci.com/davidbailey/dpd.svg?branch=trunk)](https://travis-ci.com/davidbailey/dpd)
+[![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=trunk)](https://coveralls.io/github/davidbailey/dpd?branch=trunk)
 [![Documentation Status](https://readthedocs.org/projects/dpd/badge/?version=latest)](https://dpd.readthedocs.io/en/latest/?badge=latest)
 
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
