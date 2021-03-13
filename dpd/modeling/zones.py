@@ -59,7 +59,7 @@ class Zones(geopandas.GeoDataFrame):
         """
         if not "centroid" in self.columns:
             self.calculate_centroids()
-        self["aea_centroid"] = self.centroid.map(epsg4326_to_aea)
+        self["aea_centroid"] = self.centroid.to_crs("North America Albers Equal Area Conic")
         return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
 
     def calculate_cost_dataframe(self, beta=None, centroid_distance_dataframe=None):
