@@ -34,7 +34,7 @@ class Route(geopandas.GeoDataFrame):
             dwell_time (int): the dwell time for each stop (in seconds)
 
         Returns:
-            dpd.driving.Route: a route table 
+            dpd.driving.Route: a route table
         """
         aea_way = epsg4326_to_aea(way)
         index = list(map(str, zip(way.xy[0], way.xy[1])))
@@ -94,12 +94,12 @@ class Route(geopandas.GeoDataFrame):
     def from_osm(osm, relation, *args, **kwargs):
         """
         A way to build a route from OpenStreetMaps data
-        
+
         Args:
             osm (dpd.OSM.osm): the osm that contains the route as a relation
             relation (int): the relation to build a route for
         Returns:
-            dpd.driving.Route: a route table 
+            dpd.driving.Route: a route table
         """
 
         ways = [
@@ -127,7 +127,7 @@ class Route(geopandas.GeoDataFrame):
     def add_vehicle(self, vehicle, buffer=0.0):
         """
         A way to have a vehicle "drive" along a route to generate the time between stops
-        
+
         Args:
             vehicle (dpd.driving.Vehicle): the vehicle to drive along the route
             buffer (float): a multiplier to control for timetable padding
@@ -153,7 +153,7 @@ class Route(geopandas.GeoDataFrame):
 
         Args:
             map (folium.Map): an existing map to add the route to
-        
+
         Returns:
             map (folium.Map): the map with the route on it
         """

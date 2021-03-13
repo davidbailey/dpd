@@ -18,7 +18,7 @@ def _plot_linestring(foliumMap, row):
 def plot_stops(foliumMap, stops, markercolor="red", with_contour=False, mode="walking"):
     """
     Plot a table of stops on a Folium map.
-    
+
     Args:
         foliumMap (folium.folium.Map): the map to plot the stops on
         stops (pandas.DataFrame): the DataFrame that contains the stops to plot

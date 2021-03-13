@@ -13,7 +13,7 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
     Args:
         year (str): the year to get the data from
         state (str): the name of the state to get the data for
-	data ([str]): the data to gather from the API
+        data ([str]): the data to gather from the API
         with_geometry (bool): if geometric data should be added to the result
 
     Returns:

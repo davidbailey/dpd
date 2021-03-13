@@ -1,7 +1,7 @@
 class Intersection:
     """
     Intersection: a place where things intersect.
-    
+
     input_lanes are lanes which feed into the intersection.
     output_lanes are lanes which feed out of the intersection.
     """

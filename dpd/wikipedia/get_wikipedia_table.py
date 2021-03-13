@@ -12,7 +12,7 @@ def get_wikipedia_table(url, number=0):
 
     Args:
         url (str): the url of the wikipedia page from which to get the table
-	number (int): which table on the page to return (for pages with multiple tables)
+        number (int): which table on the page to return (for pages with multiple tables)
 
     Returns:
         pandas.DataFrame: A dataframe containing the table

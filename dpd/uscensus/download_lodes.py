@@ -8,7 +8,7 @@ def download_lodes_data(data, st, part_or_seg, type_, year):
     Args:
         data (str): one of "od", "rac", or "wac"
             e.g. "od"
-        st (str): lowercase, 2-letter postal code for a chosen state 
+        st (str): lowercase, 2-letter postal code for a chosen state
             e.g. "ca"
         part_or_seg (str): If data is od, part of the state file, can have a value of either “main” or “aux”. Complimentary parts of the state file, the main part includes jobs with both workplace and residence in the state and the aux part includes jobs with the workplace in the state and the residence outside of the state. If data is rac or wac, segment of the workforce, can have the values of “S000”, “SA01”, “SA02”, “SA03”, “SE01”, “SE02”, “SE03”, “SI01”, “SI02”, or “SI03”. These correspond to the same segments of the workforce as are listed in the OD file structure.
             e.g. "main"
@@ -64,9 +64,9 @@ def download_lodes_xwalk(st):
     Download LODES Crosswalk file. APIS documentation from here: https://lehd.ces.census.gov/data/lodes/LODES7/LODESTechDoc7.4.pdf
 
     Args:
-        st (str): lowercase, 2-letter postal code for a chosen state 
+        st (str): lowercase, 2-letter postal code for a chosen state
             e.g. "ca"
-            
+
     Returns:
         str: the local filename of the downloaded file
     """
