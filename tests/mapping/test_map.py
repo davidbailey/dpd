@@ -22,6 +22,8 @@ class TestMap(unittest.TestCase):
             self.map_.add_road(
                 Road(name, geometry, input_intersection, output_intersection, 1)
             )
+        self.map_.plot()
+        self.map_.plot_folium()
 
 
 if __name__ == "__main__":
