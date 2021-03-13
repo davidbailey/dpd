@@ -19,7 +19,9 @@ class TestMap(unittest.TestCase):
             geometry = LineString(
                 [input_intersection.geometry, output_intersection.geometry]
             )
-            map_.add_road(Road(name, geometry, input_intersection, output_intersection, 1))
+            map_.add_road(
+                Road(name, geometry, input_intersection, output_intersection, 1)
+            )
 
 
 if __name__ == "__main__":

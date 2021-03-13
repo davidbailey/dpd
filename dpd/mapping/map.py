@@ -40,7 +40,9 @@ class Map:
                 )
         plt.show()
 
-    def plot_folium(self, include_intersections=False, include_roads=True, folium_map=None):
+    def plot_folium(
+        self, include_intersections=False, include_roads=True, folium_map=None
+    ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if include_intersections:

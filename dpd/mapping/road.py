@@ -2,6 +2,7 @@ class Road:
     """
     Note: the output_intersection of a road means that road is an input_road of that intersection. And the input_intersection of a road means that road is an output_road of that intersection
     """
+
     def __init__(
         self,
         name,
