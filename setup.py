@@ -25,6 +25,7 @@ setup(
         "numpy",
         "pandas",
         "polyline",
+        "pyrosm",
         "pyproj",
         "requests",
         "shapely",
