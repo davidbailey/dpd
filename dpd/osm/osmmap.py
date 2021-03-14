@@ -7,7 +7,7 @@ from shapely.geometry import Point, LineString
 from tqdm import tqdm
 
 
-from dpd.mapping import Map
+from dpd.mapping import Intersection, Map, Road
 
 
 class OSMMap(Map):
