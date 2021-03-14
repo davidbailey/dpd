@@ -3,6 +3,7 @@ from collections import Counter
 
 import geopandas as gpd
 from pyrosm import get_data, OSM
+from shapely.geometry import Point, LineString
 from tqdm import tqdm
 
 
