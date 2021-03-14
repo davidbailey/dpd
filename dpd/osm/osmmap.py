@@ -1,3 +1,5 @@
+from dpd.mapping import Map
+
 class OSMMap(Map):
     def __init__(self, region):
         super().__init__()
