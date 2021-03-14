@@ -15,7 +15,7 @@ class OSMMap(Map):
     def __init__(self, region):
         super().__init__()
         self.region = region
-        fp = get_data(region.value)
+        fp = get_data(region)
         self.osm = OSM(fp)
         self.osm.keep_node_info = True
         self.network = self.osm.get_network(
