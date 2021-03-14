@@ -1,4 +1,9 @@
+import geopandas as gpd
+from pyrosm import get_data, OSM
+
+
 from dpd.mapping import Map
+
 
 class OSMMap(Map):
     def __init__(self, region):
@@ -35,7 +40,10 @@ class OSMMap(Map):
             name = intersection
             coordinates = self.osm._node_coordinates[intersection]
             geometry = Point(coordinates["lon"], coordinates["lat"])
-            intersections[intersection] = {"geometry": geometry, "Intersection": Intersection(name, geometry)}
+            intersections[intersection] = {
+                "geometry": geometry,
+                "Intersection": Intersection(name, geometry),
+            }
         return intersections
 
     @staticmethod
@@ -64,12 +72,11 @@ class OSMMap(Map):
         else:
             end_node = None
         return {
-                    "road_geometry": road_geometry,
-                    "start_node": start_node,
-                    "end_node": end_node,
-                    "road_id": road_id,
-                }
-
+            "road_geometry": road_geometry,
+            "start_node": start_node,
+            "end_node": end_node,
+            "road_id": road_id,
+        }
 
     def build_road_segments(self, road):
         road_segments = []
@@ -84,14 +91,11 @@ class OSMMap(Map):
         if len(nodes) > 1:
             road_segments.append(self.create_road_segment(nodes, road_id))
         return road_segments
-        
-        
+
     def build_roads(self):
         print("Building roads...")
         roads = {}
-        for _, road in tqdm(
-            self.network.iterrows(), total=len(self.network)
-        ):
+        for _, road in tqdm(self.network.iterrows(), total=len(self.network)):
             road_segments = self.build_road_segments(road)
             length_sum = 0
             number_of_lanes = road["lanes"]
@@ -104,11 +108,15 @@ class OSMMap(Map):
                     length_sum += segment["road_geometry"].length
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"])
                     if segment["start_node"]:
-                        start_intersection = self.intersections.loc[segment["start_node"]]["Intersection"]
+                        start_intersection = self.intersections.loc[
+                            segment["start_node"]
+                        ]["Intersection"]
                     else:
                         start_intersection = None
                     if segment["end_node"]:
-                        end_intersection = self.intersections.loc[segment["end_node"]]["Intersection"]
+                        end_intersection = self.intersections.loc[segment["end_node"]][
+                            "Intersection"
+                        ]
                     else:
                         end_intersection = None
                     r = Road(
@@ -133,11 +141,15 @@ class OSMMap(Map):
                     length_sum += segment["road_geometry"].length
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
                     if segment["start_node"]:
-                        start_intersection = self.intersections.loc[segment["start_node"]]["Intersection"]
+                        start_intersection = self.intersections.loc[
+                            segment["start_node"]
+                        ]["Intersection"]
                     else:
                         start_intersection = None
                     if segment["end_node"]:
-                        end_intersection = self.intersections.loc[segment["end_node"]]["Intersection"]
+                        end_intersection = self.intersections.loc[segment["end_node"]][
+                            "Intersection"
+                        ]
                     else:
                         end_intersection = None
                     r = Road(
@@ -154,11 +166,15 @@ class OSMMap(Map):
                     )  # Flip it around for the other direction
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D1"
                     if segment["end_node"]:
-                        start_intersection = self.intersections.loc[segment["end_node"]]["Intersection"]
+                        start_intersection = self.intersections.loc[
+                            segment["end_node"]
+                        ]["Intersection"]
                     else:
                         start_intersection = None
                     if segment["start_node"]:
-                        end_intersection = self.intersections.loc[segment["start_node"]]["Intersection"]
+                        end_intersection = self.intersections.loc[
+                            segment["start_node"]
+                        ]["Intersection"]
                     else:
                         end_intersection = None
                     r = Road(
