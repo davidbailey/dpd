@@ -3,6 +3,7 @@ from collections import Counter
 
 import geopandas as gpd
 from pyrosm import get_data, OSM
+from tqdm import tqdm
 
 
 from dpd.mapping import Map
