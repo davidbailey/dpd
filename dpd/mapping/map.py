@@ -11,6 +11,7 @@ class Map:
     """
     A class for creating a road network map that includes roads (made up of lanes) that go between intersections.
     """
+
     def __init__(self):
         self.intersections = gpd.GeoDataFrame(columns=["geometry", "Intersection"])
         self.roads = gpd.GeoDataFrame(columns=["geometry", "Road"])
@@ -48,7 +49,12 @@ class Map:
         plt.show()
 
     def plot_folium(
-        self, include_intersections=False, include_roads=True, folium_map=None, fields_intersections=None, fields_roads=None
+        self,
+        include_intersections=False,
+        include_roads=True,
+        folium_map=None,
+        fields_intersections=None,
+        fields_roads=None,
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
@@ -56,28 +62,20 @@ class Map:
             self.intersections.crs = "EPSG:4326"
             if fields_intersections:
                 geojson = folium.GeoJson(
-                self.intersections[["geometry"]],
-                tooltip=folium.features.GeoJsonTooltip(
-                fields=fields_intersections
+                    self.intersections[["geometry"]],
+                    tooltip=folium.features.GeoJsonTooltip(fields=fields_intersections),
                 )
-            )
             else:
-                geojson = folium.GeoJson(
-                    self.intersections[["geometry"]]
-                )
+                geojson = folium.GeoJson(self.intersections[["geometry"]])
             geojson.add_to(folium_map)
         if include_roads:
             self.roads.crs = "EPSG:4326"
             if fields_roads:
                 geojson = folium.GeoJson(
-                self.roads[["geometry"]],
-                tooltip=folium.features.GeoJsonTooltip(
-                fields=fields_roads
+                    self.roads[["geometry"]],
+                    tooltip=folium.features.GeoJsonTooltip(fields=fields_roads),
                 )
-            )
             else:
-                geojson = folium.GeoJson(
-                    self.roads[["geometry"]]
-                )
+                geojson = folium.GeoJson(self.roads[["geometry"]])
             geojson.add_to(folium_map)
         return folium_map
