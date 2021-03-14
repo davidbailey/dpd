@@ -1,3 +1,6 @@
+from collections import Counter
+
+
 import geopandas as gpd
 from pyrosm import get_data, OSM
 
