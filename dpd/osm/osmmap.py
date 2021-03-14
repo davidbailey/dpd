@@ -192,6 +192,4 @@ class OSMMap(Map):
                         self.speed_converter(road["maxspeed"]),
                     )
                     roads[road_id] = {"geometry": r.geometry, "Road": r}
-            if not math.isclose(road.geometry.length, length_sum):
-                print(road.geometry.length, length_sum, road)
         return roads
