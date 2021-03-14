@@ -16,7 +16,7 @@ dpd is a growing library of transportation-related tools sorted into submodules.
 * Modeling - a set of classes for performing transportation modeling. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html) and [Four-step Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/four_step_transportation_model.html)
 * Multi-criteria analysis (MCA) - a class for performing multi-criteria analysis. E.g. [Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
 * Open Source Routing Machine (OSRM) - functions to interact with an OSRM server
-* OpenStreetMap (OSM) - a class for downloading relations, ways, and nodes from OpenStreetMap.
+* OpenStreetMap (OSM) - a class for downloading relations, ways, and nodes from OpenStreetMap and a class for creating a road network map.
 * Shapely - functions for working with shapely geometries
 * US Census -  functions for gathering data from the US Census. E.g. [Density and public transportation](https://dpd.readthedocs.io/en/latest/notebooks/density_and_public_transportation.html) and [Four-step Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/four_step_transportation_model.html)
 * Utils - utility functions used by other submodules
