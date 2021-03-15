@@ -1,4 +1,5 @@
 import geopandas as gpd
+from matplotlib import pyplot as plt
 
 
 from dpd.mapping import Map
