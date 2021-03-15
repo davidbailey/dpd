@@ -1,4 +1,6 @@
 import geopandas as gpd
+from uuid import uuid4
+
 
 from dpd.mapping import Map
 from .yieldintersection import YieldIntersection
