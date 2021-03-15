@@ -1,3 +1,4 @@
+import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
