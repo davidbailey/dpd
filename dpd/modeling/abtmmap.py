@@ -1,4 +1,7 @@
+import geopandas as gpd
+
 from dpd.mapping import Map
+
 
 class ABTMMap(Map):
     def __init__(self, model, map_):
