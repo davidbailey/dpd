@@ -1,6 +1,7 @@
 import geopandas as gpd
 
 from dpd.mapping import Map
+from .yieldintersection import YieldIntersection
 
 
 class ABTMMap(Map):
