@@ -40,7 +40,6 @@ class OSMMap(Map):
         tags = np.concatenate([group["tags"] for group in self.osm._nodes])
         return {ids[i]: tags[i] for i in range(0, len(ids))}
 
-
     def build_intersections(self):
         # Find all intersections by going through all the ways in the network and counting how often a node is referenced. If it is referenced more than once, it is an intersection.
         counter = Counter()
