@@ -36,7 +36,7 @@ class ABTMMap(Map):
                 intersection = SignalIntersection(
                     intersection["Intersection"], self.model
                 )
-            elif intersection_type == "Yield":
+            elif intersection_type == "Stop":
                 intersection = StopIntersection(
                     intersection["Intersection"], self.model
                 )
