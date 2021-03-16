@@ -1,3 +1,5 @@
+import requests
+
 from .lane import Lane
 
 
@@ -28,3 +30,14 @@ class Road:
             lane = Lane(self, lane_number)
             self.lanes.insert(-1, lane)
         self.max_speed = max_speed
+
+    def update_lanes_from_streetmix(self, url):
+        r = requests.get(url)
+        street = r.json()
+        lane_number = 0
+        self.lanes = [None, None]
+        for segment in street["data"]["street"]["segments"]:
+            if segment["type"] == "drive-lane":
+                lane = Lane(self, lane_number)
+                self.lanes.insert(-1, lane)
+                lane_number += 1
