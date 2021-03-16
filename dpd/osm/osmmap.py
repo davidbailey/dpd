@@ -3,6 +3,7 @@ import math
 
 
 import geopandas as gpd
+import numpy as np
 from pyrosm import get_data, OSM
 from shapely.geometry import Point, LineString
 from tqdm import tqdm
@@ -21,6 +22,7 @@ class OSMMap(Map):
         self.network = self.osm.get_network(
             "driving"
         )  # TODO Add cycling and walking networks.
+        self.node_tags = self.create_node_tags_lookup()  # Used to find traffic signals.
         intersections = self.build_intersections()
         self.intersections = gpd.GeoDataFrame.from_dict(intersections, orient="index")
         roads = self.build_roads()
@@ -32,6 +34,12 @@ class OSMMap(Map):
             len(self.roads),
             "roads.",
         )
+
+    def create_node_tags_lookup(self):
+        ids = np.concatenate([group["id"] for group in self.osm._nodes])
+        tags = np.concatenate([group["tags"] for group in self.osm._nodes])
+        return {ids[i]: tags[i] for i in range(0, len(ids))}
+
 
     def build_intersections(self):
         # Find all intersections by going through all the ways in the network and counting how often a node is referenced. If it is referenced more than once, it is an intersection.
@@ -46,8 +54,19 @@ class OSMMap(Map):
             name = intersection
             coordinates = self.osm._node_coordinates[intersection]
             geometry = Point(coordinates["lon"], coordinates["lat"])
+            if (
+                self.node_tags[intersection]
+                and "highway" in self.node_tags[intersection]
+                and self.node_tags[intersection]["highway"] == "traffic_signals"
+            ):
+                type_ = "Signal"
+            elif False:
+                type_ = "Stop"
+            else:
+                type_ = "Yield"
             intersections[intersection] = {
                 "geometry": geometry,
+                "Type": type_,
                 "Intersection": Intersection(name, geometry),
             }
         return intersections
