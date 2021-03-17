@@ -1,6 +1,7 @@
 import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
+from pyproj import CRS
 
 
 from dpd.mapping import Map
@@ -70,6 +71,19 @@ class ABTMMap(Map):
             for lane in road.lanes:
                 if lane is not None:
                     lane.occupants = []
+
+    def transform_people_to_aea(self):
+        aea = CRS.from_string("North America Albers Equal Area Conic")
+        if self.people.crs == None:
+            self.people.crs = "EPSG:4326"
+        self.people.to_crs(aea, inplace=True)
+        for _, person in self.people.iterrows():
+            person["Person"].geometry = person["geometry"]
+
+    def transform_people_to_epsg4326(self):
+        self.people.to_crs("EPSG:4326", inplace=True)
+        for _, person in self.people.iterrows():
+            person["Person"].geometry = person["geometry"]
 
     def refresh_people_geometries(self):
         self.people["geometry"] = self.people["Person"].map(

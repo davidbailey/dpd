@@ -1,6 +1,7 @@
 import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
+from pyproj import CRS
 
 from .intersection import Intersection
 from .lane import Lane
@@ -24,6 +25,32 @@ class Map:
 
     def add_road(self, road):
         self.roads.loc[road.name] = [road.geometry, road]
+
+    def transform_intersections_to_aea(self):
+        aea = CRS.from_string("North America Albers Equal Area Conic")
+        if self.intersections.crs == None:
+            self.intersections.crs = "EPSG:4326"
+        self.intersections.to_crs(aea, inplace=True)
+        for _, intersection in self.intersections.iterrows():
+            intersection["Intersection"].geometry = intersection["geometry"]
+
+    def transform_intersections_to_epsg4326(self):
+        self.intersections.to_crs("EPSG:4326", inplace=True)
+        for _, intersection in self.intersections.iterrows():
+            intersection["Intersection"].geometry = intersection["geometry"]
+
+    def transform_roads_to_aea(self):
+        aea = CRS.from_string("North America Albers Equal Area Conic")
+        if self.roads.crs == None:
+            self.roads.crs = "EPSG:4326"
+        self.roads.to_crs(aea, inplace=True)
+        for _, road in self.roads.iterrows():
+            road["Road"].geometry = road["geometry"]
+
+    def transform_roads_to_epsg4326(self):
+        self.roads.to_crs("EPSG:4326", inplace=True)
+        for _, road in self.roads.iterrows():
+            road["Road"].geometry = road["geometry"]
 
     def plot(self, include_intersections=False, include_roads=True, fig=None, ax=None):
         if not fig:
