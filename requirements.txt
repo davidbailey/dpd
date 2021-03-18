@@ -1,3 +1,4 @@
+astropy
 black
 bs4
 coveralls

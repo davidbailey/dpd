@@ -1,3 +1,4 @@
+from astropy import units
 from mesa import Agent
 from uuid import uuid4
 
@@ -12,10 +13,10 @@ class Driver(Agent):
         self.road = self.route.pop()
         self.lane = self.road.lanes[-2]
         self.lane.occupants.append(self)
-        self.length_on_lane = self.road.geometry.project(self.geometry)
-        self.stopping_distance = 1
-        self.max_speed = 160
-        self.speed = 0
+        self.length_on_lane = self.road.geometry.project(self.geometry) * units.meter
+        self.stopping_distance = 1 * units.meter
+        self.max_speed = 100 * units.imperial.mile / units.hour
+        self.speed = 0 * units.imperial.mile / units.hour
 
     def step(self):
         print(self.name, self.geometry)
@@ -58,19 +59,19 @@ class Driver(Agent):
     def move_forward(self):
         # print(self.name, self.length_on_lane)
         self.speed = min(self.max_speed, self.road.max_speed)
-        self.length_on_lane += self.speed
-        self.geometry = self.road.geometry.interpolate(self.length_on_lane)
+        self.length_on_lane += self.speed * 1 * units.second
+        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter))
 
     def stop(self):
-        self.speed = 0
+        self.speed = 0 * units.meter / units.second
 
     def attempt_lane_change(self, lane):
         # print(self.name, "attempting lane change")
         index_of_new_person_in_front_of_me = bisect.bisect_left(
-            list(map(lambda x: x.length_on_lane, lane.occupants)), self.length_on_lane
+            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)), self.length_on_lane.to_value(units.meter)
         )
         index_of_new_person_behind_me = bisect.bisect_right(
-            list(map(lambda x: x.length_on_lane, lane.occupants)), self.length_on_lane
+            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)), self.length_on_lane.to_value(units.meter)
         )
         if index_of_new_person_in_front_of_me > 0:
             new_person_in_front_of_me = lane[index_of_new_person_in_front_of_me]
@@ -100,6 +101,6 @@ class Driver(Agent):
             print("ERROR", self, self.lane, self.lane.occupants)
         self.road = self.route.pop()
         self.lane = self.road.lanes[-2]
-        self.length_on_lane = 0
+        self.length_on_lane = 0 * units.meter
         self.lane.occupants.append(self)
-        self.geometry = self.road.geometry.interpolate(self.length_on_lane)
+        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter)

@@ -1,7 +1,7 @@
 from collections import Counter
 import math
 
-
+from astropy import units
 import geopandas as gpd
 import numpy as np
 from pyrosm import get_data, OSM
@@ -72,14 +72,14 @@ class OSMMap(Map):
 
     @staticmethod
     def speed_converter(speed):
-        default_speed = 25
+        default_speed = 25 * units.imperial.mile / units.hour
         if speed == None:
             return default_speed
         r = [int(s) for s in speed.split() if s.isdigit()]
         if len(r) > 0:
-            return r[0]
+            return r[0] * units.imperial.mile / units.hour
         else:
-            return default_speed
+            return default_speed * units.imperial.mile / units.hour
 
     def create_road_segment(self, nodes, road_id):
         linestring = []

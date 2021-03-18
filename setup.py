@@ -12,6 +12,7 @@ setup(
     packages=find_packages(),
     license="Public Domain",
     install_requires=[
+        "astropy",
         "bs4",
         "flask",
         "folium",
