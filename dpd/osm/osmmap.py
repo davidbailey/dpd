@@ -149,9 +149,8 @@ class OSMMap(Map):
                         start_intersection,
                         end_intersection,
                         number_of_lanes,
-                        self.speed_converter(road["maxspeed"]),
                     )
-                    roads[road_id] = {"geometry": r.geometry, "Road": r}
+                    roads[road_id] = {"geometry": r.geometry, "Road": r, "maxspeed": self.speed_converter(road["maxspeed"])}
             else:
                 if not number_of_lanes:
                     number_of_lanes = 2
@@ -182,9 +181,8 @@ class OSMMap(Map):
                         start_intersection,
                         end_intersection,
                         int(number_of_lanes),
-                        self.speed_converter(road["maxspeed"]),
                     )
-                    roads[road_id] = {"geometry": r.geometry, "Road": r}
+                    roads[road_id] = {"geometry": r.geometry, "Road": r, "maxspeed": self.speed_converter(road["maxspeed"])}
                     reversed_segment_road_geometry = LineString(
                         segment["road_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
@@ -207,7 +205,6 @@ class OSMMap(Map):
                         start_intersection,
                         end_intersection,
                         int(number_of_lanes),
-                        self.speed_converter(road["maxspeed"]),
                     )
-                    roads[road_id] = {"geometry": r.geometry, "Road": r}
+                    roads[road_id] = {"geometry": r.geometry, "Road": r, "maxspeed": self.speed_converter(road["maxspeed"])}
         return roads

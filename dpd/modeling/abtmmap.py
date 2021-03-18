@@ -20,7 +20,7 @@ class ABTMMap(Map):
             ),
             axis=1,
         )
-        self.roads["Road"].map(lambda road: self.transform_road_to_agent_based(road))
+        self.roads.apply(lambda road: self.transform_road_to_agent_based(road), axis=1)
         self.clear_lanes()
 
     def add_person(self, person):
@@ -54,13 +54,14 @@ class ABTMMap(Map):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        if road.input_intersection:
-            road.input_intersection = self.intersections.loc[
-                road.input_intersection.name
+        road["Road"].max_speed = road["maxspeed"]
+        if road["Road"].input_intersection:
+            road["Road"].input_intersection = self.intersections.loc[
+                road["Road"].input_intersection.name
             ]["Intersection"]
-        if road.output_intersection:
-            road.output_intersection = self.intersections.loc[
-                road.output_intersection.name
+        if road["Road"].output_intersection:
+            road["Road"].output_intersection = self.intersections.loc[
+                road["Road"].output_intersection.name
             ]["Intersection"]
 
     def clear_lanes(self):
