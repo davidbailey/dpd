@@ -13,8 +13,8 @@ class Driver(Agent):
         self.lane = self.road.lanes[-2]
         self.lane.occupants.append(self)
         self.length_on_lane = self.road.geometry.project(self.geometry)
-        self.stopping_distance = 0.4
-        self.max_speed = 0.3
+        self.stopping_distance = 1
+        self.max_speed = 160
         self.speed = 0
 
     def step(self):
