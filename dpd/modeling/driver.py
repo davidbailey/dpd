@@ -60,7 +60,9 @@ class Driver(Agent):
         # print(self.name, self.length_on_lane)
         self.speed = min(self.max_speed, self.road.max_speed)
         self.length_on_lane += self.speed * 1 * units.second
-        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter))
+        self.geometry = self.road.geometry.interpolate(
+            self.length_on_lane.to_value(units.meter)
+        )
 
     def stop(self):
         self.speed = 0 * units.meter / units.second
@@ -68,10 +70,12 @@ class Driver(Agent):
     def attempt_lane_change(self, lane):
         # print(self.name, "attempting lane change")
         index_of_new_person_in_front_of_me = bisect.bisect_left(
-            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)), self.length_on_lane.to_value(units.meter)
+            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
+            self.length_on_lane.to_value(units.meter),
         )
         index_of_new_person_behind_me = bisect.bisect_right(
-            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)), self.length_on_lane.to_value(units.meter)
+            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
+            self.length_on_lane.to_value(units.meter),
         )
         if index_of_new_person_in_front_of_me > 0:
             new_person_in_front_of_me = lane[index_of_new_person_in_front_of_me]
@@ -103,4 +107,6 @@ class Driver(Agent):
         self.lane = self.road.lanes[-2]
         self.length_on_lane = 0 * units.meter
         self.lane.occupants.append(self)
-        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter))
+        self.geometry = self.road.geometry.interpolate(
+            self.length_on_lane.to_value(units.meter)
+        )
