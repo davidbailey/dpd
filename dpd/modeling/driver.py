@@ -103,4 +103,4 @@ class Driver(Agent):
         self.lane = self.road.lanes[-2]
         self.length_on_lane = 0 * units.meter
         self.lane.occupants.append(self)
-        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter)
+        self.geometry = self.road.geometry.interpolate(self.length_on_lane.to_value(units.meter))
