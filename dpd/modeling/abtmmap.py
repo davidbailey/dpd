@@ -1,3 +1,4 @@
+from astropy import units
 import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
@@ -57,7 +58,10 @@ class ABTMMap(Map):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        road["Road"].max_speed = road["maxspeed"]
+        if "maxspeed" in road.columns:
+            road["Road"].max_speed = road["maxspeed"] * units.imperial.mile / units.hour
+        else:
+            road["Road"].max_speed = 1 * units.meter / units.second
         if road["Road"].input_intersection:
             road["Road"].input_intersection = self.intersections.loc[
                 road["Road"].input_intersection.name
