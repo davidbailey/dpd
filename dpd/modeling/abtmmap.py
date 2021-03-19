@@ -2,10 +2,13 @@ import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
 from pyproj import CRS
+import requests
 
 
 from dpd.mapping import Map
 from .yieldintersection import YieldIntersection
+
+SignalIntersection = YieldIntersection
 
 
 class ABTMMap(Map):
@@ -85,6 +88,13 @@ class ABTMMap(Map):
         self.people.to_crs("EPSG:4326", inplace=True)
         for _, person in self.people.iterrows():
             person["Person"].geometry = person["geometry"]
+
+    def post_people(self, url):
+        self.refresh_people_geometries()
+        crs = self.people.crs
+        self.people.to_crs("EPSG:4326", inplace=True)
+        p = requests.post(url, data=self.people["geometry"].to_json())
+        self.people.to_crs(crs, inplace=True)
 
     def refresh_people_geometries(self):
         self.people["geometry"] = self.people["Person"].map(
