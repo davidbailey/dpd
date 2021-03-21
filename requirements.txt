@@ -21,3 +21,4 @@ pytest-cov
 requests
 shapely
 us
+werkzeug

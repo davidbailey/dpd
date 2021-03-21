@@ -31,6 +31,7 @@ setup(
         "requests",
         "shapely",
         "us",
+        "werkzeug",
     ],
     tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
 )

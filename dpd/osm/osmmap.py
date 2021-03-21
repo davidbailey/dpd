@@ -25,8 +25,10 @@ class OSMMap(Map):
         self.node_tags = self.create_node_tags_lookup()  # Used to find traffic signals.
         intersections = self.build_intersections()
         self.intersections = gpd.GeoDataFrame.from_dict(intersections, orient="index")
+        self.intersections.crs = "EPSG:4326"
         roads = self.build_roads()
         self.roads = gpd.GeoDataFrame.from_dict(roads, orient="index")
+        self.roads.crs = "EPSG:4326"
         print(
             "Generated",
             len(self.intersections),

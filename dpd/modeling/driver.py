@@ -20,7 +20,7 @@ class Driver(Agent):
 
     def step(self):
         print(self.name, self.geometry)
-        if self.length_on_lane >= self.road.geometry.length:
+        if self.length_on_lane >= self.road.geometry.length * units.meter:
             print(self.name, "reached end of lane, pass control to intersection")
             if self.route:
                 # if there are still more segments, we are not at the end
