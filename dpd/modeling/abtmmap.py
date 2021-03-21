@@ -12,7 +12,9 @@ from tqdm import tqdm
 
 
 from dpd.mapping import Map
+from dpd.werkzeug import WerkzeugThread
 from .driver import Driver
+from .people_flask_app import people_flask_app
 from .yieldintersection import YieldIntersection
 
 SignalIntersection = YieldIntersection
@@ -163,6 +165,9 @@ class ABTMMap(Map):
             "North America Albers Equal Area Conic"
         ):
             self.transform_people_to_aea()
+        if post_people:
+            werkzeug_thread = WerkzeugThread(people_flask_app)
+            werkzeug_thread.start()
         for x in range(number_of_rounds):
             # print("Simulating round", x)
             for _, person in self.people.iterrows():
@@ -178,6 +183,8 @@ class ABTMMap(Map):
                 self.post_people("http://localhost:9000/people")
             self.model.step()
             time = time + datetime.timedelta(seconds=1)
+        if post_people:
+            werkzeug_thread.stop()
         gpd_trajectories = gpd.GeoDataFrame(trajectories).set_index("time")
         gpd_trajectories.crs = CRS.from_string("North America Albers Equal Area Conic")
         gpd_trajectories.to_crs("EPSG:4326", inplace=True)
