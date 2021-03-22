@@ -21,6 +21,7 @@ setup(
         "ipfn",
         "matplotlib",
         "mesa",
+        "movingpandas",
         "mplleaflet",
         "networkx",
         "numpy",

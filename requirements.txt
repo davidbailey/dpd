@@ -9,6 +9,7 @@ gtfs_kit
 ipfn
 matplotlib
 mesa
+movingpandas
 mplleaflet
 networkx
 numpy
