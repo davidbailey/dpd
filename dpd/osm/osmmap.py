@@ -182,7 +182,7 @@ class OSMMap(Map):
                     r = Road(
                         road_id,
                         reversed_segment_road_geometry,
-                        segment["end_node"], 
+                        segment["end_node"],
                         segment["start_node"],
                         int(number_of_lanes),
                     )
