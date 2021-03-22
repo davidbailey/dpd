@@ -24,6 +24,7 @@ class TestMap(unittest.TestCase):
             )
         self.map_.plot()
         self.map_.plot_folium(include_intersections=True)
+        self.map_.to_geodigraph()
 
 
 if __name__ == "__main__":
