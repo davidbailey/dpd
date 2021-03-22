@@ -1,4 +1,5 @@
 from collections import Counter
+import logging
 import math
 
 from astropy import units
@@ -29,7 +30,7 @@ class OSMMap(Map):
         roads = self.build_roads()
         self.roads = gpd.GeoDataFrame.from_dict(roads, orient="index")
         self.roads.crs = "EPSG:4326"
-        print(
+        logging.info(
             "Generated",
             len(self.intersections),
             "intersections and",
@@ -49,7 +50,7 @@ class OSMMap(Map):
             for node in nodes:
                 counter[node] += 1
         intersections_list = [key for key, count in counter.items() if count >= 2]
-        print("Building intersections...")
+        logging.info("Building intersections...")
         intersections = {}
         for intersection in tqdm(intersections_list):
             name = intersection
@@ -119,7 +120,7 @@ class OSMMap(Map):
         return road_segments
 
     def build_roads(self):
-        print("Building roads...")
+        logging.info("Building roads...")
         roads = {}
         for _, road in tqdm(self.network.iterrows(), total=len(self.network)):
             road_segments = self.build_road_segments(road)
@@ -156,13 +157,14 @@ class OSMMap(Map):
                         "geometry": r.geometry,
                         "Road": r,
                         "maxspeed": self.speed_converter(road["maxspeed"]),
+                        "lanes": number_of_lanes,
                     }
             else:
                 if not number_of_lanes:
                     number_of_lanes = 2
                 elif number_of_lanes == "1":
                     number_of_lanes = 2
-                    print("two-way street with only one lane:", road.name)
+                    logging.warning("Two-way street with only one lane:", road.name)
                 else:
                     number_of_lanes = int(number_of_lanes)
                 number_of_lanes = number_of_lanes / 2  # TODO add turning lanes
@@ -192,6 +194,7 @@ class OSMMap(Map):
                         "geometry": r.geometry,
                         "Road": r,
                         "maxspeed": self.speed_converter(road["maxspeed"]),
+                        "lanes": number_of_lanes,
                     }
                     reversed_segment_road_geometry = LineString(
                         segment["road_geometry"].coords[::-1]
@@ -220,5 +223,6 @@ class OSMMap(Map):
                         "geometry": r.geometry,
                         "Road": r,
                         "maxspeed": self.speed_converter(road["maxspeed"]),
+                        "lanes": number_of_lanes,
                     }
         return roads

@@ -1,3 +1,4 @@
+import logging
 import os.path
 import subprocess
 
@@ -17,7 +18,7 @@ class OSRM:
         self.profile_directory = profile_directory
 
     def extract(self, *args, **kwargs):
-        print("Extracting " + self.filename)
+        logging.info("Extracting " + self.filename)
         return subprocess.run(
             [
                 "osrm-extract",
@@ -32,7 +33,7 @@ class OSRM:
     def contract(self, *args, **kwargs):
         if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm"):
             self.extract()
-        print("Contracting " + self.filename)
+        logging.info("Contracting " + self.filename)
         return subprocess.run(["osrm-contract", self.filename], *args, **kwargs)
 
     def routed(self, *args, **kwargs):

@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 
 from astropy import units
@@ -94,18 +95,13 @@ class ABTMMap(Map):
             if node in self.intersections.index:
                 nodes.append(node)
         roads = []
-        # print(nodes)
         for i in range(len(nodes) - 1):
-            # print("Finding lane from node", nodes[i], "to node", nodes[i+1])
             for road in self.intersections.loc[nodes[i]]["Intersection"].output_roads:
-                # if road.output_intersection:
-                #    print(road.output_intersection.name)
                 if (
                     road.output_intersection
                     and road.output_intersection.name == nodes[i + 1]
                 ):
                     roads.append(road)
-                    # print("Found lane:", road.name, "that goes from", road.input_intersection.name, "and goes to", road.output_intersection.name)
                     break
         return roads
 
@@ -123,7 +119,7 @@ class ABTMMap(Map):
         self.people.crs = "EPSG:4326"
 
     def transform_people_to_aea(self):
-        print("Transforming people to AEA. This could take a while...")
+        logging.info("Transforming people to AEA. This could take a while...")
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.people.to_crs(aea, inplace=True)
         for _, person in self.people.iterrows():
@@ -169,7 +165,7 @@ class ABTMMap(Map):
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
         for x in range(number_of_rounds):
-            # print("Simulating round", x)
+            logging.info("Simulating round", x)
             for _, person in self.people.iterrows():
                 # if not person["Person"].arrived
                 trajectories.append(

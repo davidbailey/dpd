@@ -1,3 +1,5 @@
+import logging
+
 from astropy import units
 from mesa import Agent
 from uuid import uuid4
@@ -19,17 +21,16 @@ class Driver(Agent):
         self.speed = 0 * units.imperial.mile / units.hour
 
     def step(self):
-        print(self.name, self.geometry)
         if self.length_on_lane >= self.road.geometry.length * units.meter:
-            print(self.name, "reached end of lane, pass control to intersection")
+            logging.info(self.name, "reached end of lane, pass control to intersection")
             if self.route:
                 # if there are still more segments, we are not at the end
                 self.road.output_intersection.new_approach(self)
             else:
                 # if there are no more route segments, we have arrived
-                print(self.name, "Arrived")
+                logging.info(self.name, "Arrived")
         elif self.lane.occupants.index(self) > 0:
-            print(self.name, "potential for congestion", self.lane.occupants)
+            logging.info(self.name, "potential for congestion", self.lane.occupants)
             my_index = self.lane.occupants.index(self)
             person_in_front_of_me = self.lane.occupants[my_index - 1]
             if (
@@ -53,11 +54,10 @@ class Driver(Agent):
                 # freeflow traffic, person too far ahead
                 self.move_forward()
         else:
-            # print(self.name, "freeflow traffic, no one ahead")
+            logging.info(self.name, "freeflow traffic, no one ahead")
             self.move_forward()
 
     def move_forward(self):
-        # print(self.name, self.length_on_lane)
         self.speed = min(self.max_speed, self.road.max_speed)
         self.length_on_lane += self.speed * 1 * units.second
         self.geometry = self.road.geometry.interpolate(
@@ -68,7 +68,7 @@ class Driver(Agent):
         self.speed = 0 * units.meter / units.second
 
     def attempt_lane_change(self, lane):
-        # print(self.name, "attempting lane change")
+        logging.info(self.name, "attempting lane change")
         index_of_new_person_in_front_of_me = bisect.bisect_left(
             list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
             self.length_on_lane.to_value(units.meter),
@@ -99,10 +99,7 @@ class Driver(Agent):
         return False
 
     def proceed_through_intersection(self):
-        if self in self.lane.occupants:
-            self.lane.occupants.remove(self)
-        else:
-            print("ERROR", self, self.lane, self.lane.occupants)
+        self.lane.occupants.remove(self)
         self.road = self.route.pop()
         self.lane = self.road.lanes[-2]
         self.length_on_lane = 0 * units.meter

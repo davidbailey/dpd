@@ -54,22 +54,26 @@ people = """
 
 root_blueprint = Blueprint("root", __name__)
 
+
 @root_blueprint.route("/")
 def root():
     return index
 
+
 get_post_people_blueprint = Blueprint("get_post_people", __name__)
 
-@get_post_people_blueprint.route('/people', methods=['GET', 'POST'])
+
+@get_post_people_blueprint.route("/people", methods=["GET", "POST"])
 def get_post_people():
     global people
-    if request.method == 'POST':
-        people = request.form['people']
+    if request.method == "POST":
+        people = request.form["people"]
         return Response()
     else:
         resp = Response(people)
         resp.headers["Access-Control-Allow-Origin"] = "*"
         return resp
+
 
 def people_flask_app():
     app = Flask(__name__)
