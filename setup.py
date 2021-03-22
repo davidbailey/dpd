@@ -16,6 +16,7 @@ setup(
         "bs4",
         "flask",
         "folium",
+        "geonetworkx",
         "geopandas",
         "gtfs_kit",
         "ipfn",

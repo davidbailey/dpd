@@ -1,4 +1,5 @@
 import folium
+import geonetworkx
 import geopandas as gpd
 from matplotlib import pyplot as plt
 from pyproj import CRS
@@ -102,3 +103,22 @@ class Map:
                 geojson = folium.GeoJson(self.roads[["geometry"]])
             geojson.add_to(folium_map)
         return folium_map
+
+    def to_geodigraph(self):
+        G = geonetworkx.GeoDiGraph()
+        nodes = []
+        for index, intersection in self.intersections.iterrows():
+            nodes.append((index,
+            intersection.to_dict())
+            )
+        G.add_nodes_from(nodes)
+        edges = []
+        for index, road in self.roads.iterrows():
+            edges.append((
+                road["Road"].input_intersection.name if road["Road"].input_intersection else None,
+                road["Road"].output_intersection.name if road["Road"].output_intersection else None,
+                road.to_dict()
+            )
+            )
+        G.add_edges_from(edges)
+        return G

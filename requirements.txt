@@ -4,6 +4,7 @@ bs4
 coveralls
 flask
 folium
+geonetworkx
 geopandas
 gtfs_kit
 ipfn
