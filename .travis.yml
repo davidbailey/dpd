@@ -1,6 +1,8 @@
 language: python
 python: 3.9
 install:
+  - sudo apt update
+  - sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev
   - pip install --upgrade -r requirements.txt
   - pip install -e .
 script:
