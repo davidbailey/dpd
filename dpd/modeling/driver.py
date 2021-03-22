@@ -22,15 +22,19 @@ class Driver(Agent):
 
     def step(self):
         if self.length_on_lane >= self.road.geometry.length * units.meter:
-            logging.info(self.name, "reached end of lane, pass control to intersection")
+            logging.info(
+                "%s reached end of lane, pass control to intersection" % (self.name,)
+            )
             if self.route:
                 # if there are still more segments, we are not at the end
                 self.road.output_intersection.new_approach(self)
             else:
                 # if there are no more route segments, we have arrived
-                logging.info(self.name, "Arrived")
+                logging.info("%s arrived" % (self.name,))
         elif self.lane.occupants.index(self) > 0:
-            logging.info(self.name, "potential for congestion", self.lane.occupants)
+            logging.info(
+                "%s potential for congestion %s" % (self.name, self.lane.occupants)
+            )
             my_index = self.lane.occupants.index(self)
             person_in_front_of_me = self.lane.occupants[my_index - 1]
             if (
@@ -54,7 +58,7 @@ class Driver(Agent):
                 # freeflow traffic, person too far ahead
                 self.move_forward()
         else:
-            logging.info(self.name, "freeflow traffic, no one ahead")
+            logging.info("%s freeflow traffic, no one ahead" % (self.name,))
             self.move_forward()
 
     def move_forward(self):
@@ -68,7 +72,7 @@ class Driver(Agent):
         self.speed = 0 * units.meter / units.second
 
     def attempt_lane_change(self, lane):
-        logging.info(self.name, "attempting lane change")
+        logging.info("%s attempting lane change" % (self.name,))
         index_of_new_person_in_front_of_me = bisect.bisect_left(
             list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
             self.length_on_lane.to_value(units.meter),

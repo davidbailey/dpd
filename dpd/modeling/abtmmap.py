@@ -166,7 +166,7 @@ class ABTMMap(Map):
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
         for x in range(number_of_rounds):
-            logging.info("Simulating round", x)
+            logging.info("Simulating round %s" % (x,))
             for _, person in self.people.iterrows():
                 # if not person["Person"].arrived
                 trajectories.append(

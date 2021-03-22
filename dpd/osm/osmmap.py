@@ -31,11 +31,8 @@ class OSMMap(Map):
         self.roads = gpd.GeoDataFrame.from_dict(roads, orient="index")
         self.roads.crs = "EPSG:4326"
         logging.info(
-            "Generated",
-            len(self.intersections),
-            "intersections and",
-            len(self.roads),
-            "roads.",
+            "Generated %s intersections and %s roads."
+            % (len(self.intersections), len(self.roads))
         )
 
     def create_node_tags_lookup(self):
@@ -95,11 +92,11 @@ class OSMMap(Map):
             linestring.append(Point(coordinates["lon"], coordinates["lat"]))
         road_geometry = LineString(linestring)
         if nodes[0] in self.intersections.index:
-            start_node = nodes[0]
+            start_node = self.intersections.loc[nodes[0]]["Intersection"]
         else:
             start_node = None
         if nodes[-1] in self.intersections.index:
-            end_node = nodes[-1]
+            end_node = self.intersections.loc[nodes[-1]]["Intersection"]
         else:
             end_node = None
         return {
@@ -138,23 +135,11 @@ class OSMMap(Map):
                 for segment in road_segments:
                     length_sum += segment["road_geometry"].length
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"])
-                    if segment["start_node"]:
-                        start_intersection = self.intersections.loc[
-                            segment["start_node"]
-                        ]["Intersection"]
-                    else:
-                        start_intersection = None
-                    if segment["end_node"]:
-                        end_intersection = self.intersections.loc[segment["end_node"]][
-                            "Intersection"
-                        ]
-                    else:
-                        end_intersection = None
                     r = Road(
                         road_id,
                         segment["road_geometry"],
-                        start_intersection,
-                        end_intersection,
+                        segment["start_node"],
+                        segment["end_node"],
                         number_of_lanes,
                     )
                     roads[road_id] = {
@@ -168,30 +153,20 @@ class OSMMap(Map):
                     number_of_lanes = 2
                 elif number_of_lanes == "1":
                     number_of_lanes = 2
-                    logging.warning("Two-way street with only one lane:", road.name)
+                    logging.warning(
+                        "Two-way street with only one lane: %s" % (road.name),
+                    )
                 else:
                     number_of_lanes = int(number_of_lanes)
                 number_of_lanes = number_of_lanes / 2  # TODO add turning lanes
                 for segment in road_segments:
                     length_sum += segment["road_geometry"].length
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
-                    if segment["start_node"]:
-                        start_intersection = self.intersections.loc[
-                            segment["start_node"]
-                        ]["Intersection"]
-                    else:
-                        start_intersection = None
-                    if segment["end_node"]:
-                        end_intersection = self.intersections.loc[segment["end_node"]][
-                            "Intersection"
-                        ]
-                    else:
-                        end_intersection = None
                     r = Road(
                         road_id,
                         segment["road_geometry"],
-                        start_intersection,
-                        end_intersection,
+                        segment["start_node"],
+                        segment["end_node"],
                         int(number_of_lanes),
                     )
                     roads[road_id] = {
@@ -204,23 +179,11 @@ class OSMMap(Map):
                         segment["road_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
                     road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D1"
-                    if segment["end_node"]:
-                        start_intersection = self.intersections.loc[
-                            segment["end_node"]
-                        ]["Intersection"]
-                    else:
-                        start_intersection = None
-                    if segment["start_node"]:
-                        end_intersection = self.intersections.loc[
-                            segment["start_node"]
-                        ]["Intersection"]
-                    else:
-                        end_intersection = None
                     r = Road(
                         road_id,
-                        segment["road_geometry"],
-                        start_intersection,
-                        end_intersection,
+                        reversed_segment_road_geometry,
+                        segment["end_node"], 
+                        segment["start_node"],
                         int(number_of_lanes),
                     )
                     roads[road_id] = {
