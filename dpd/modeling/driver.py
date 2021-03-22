@@ -12,7 +12,7 @@ class Driver(Agent):
         self.geometry = geometry
         self.name = str(unique_id)
         self.route = route
-        self.road = self.route.pop()
+        self.road = self.route.pop(0)
         self.lane = self.road.lanes[-2]
         self.lane.occupants.append(self)
         self.length_on_lane = self.road.geometry.project(self.geometry) * units.meter
@@ -100,7 +100,7 @@ class Driver(Agent):
 
     def proceed_through_intersection(self):
         self.lane.occupants.remove(self)
-        self.road = self.route.pop()
+        self.road = self.route.pop(0)
         self.lane = self.road.lanes[-2]
         self.length_on_lane = 0 * units.meter
         self.lane.occupants.append(self)

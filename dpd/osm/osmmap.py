@@ -62,8 +62,12 @@ class OSMMap(Map):
                 and self.node_tags[intersection]["highway"] == "traffic_signals"
             ):
                 type_ = "Signal"
-            elif False:
-                type_ = "Stop"
+            elif (
+                self.node_tags[intersection]
+                and "highway" in self.node_tags[intersection]
+                and self.node_tags[intersection]["highway"] == "stop"
+            ):
+                type_ = "All-way Stop"
             else:
                 type_ = "Yield"
             intersections[intersection] = {

@@ -19,6 +19,7 @@ from .people_flask_app import people_flask_app
 from .yieldintersection import YieldIntersection
 
 SignalIntersection = YieldIntersection
+StopIntersection = YieldIntersection
 
 
 class ABTMMap(Map):
