@@ -58,7 +58,7 @@ root_blueprint = Blueprint("root", __name__)
 def root():
     return index
 
-get_post_people_blueprint = Blueprint("get_post_people", __name)
+get_post_people_blueprint = Blueprint("get_post_people", __name__)
 
 @get_post_people_blueprint.route('/people', methods=['GET', 'POST'])
 def get_post_people():

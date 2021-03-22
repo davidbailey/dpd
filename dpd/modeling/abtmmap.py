@@ -166,7 +166,7 @@ class ABTMMap(Map):
         ):
             self.transform_people_to_aea()
         if post_people:
-            werkzeug_thread = WerkzeugThread(people_flask_app)
+            werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
         for x in range(number_of_rounds):
             # print("Simulating round", x)
