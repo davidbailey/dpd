@@ -85,7 +85,7 @@ class OSMMap(Map):
         if len(speed_split) == 2:
             if speed_split[1] == "mph":
                 speed_unit = units.imperial.mile / units.hour
-            elif speed_split[1] == "kph":
+            elif speed_split[1] == "km/h":
                 speed_unit = units.kilometer / units.hour
             else:
                 speed_unit = DEFAULT_SPEED_UNIT
