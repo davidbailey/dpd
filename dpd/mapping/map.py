@@ -50,45 +50,43 @@ class Map:
         for _, road in self.roads.iterrows():
             road["Road"].geometry = road["geometry"]
 
-    def plot(self, include_intersections=False, include_roads=True, fig=None, ax=None):
-        if not fig:
-            fig = plt.figure(figsize=(18, 16))
-        if not ax:
-            ax = fig.add_subplot(111)
+    def plot_df(self, ax, df, filter_df):
+        df.plot(ax=ax)
+        for idx, row in df.iterrows():
+            plt.annotate(
+                text=idx,
+                xy=row.geometry.centroid.coords[0],
+                horizontalalignment="center",
+            )
+
+    def plot(self, include_intersections=False, include_roads=True, filter_box=None):
+        fig = plt.figure(figsize=(18, 16))
+        ax = fig.add_subplot(111)
+        if filter_box:
+            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = "EPSG:4326"
+        else:
+            filter_df = None
         if include_intersections:
-            self.intersections.plot(ax=ax)
-            for idx, row in self.intersections.iterrows():
-                plt.annotate(
-                    text=idx,
-                    xy=row.geometry.centroid.coords[0],
-                    horizontalalignment="center",
-                )
+            self.plot_df(ax, self.intersections, filter_df)
         if include_roads:
-            self.roads.plot(ax=ax)
-            for idx, row in self.roads.iterrows():
-                plt.annotate(
-                    text=idx,
-                    xy=row.geometry.centroid.coords[0],
-                    horizontalalignment="center",
-                )
+            self.plot_df(ax, self.roads, filter_df)
         plt.show()
 
-
     def plot_folium_df(self, folium_map, df, filter_df, fields):
-            df.crs = "EPSG:4326"
-            if filter_df:
-                plot_df = gpd.overlay(df, filter_df, how='intersection')
-            else:
-                plot_df = df
-            if fields:
-                geojson = folium.GeoJson(
-                    plot_df[["geometry"]],
-                    tooltip=folium.features.GeoJsonTooltip(fields=fields),
-                )
-            else:
-                geojson = folium.GeoJson(plot_df[["geometry"]])
-            geojson.add_to(folium_map)
-        
+        df.crs = "EPSG:4326"
+        if filter_df:
+            plot_df = gpd.overlay(df, filter_df, how="intersection")
+        else:
+            plot_df = df
+        if fields:
+            geojson = folium.GeoJson(
+                plot_df[["geometry"]],
+                tooltip=folium.features.GeoJsonTooltip(fields=fields),
+            )
+        else:
+            geojson = folium.GeoJson(plot_df[["geometry"]])
+        geojson.add_to(folium_map)
 
     def plot_folium(
         self,
@@ -97,17 +95,21 @@ class Map:
         folium_map=None,
         fields_intersections=None,
         fields_roads=None,
-        filter_box=None
+        filter_box=None,
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if filter_box:
             filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
             filter_df = "EPSG:4326"
+        else:
+            filter_df = None
         if include_roads:
             self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
         if include_intersections:
-            self.plot_folium_df(folium_map, self.intersections, filter_df, fields_intersections)
+            self.plot_folium_df(
+                folium_map, self.intersections, filter_df, fields_intersections
+            )
         return folium_map
 
     def to_geodigraph(self):

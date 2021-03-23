@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 import movingpandas as mpd
 from pyproj import CRS
 import requests
+from shapely.geometry import box
 from tqdm import tqdm
 
 
@@ -188,23 +189,27 @@ class ABTMMap(Map):
         mpd_trajectories = mpd.TrajectoryCollection(gpd_trajectories, "name")
         return mpd_trajectories
 
-    def abtmplot(self, include_intersections=False, include_roads=False):
-        self.refresh_people_geometries()
+    def plot(
+        self,
+        include_intersections=False,
+        include_roads=False,
+        include_people=True,
+        filter_box=None,
+    ):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
-        self.people.plot(ax=ax)
-        for idx, row in self.people.iterrows():
-            plt.annotate(
-                text=idx,
-                xy=row.geometry.centroid.coords[0],
-                horizontalalignment="center",
-            )
-        self.plot(
-            fig=fig,
-            ax=ax,
-            include_intersections=include_intersections,
-            include_roads=include_roads,
-        )
+        if filter_box:
+            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = "EPSG:4326"
+        else:
+            filter_df = None
+        if include_intersections:
+            self.plot_df(ax, self.intersections, filter_df)
+        if include_roads:
+            self.plot_df(ax, self.roads, filter_df)
+        if include_people:
+            self.plot_df(ax, self.people, filter_df)
+        plt.show()
 
     def plot_folium_people(self, folium_map, fields_people):
         self.people.crs = "EPSG:4326"
@@ -217,7 +222,6 @@ class ABTMMap(Map):
             geojson = folium.GeoJson(self.people[["geometry"]])
         geojson.add_to(folium_map)
 
-
     def plot_folium(
         self,
         include_intersections=False,
@@ -227,14 +231,21 @@ class ABTMMap(Map):
         fields_intersections=None,
         fields_roads=None,
         fields_people=None,
-        filter_df=None
+        filter_box=None,
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
+        if filter_box:
+            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = "EPSG:4326"
+        else:
+            filter_df = None
         if include_roads:
             self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
         if include_intersections:
-            self.plot_folium_df(folium_map, self.intersections, filter_df, fields_intersections)
+            self.plot_folium_df(
+                folium_map, self.intersections, filter_df, fields_intersections
+            )
         if include_people:
             self.plot_folium_df(folium_map, self.people, filter_df, fields_people)
         return folium_map
