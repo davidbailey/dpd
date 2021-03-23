@@ -15,6 +15,7 @@ from dpd.mapping import Intersection, Map, Road
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
 
+
 class OSMMap(Map):
     def __init__(self, region):
         super().__init__()
@@ -79,7 +80,7 @@ class OSMMap(Map):
     @staticmethod
     def speed_converter(speed):
         if speed == None:
-            return DEFAULT_SPEED 
+            return DEFAULT_SPEED
         speed_split = speed.split()
         if len(speed_split) == 2:
             if speed_split[1] == "mph":
