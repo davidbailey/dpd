@@ -12,6 +12,8 @@ from tqdm import tqdm
 
 from dpd.mapping import Intersection, Map, Road
 
+DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
+DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
 
 class OSMMap(Map):
     def __init__(self, region):
@@ -76,14 +78,20 @@ class OSMMap(Map):
 
     @staticmethod
     def speed_converter(speed):
-        default_speed = 25 * units.imperial.mile / units.hour
         if speed == None:
-            return default_speed
-        r = [int(s) for s in speed.split() if s.isdigit()]
-        if len(r) > 0:
-            return r[0] * units.imperial.mile / units.hour
+            return DEFAULT_SPEED 
+        speed_split = speed.split()
+        if len(speed_split) == 2:
+            if speed_split[1] == "mph":
+                speed_unit = units.imperial.mile / units.hour
+            elif speed_split[1] == "kph":
+                speed_unit = units.kilometer / units.hour
+            else:
+                speed_unit = DEFAULT_SPEED_UNIT
+            return speed_split[0] * speed_unit
         else:
-            return default_speed * units.imperial.mile / units.hour
+            logging.warning("No speed unit: %s" % (speed,))
+            return speed_split[0] * DEFAULT_SPEED_UNIT
 
     def create_road_segment(self, nodes, road_id):
         linestring = []
