@@ -206,11 +206,7 @@ class ABTMMap(Map):
             include_roads=include_roads,
         )
 
-    def abtmplot_folium(
-        self, include_intersections=False, include_roads=False, fields_people=None
-    ):
-        self.refresh_people_geometries()
-        folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
+    def plot_folium_people(self, folium_map, fields_people):
         self.people.crs = "EPSG:4326"
         if fields_people:
             geojson = folium.GeoJson(
@@ -220,8 +216,25 @@ class ABTMMap(Map):
         else:
             geojson = folium.GeoJson(self.people[["geometry"]])
         geojson.add_to(folium_map)
-        return self.plot_folium(
-            folium_map=folium_map,
-            include_intersections=include_intersections,
-            include_roads=include_roads,
-        )
+
+
+    def plot_folium(
+        self,
+        include_intersections=False,
+        include_roads=False,
+        include_people=True,
+        folium_map=None,
+        fields_intersections=None,
+        fields_roads=None,
+        fields_people=None,
+        filter_df=None
+    ):
+        if not folium_map:
+            folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
+        if include_roads:
+            self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
+        if include_intersections:
+            self.plot_folium_df(folium_map, self.intersections, filter_df, fields_intersections)
+        if include_people:
+            self.plot_folium_df(folium_map, self.people, filter_df, fields_people)
+        return folium_map

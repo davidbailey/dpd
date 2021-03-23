@@ -72,6 +72,23 @@ class Map:
                 )
         plt.show()
 
+
+    def plot_folium_df(self, folium_map, df, filter_df, fields):
+            df.crs = "EPSG:4326"
+            if filter_df:
+                plot_df = gpd.overlay(df, filter_df, how='intersection')
+            else:
+                plot_df = df
+            if fields:
+                geojson = folium.GeoJson(
+                    plot_df[["geometry"]],
+                    tooltip=folium.features.GeoJsonTooltip(fields=fields),
+                )
+            else:
+                geojson = folium.GeoJson(plot_df[["geometry"]])
+            geojson.add_to(folium_map)
+        
+
     def plot_folium(
         self,
         include_intersections=False,
@@ -79,29 +96,14 @@ class Map:
         folium_map=None,
         fields_intersections=None,
         fields_roads=None,
+        filter_df=None
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
-        if include_intersections:
-            self.intersections.crs = "EPSG:4326"
-            if fields_intersections:
-                geojson = folium.GeoJson(
-                    self.intersections[["geometry"]],
-                    tooltip=folium.features.GeoJsonTooltip(fields=fields_intersections),
-                )
-            else:
-                geojson = folium.GeoJson(self.intersections[["geometry"]])
-            geojson.add_to(folium_map)
         if include_roads:
-            self.roads.crs = "EPSG:4326"
-            if fields_roads:
-                geojson = folium.GeoJson(
-                    self.roads[["geometry"]],
-                    tooltip=folium.features.GeoJsonTooltip(fields=fields_roads),
-                )
-            else:
-                geojson = folium.GeoJson(self.roads[["geometry"]])
-            geojson.add_to(folium_map)
+            self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
+        if include_intersections:
+            self.plot_folium_df(folium_map, self.intersections, filter_df, fields_intersections)
         return folium_map
 
     def to_geodigraph(self):
