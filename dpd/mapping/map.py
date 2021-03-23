@@ -3,6 +3,7 @@ import geonetworkx
 import geopandas as gpd
 from matplotlib import pyplot as plt
 from pyproj import CRS
+from shapely.geometry import box
 
 from .intersection import Intersection
 from .lane import Lane
@@ -96,10 +97,13 @@ class Map:
         folium_map=None,
         fields_intersections=None,
         fields_roads=None,
-        filter_df=None
+        filter_box=None
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
+        if filter_box:
+            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = "EPSG:4326"
         if include_roads:
             self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
         if include_intersections:
