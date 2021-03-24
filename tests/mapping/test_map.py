@@ -23,8 +23,8 @@ class TestMap(unittest.TestCase):
                 Road(name, geometry, input_intersection, output_intersection, 1)
             )
         self.map_.plot()
-        self.roads.crs = "EPSG:4326"
-        self.intersections.crs = "EPSG:4326"
+        self.map_.roads.crs = "EPSG:4326"
+        self.map_.intersections.crs = "EPSG:4326"
         self.map_.plot_folium(include_intersections=True)
         self.map_.to_geodigraph()
 
