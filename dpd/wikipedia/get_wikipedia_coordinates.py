@@ -17,8 +17,14 @@ def get_wikipedia_coordinates(url):
     """
     request = requests.get(url)
     soup = bs4.BeautifulSoup(request.content, "html.parser")
-    latitude = soup.find_all("span", attrs={'class':'latitude'})[0].contents[0]
-    longitude = soup.find_all("span", attrs={'class':'longitude'})[0].contents[0]
+    if soup.find_all("span", attrs={'class':'latitude'}):
+        latitude = soup.find_all("span", attrs={'class':'latitude'})[0].contents[0]
+    else:
+        latitude = None
+    if soup.find_all("span", attrs={'class':'longitude'}):
+        longitude = soup.find_all("span", attrs={'class':'longitude'})[0].contents[0]
+    else:
+        longitude = None
     return (latitude, longitude)
 
 
