@@ -24,7 +24,13 @@ class OSMMap(Map):
         self.osm = OSM(fp)
         self.osm.keep_node_info = True
         self.network = self.osm.get_network(
-            "driving"
+            "driving",
+            extra_attributes=[
+                "lanes:forward",
+                "lanes:backward",
+                "cycleway:left",
+                "cycleway:right",
+            ],
         )  # TODO Add cycling and walking networks.
         self.node_tags = self.create_node_tags_lookup()  # Used to find traffic signals.
         intersections = self.build_intersections()
@@ -129,61 +135,56 @@ class OSMMap(Map):
             road_segments.append(self.create_road_segment(nodes, road_id))
         return road_segments
 
+    def lane_calculator(self, road):
+        if road["oneway"] == "yes":
+            if road["lanes:forward"]:
+                number_of_lanes_forward = int(road["lanes:forward"])
+            elif road["lanes"]:
+                number_of_lanes_forward = int(road["lanes"])
+            else:
+                number_of_lanes_forward = 1
+            number_of_lanes_backward = 0
+        elif road["lanes:forward"]:
+            number_of_lanes_forward = int(road["lanes:forward"])
+            if road["lanes:backward"]:
+                number_of_lanes_backward = int(road["lanes:backward"])
+            elif road["lanes"]:
+                number_of_lanes_backward = int(road["lanes"]) - number_of_lanes_forward
+            else:
+                number_of_lanes_backward = 1
+        elif road["lanes"]:
+            number_of_lanes_forward = math.ceil(int(road["lanes"]) / 2)
+            logging.warning("two way road with only one lane %s" % road["name"])
+            number_of_lanes_backward = int(road["lanes"]) // 2
+        else:
+            number_of_lanes_forward = 1
+            number_of_lanes_backward = 1
+        return number_of_lanes_forward, number_of_lanes_backward
+
     def build_roads(self):
         logging.info("Building roads...")
         roads = {}
         for _, road in tqdm(self.network.iterrows(), total=len(self.network)):
+            number_of_lanes_forward, number_of_lanes_backward = self.lane_calculator(
+                road
+            )
             road_segments = self.build_road_segments(road)
-            length_sum = 0
-            number_of_lanes = road["lanes"]
-            if road["oneway"]:
-                if not number_of_lanes:
-                    number_of_lanes = 1
-                else:
-                    number_of_lanes = int(number_of_lanes)
-                for segment in road_segments:
-                    length_sum += segment["road_geometry"].length
-                    road_id = str(road["id"]) + ":S" + str(segment["road_id"])
-                    r = Road(
-                        road_id,
-                        segment["road_geometry"],
-                        segment["start_node"],
-                        segment["end_node"],
-                        number_of_lanes,
-                    )
-                    roads[road_id] = {
-                        "geometry": r.geometry,
-                        "Road": r,
-                        "maxspeed": self.speed_converter(road["maxspeed"]),
-                        "lanes": number_of_lanes,
-                    }
-            else:
-                if not number_of_lanes:
-                    number_of_lanes = 2
-                elif number_of_lanes == "1":
-                    number_of_lanes = 2
-                    logging.warning(
-                        "Two-way street with only one lane: %s" % (road.name),
-                    )
-                else:
-                    number_of_lanes = int(number_of_lanes)
-                number_of_lanes = number_of_lanes / 2  # TODO add turning lanes
-                for segment in road_segments:
-                    length_sum += segment["road_geometry"].length
-                    road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
-                    r = Road(
-                        road_id,
-                        segment["road_geometry"],
-                        segment["start_node"],
-                        segment["end_node"],
-                        int(number_of_lanes),
-                    )
-                    roads[road_id] = {
-                        "geometry": r.geometry,
-                        "Road": r,
-                        "maxspeed": self.speed_converter(road["maxspeed"]),
-                        "lanes": number_of_lanes,
-                    }
+            for segment in road_segments:
+                road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
+                r = Road(
+                    road_id,
+                    segment["road_geometry"],
+                    segment["start_node"],
+                    segment["end_node"],
+                    number_of_lanes_forward,
+                )
+                roads[road_id] = {
+                    "geometry": r.geometry,
+                    "Road": r,
+                    "maxspeed": self.speed_converter(road["maxspeed"]),
+                    "lanes": number_of_lanes_forward,
+                }
+                if number_of_lanes_backward:
                     reversed_segment_road_geometry = LineString(
                         segment["road_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
@@ -193,12 +194,12 @@ class OSMMap(Map):
                         reversed_segment_road_geometry,
                         segment["end_node"],
                         segment["start_node"],
-                        int(number_of_lanes),
+                        int(number_of_lanes_backward),
                     )
                     roads[road_id] = {
                         "geometry": r.geometry,
                         "Road": r,
                         "maxspeed": self.speed_converter(road["maxspeed"]),
-                        "lanes": number_of_lanes,
+                        "lanes": number_of_lanes_backward,
                     }
         return roads

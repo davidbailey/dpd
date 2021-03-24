@@ -5,10 +5,6 @@ from matplotlib import pyplot as plt
 from pyproj import CRS
 from shapely.geometry import box
 
-from .intersection import Intersection
-from .lane import Lane
-from .road import Road
-
 
 class Map:
     """
@@ -74,7 +70,6 @@ class Map:
         plt.show()
 
     def plot_folium_df(self, folium_map, df, filter_df, fields):
-        df.crs = "EPSG:4326"
         if filter_df:
             plot_df = gpd.overlay(df, filter_df, how="intersection")
         else:

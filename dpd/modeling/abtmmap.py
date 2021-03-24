@@ -212,7 +212,6 @@ class ABTMMap(Map):
         plt.show()
 
     def plot_folium_people(self, folium_map, fields_people):
-        self.people.crs = "EPSG:4326"
         if fields_people:
             geojson = folium.GeoJson(
                 self.people[["geometry"]],
