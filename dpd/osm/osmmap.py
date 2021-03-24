@@ -148,13 +148,18 @@ class OSMMap(Map):
             number_of_lanes_forward = int(road["lanes:forward"])
             if road["lanes:backward"]:
                 number_of_lanes_backward = int(road["lanes:backward"])
+                if number_of_lanes_forward + number_of_lanes_backward != int(road["lanes"]):
+                    logging.warning("lanes:forward + lanes:backward != lanes %s" % road["name"])
             elif road["lanes"]:
                 number_of_lanes_backward = int(road["lanes"]) - number_of_lanes_forward
             else:
                 number_of_lanes_backward = 1
         elif road["lanes"]:
+            if road["lanes"] == "1":
+                logging.warning("two way road with only one lane %s" % road["name"])
+                number_of_lanes_forward = 1
+                number_of_lanes_backward = 1
             number_of_lanes_forward = math.ceil(int(road["lanes"]) / 2)
-            logging.warning("two way road with only one lane %s" % road["name"])
             number_of_lanes_backward = int(road["lanes"]) // 2
         else:
             number_of_lanes_forward = 1
