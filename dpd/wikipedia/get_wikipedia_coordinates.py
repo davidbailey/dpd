@@ -5,7 +5,7 @@ import bs4
 import requests
 
 
-def get_wikipedia_coordinates(url)
+def get_wikipedia_coordinates(url):
     """
     Get the latitude, longitude coordinates from a wikipedia page and return it as a tuple.
 
