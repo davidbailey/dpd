@@ -162,7 +162,7 @@ class OSMMap(Map):
                 number_of_lanes_backward = 1
         elif road["lanes"]:
             if road["lanes"] == "1":
-                logging.warning("two way road with only one lane %s" % road["name"])
+                logging.warning("two way road with only one lane %s" % road["id"])
                 number_of_lanes_forward = 1
                 number_of_lanes_backward = 1
             number_of_lanes_forward = math.ceil(int(road["lanes"]) / 2)
