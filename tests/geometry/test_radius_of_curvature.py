@@ -7,8 +7,8 @@ p2 = [1, 1]
 p3 = [2, 3]
 
 
-class TestCut(unittest.TestCase):
-    def test_cut(self):
+class TestRadiusOfCurvature(unittest.TestCase):
+    def test_radius_of_curvature(self):
         self.assertEqual(radius_of_curvature(p1, p2, p3), 1.8263585701380227)
 
 
