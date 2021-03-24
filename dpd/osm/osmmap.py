@@ -24,15 +24,15 @@ class OSMMap(Map):
         self.osm = OSM(fp)
         self.osm.keep_node_info = True
         self.network = self.osm.get_network(
-            "driving",
+            "all",
             extra_attributes=[
                 "lanes:forward",
                 "lanes:backward",
                 "cycleway:left",
                 "cycleway:right",
             ],
-        )  # TODO Add cycling and walking networks.
-        self.node_tags = self.create_node_tags_lookup()  # Used to find traffic signals.
+        )
+        self.node_tags = self.create_node_tags_lookup()  # Used to find traffic signals, all-way stops
         intersections = self.build_intersections()
         self.intersections = gpd.GeoDataFrame.from_dict(intersections, orient="index")
         self.intersections.crs = "EPSG:4326"
