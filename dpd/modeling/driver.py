@@ -19,6 +19,7 @@ class Driver(Agent):
         self.stopping_distance = 1 * units.meter
         self.max_speed = 100 * units.imperial.mile / units.hour
         self.speed = 0 * units.imperial.mile / units.hour
+        self.arrived = False
 
     def step(self):
         if self.length_on_lane >= self.road.geometry.length * units.meter:
@@ -31,6 +32,7 @@ class Driver(Agent):
             else:
                 # if there are no more route segments, we have arrived
                 logging.info("%s arrived" % (self.name,))
+                self.arrived = True
         elif self.lane.occupants.index(self) > 0:
             logging.info(
                 "%s potential for congestion %s" % (self.name, self.lane.occupants)

@@ -7,6 +7,7 @@ import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
 import movingpandas as mpd
+import numpy as np
 from pyproj import CRS
 import requests
 from shapely.geometry import box
@@ -144,9 +145,15 @@ class ABTMMap(Map):
             lambda person: person.geometry
         )
 
+    def all_people_arrived(self):
+        for person in self.people["Person"]:
+            if not person.arrived:
+                return Fasle
+        return True
+
     def simulate(
         self,
-        number_of_rounds,
+        number_of_rounds=np.inf,
         time=datetime.datetime(1970, 1, 1, 0, 0, 0),
         post_people=False,
     ):
@@ -166,21 +173,23 @@ class ABTMMap(Map):
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
-        for x in range(number_of_rounds):
-            logging.info("Simulating round %s" % (x,))
+        round_number = 0
+        while round_number <= number_of_rounds and not self.all_people_arrived():
+            logging.info("Simulating round %s" % (round_number,))
             for _, person in self.people.iterrows():
-                # if not person["Person"].arrived
-                trajectories.append(
-                    {
-                        "time": time,
-                        "geometry": person["Person"].geometry,
-                        "name": person.name,
-                    }
-                )
+                if not person["Person"].arrived:
+                    trajectories.append(
+                        {
+                            "time": time,
+                            "geometry": person["Person"].geometry,
+                            "name": person.name,
+                        }
+                    )
             if post_people:
                 self.post_people("http://localhost:9000/people")
             self.model.step()
             time = time + datetime.timedelta(seconds=1)
+            round_number = round_number + 1
         if post_people:
             werkzeug_thread.stop()
         gpd_trajectories = gpd.GeoDataFrame(trajectories).set_index("time")
