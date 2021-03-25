@@ -27,9 +27,9 @@ def get_wikipedia_table(url, number=0, styled=False):
                         lambda element: "".join(
                             list(
                                 map(
-                                    lambda x: str(x).replace(
-                                        "/wiki/", "https://en.wikipedia.org/wiki/"
-                                    ).rstrip(),
+                                    lambda x: str(x)
+                                    .replace("/wiki/", "https://en.wikipedia.org/wiki/")
+                                    .rstrip(),
                                     element.contents,
                                 )
                             )
