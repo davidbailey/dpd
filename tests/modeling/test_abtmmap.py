@@ -49,7 +49,7 @@ class TestABTMMap(unittest.TestCase):
         self.abtmmap.intersections.crs = aea
         self.abtmmap.roads.crs = aea
         self.abtmmap.people.crs = aea
-        trajectories = self.abtmmap.simulate(10, post_people=True)
+        trajectories = self.abtmmap.simulate(10)
         self.abtmmap.plot(include_roads=True)
 
 
