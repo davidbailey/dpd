@@ -6,7 +6,7 @@ import requests
 import pandas
 
 
-def get_wikipedia_table(url, number=0, include_links=False):
+def get_wikipedia_table(url, number=0):
     """
     Get a table from wikipedia and return it as a Pandas DataFrame.
 
@@ -23,7 +23,16 @@ def get_wikipedia_table(url, number=0, include_links=False):
         map(
             lambda row: list(
                 map(
-                    lambda element: bs4.element.Tag.getText(element).rstrip(),
+                    lambda element: "".join(
+                        list(
+                            map(
+                                lambda x: str(x).replace(
+                                    "/wiki/", "https://en.wikipedia.org/wiki/"
+                                ),
+                                element.contents,
+                            )
+                        )
+                    ),
                     row.find_all(["td", "th"]),
                 )
             ),
@@ -31,20 +40,5 @@ def get_wikipedia_table(url, number=0, include_links=False):
         )
     )
     dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
-    if include_links:
-        rows = list(
-            map(
-                lambda row: list(
-                    map(
-                        lambda element: element.find("a")["href"]
-                        if element.find("a")
-                        else "",
-                        row.find_all(["td", "th"]),
-                    )
-                ),
-                soup.find_all("table")[number].find_all("tr"),
-            )
-        )
-        links_dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
-        return dataframe, links_dataframe
+    dataframe = dataframe.style.format(lambda x: x)
     return dataframe
