@@ -29,7 +29,7 @@ def get_wikipedia_table(url, number=0, styled=False):
                                 map(
                                     lambda x: str(x).replace(
                                         "/wiki/", "https://en.wikipedia.org/wiki/"
-                                    ),
+                                    ).rstrip(),
                                     element.contents,
                                 )
                             )
@@ -41,7 +41,7 @@ def get_wikipedia_table(url, number=0, styled=False):
             )
         )
         dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
-        dataframe.style.format(lambda x: x)
+        dataframe = dataframe.style.format(lambda x: x)
     else:
         rows = list(
             map(
