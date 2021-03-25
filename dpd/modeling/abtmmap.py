@@ -148,7 +148,7 @@ class ABTMMap(Map):
     def all_people_arrived(self):
         for person in self.people["Person"]:
             if not person.arrived:
-                return Fasle
+                return False
         return True
 
     def simulate(
