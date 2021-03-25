@@ -19,6 +19,7 @@ setup(
         "geonetworkx",
         "geopandas",
         "gtfs_kit",
+        "haversine",
         "ipfn",
         "matplotlib",
         "mesa",

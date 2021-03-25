@@ -5,5 +5,5 @@ class GravityModel():
         self.b = b
         self.d = d
         
-    def compute(mass_a, mass_b, distance):
-        return self.G * (mass_a**self.a, mass_b**self.b) / distance**self.d
+    def compute(self, mass_a, mass_b, distance):
+        return self.G * (mass_a**self.a * mass_b**self.b) / distance**self.d
