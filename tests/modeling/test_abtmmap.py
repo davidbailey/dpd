@@ -50,7 +50,7 @@ class TestABTMMap(unittest.TestCase):
         self.abtmmap.roads.crs = aea
         self.abtmmap.people.crs = aea
         trajectories = self.abtmmap.simulate(10, post_people=True)
-        self.abtmmap.abtmplot(include_roads=True)
+        self.abtmmap.plot(include_roads=True)
 
 
 if __name__ == "__main__":
