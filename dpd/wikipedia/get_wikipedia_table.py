@@ -6,7 +6,7 @@ import requests
 import pandas
 
 
-def get_wikipedia_table(url, number=0):
+def get_wikipedia_table(url, number=0, styled=False):
     """
     Get a table from wikipedia and return it as a Pandas DataFrame.
 
@@ -19,26 +19,40 @@ def get_wikipedia_table(url, number=0):
     """
     request = requests.get(url)
     soup = bs4.BeautifulSoup(request.content, "html.parser")
-    rows = list(
-        map(
-            lambda row: list(
-                map(
-                    lambda element: "".join(
-                        list(
-                            map(
-                                lambda x: str(x).replace(
-                                    "/wiki/", "https://en.wikipedia.org/wiki/"
-                                ),
-                                element.contents,
+    if styled:
+        rows = list(
+            map(
+                lambda row: list(
+                    map(
+                        lambda element: "".join(
+                            list(
+                                map(
+                                    lambda x: str(x).replace(
+                                        "/wiki/", "https://en.wikipedia.org/wiki/"
+                                    ),
+                                    element.contents,
+                                )
                             )
-                        )
-                    ),
-                    row.find_all(["td", "th"]),
-                )
-            ),
-            soup.find_all("table")[number].find_all("tr"),
+                        ),
+                        row.find_all(["td", "th"]),
+                    )
+                ),
+                soup.find_all("table")[number].find_all("tr"),
+            )
         )
-    )
-    dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
-    dataframe = dataframe.style.format(lambda x: x)
+        dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
+        dataframe.style.format(lambda x: x)
+    else:
+        rows = list(
+            map(
+                lambda row: list(
+                    map(
+                        lambda element: bs4.element.Tag.getText(element).rstrip(),
+                        row.find_all(["td", "th"]),
+                    )
+                ),
+                soup.find_all("table")[number].find_all("tr"),
+            )
+        )
+        dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
     return dataframe
