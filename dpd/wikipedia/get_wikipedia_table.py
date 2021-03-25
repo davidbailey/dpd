@@ -32,17 +32,19 @@ def get_wikipedia_table(url, number=0, include_links=False):
     )
     dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
     if include_links:
-        rows = list(    
-            map(    
-                lambda row: list(    
-                    map(    
-                        lambda element: element.find("a")["href"] if element.find("a") else "",    
-                        row.find_all(["td", "th"]),    
-                    )    
-                ),    
-                soup.find_all("table")[number].find_all("tr"),    
-            )    
-        )    
-        links_dataframe = pandas.DataFrame(rows[1:], columns=rows[0])    
+        rows = list(
+            map(
+                lambda row: list(
+                    map(
+                        lambda element: element.find("a")["href"]
+                        if element.find("a")
+                        else "",
+                        row.find_all(["td", "th"]),
+                    )
+                ),
+                soup.find_all("table")[number].find_all("tr"),
+            )
+        )
+        links_dataframe = pandas.DataFrame(rows[1:], columns=rows[0])
         return dataframe, links_dataframe
     return dataframe
