@@ -42,7 +42,7 @@ class Road:
             lane = Lane(self, lane_number)
             self.lanes.insert(-1, lane)
         for attribute, value in kwargs.items():
-            self.attribute = value
+            setattr(self, attribute, value)
 
     def update_lanes_from_streetmix(self, url):
         r = requests.get(url)
