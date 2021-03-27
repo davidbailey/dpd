@@ -2,7 +2,7 @@ import requests
 
 from .lane import Lane
 from .cycleway import Cycleway
-
+from .sidewalk import Sidewalk
 
 class Road:
     """
