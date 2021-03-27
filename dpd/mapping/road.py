@@ -1,6 +1,7 @@
 import requests
 
 from .lane import Lane
+from .cycleway import Cycleway
 
 
 class Road:
@@ -15,6 +16,8 @@ class Road:
         input_intersection,
         output_intersection,
         number_of_lanes,
+        cycleway=None,
+        sidewalk=True,
         **kwargs
     ):
         self.name = name
@@ -26,6 +29,14 @@ class Road:
         if output_intersection:
             output_intersection.add_input_road(self)
         self.lanes = [None, None]
+        if cycleway == "track" or cycleway == "lane":
+            self.cycleway = Cycleway(self, cycleway)
+        else:
+            self.cycleway = None
+        if sidewalk:
+            self.sidewalk = Sidewalk(self)
+        else:
+            self.sidewalk = None
         for lane_number in range(number_of_lanes):
             lane = Lane(self, lane_number)
             self.lanes.insert(-1, lane)
