@@ -18,7 +18,7 @@ from dpd.mapping import Map
 from dpd.werkzeug import WerkzeugThread
 from .driver import Driver
 from .people_flask_app import people_flask_app
-from .yieldintersection import YieldIntersection
+from .yield_intersection import YieldIntersection
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection

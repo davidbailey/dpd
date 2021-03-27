@@ -8,7 +8,7 @@ class SignalIntersection(YieldIntersection):
         self.create_signal_plan()
         self.phase = 0
         self.time_in_phase = 0
-        
+
     def create_signal_plan(self):
         signal_plan = []
         for road in self.input_roads:
