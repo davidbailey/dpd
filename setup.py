@@ -14,6 +14,7 @@ setup(
     install_requires=[
         "astropy",
         "bs4",
+        "contextily",
         "flask",
         "folium",
         "geonetworkx",

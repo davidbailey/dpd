@@ -15,6 +15,7 @@ class Road:
         input_intersection,
         output_intersection,
         number_of_lanes,
+        **kwargs
     ):
         self.name = name
         self.geometry = geometry
@@ -28,6 +29,8 @@ class Road:
         for lane_number in range(number_of_lanes):
             lane = Lane(self, lane_number)
             self.lanes.insert(-1, lane)
+        for attribute, value in kwargs.items():
+            self.attribute = value
 
     def update_lanes_from_streetmix(self, url):
         r = requests.get(url)

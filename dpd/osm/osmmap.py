@@ -188,12 +188,11 @@ class OSMMap(Map):
                     segment["start_node"],
                     segment["end_node"],
                     number_of_lanes_forward,
+                    max_speed = road["maxspeed"]
                 )
                 roads[road_id] = {
                     "geometry": r.geometry,
                     "Road": r,
-                    "maxspeed": self.speed_converter(road["maxspeed"]),
-                    "lanes": number_of_lanes_forward,
                 }
                 if number_of_lanes_backward:
                     reversed_segment_road_geometry = LineString(
@@ -206,11 +205,10 @@ class OSMMap(Map):
                         segment["end_node"],
                         segment["start_node"],
                         int(number_of_lanes_backward),
+                        max_speed = road["maxspeed"]
                     )
                     roads[road_id] = {
                         "geometry": r.geometry,
                         "Road": r,
-                        "maxspeed": self.speed_converter(road["maxspeed"]),
-                        "lanes": number_of_lanes_backward,
                     }
         return roads

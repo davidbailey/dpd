@@ -1,6 +1,7 @@
 astropy
 black
 bs4
+contextily
 coveralls
 flask
 folium

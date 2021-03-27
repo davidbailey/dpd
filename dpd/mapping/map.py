@@ -69,18 +69,12 @@ class Map:
             self.plot_df(ax, self.roads, filter_df)
         plt.show()
 
-    def plot_folium_df(self, folium_map, df, filter_df, fields):
+    def plot_folium_df(self, folium_map, df, filter_df, **kwargs):
         if filter_df:
             plot_df = gpd.overlay(df, filter_df, how="intersection")
         else:
             plot_df = df
-        if fields:
-            geojson = folium.GeoJson(
-                plot_df[["geometry"]],
-                tooltip=folium.features.GeoJsonTooltip(fields=fields),
-            )
-        else:
-            geojson = folium.GeoJson(plot_df[["geometry"]])
+        geojson = folium.GeoJson(plot_df.to_json(), **kwargs)
         geojson.add_to(folium_map)
 
     def plot_folium(
@@ -88,22 +82,26 @@ class Map:
         include_intersections=False,
         include_roads=True,
         folium_map=None,
-        fields_intersections=None,
-        fields_roads=None,
         filter_box=None,
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if filter_box:
             filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
-            filter_df = "EPSG:4326"
+            filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
         if include_roads:
-            self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
+            if not "number_of_lanes" in self.roads.columns:
+                self.roads["number_of_lanes"] = self.roads["Road"].map(lambda road: len(road.lanes))
+            style_function = lambda x: {'weight' : x['properties']['number_of_lanes']}
+            self.plot_folium_df(folium_map, self.roads[["geometry", "number_of_lanes"]], filter_df, style_function=style_function)
         if include_intersections:
+            if not "name" in self.intersections.columns:
+                self.intersections["name"] = self.intersections["Intersection"].map(lambda intersection: intersection.name)
+            tooltip=folium.features.GeoJsonTooltip(fields=["name"]),
             self.plot_folium_df(
-                folium_map, self.intersections, filter_df, fields_intersections
+                folium_map, self.intersections[["geometry", "name"]], filter_df, tooltip=tooltip 
             )
         return folium_map
 

@@ -68,10 +68,6 @@ class ABTMMap(Map):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        if "maxspeed" in road.index:
-            road["Road"].max_speed = road["maxspeed"]
-        else:
-            road["Road"].max_speed = 1 * units.meter / units.second
         if road["Road"].input_intersection:
             road["Road"].input_intersection = self.intersections.loc[
                 road["Road"].input_intersection.name
@@ -220,40 +216,36 @@ class ABTMMap(Map):
             self.plot_df(ax, self.people, filter_df)
         plt.show()
 
-    def plot_folium_people(self, folium_map, fields_people):
-        if fields_people:
-            geojson = folium.GeoJson(
-                self.people[["geometry"]],
-                tooltip=folium.features.GeoJsonTooltip(fields=fields_people),
-            )
-        else:
-            geojson = folium.GeoJson(self.people[["geometry"]])
-        geojson.add_to(folium_map)
-
     def plot_folium(
         self,
         include_intersections=False,
         include_roads=False,
         include_people=True,
         folium_map=None,
-        fields_intersections=None,
-        fields_roads=None,
-        fields_people=None,
         filter_box=None,
     ):
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if filter_box:
             filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
-            filter_df = "EPSG:4326"
+            filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
-        if include_roads:
-            self.plot_folium_df(folium_map, self.roads, filter_df, fields_roads)
-        if include_intersections:
-            self.plot_folium_df(
-                folium_map, self.intersections, filter_df, fields_intersections
-            )
+        if include_roads:    
+            if not "number_of_lanes" in self.roads.columns:    
+                self.roads["number_of_lanes"] = self.roads["Road"].map(lambda road: len(road.lanes))        
+            style_function = lambda x: {'weight' : x['properties']['number_of_lanes']}        
+            self.plot_folium_df(folium_map, self.roads[["geometry", "number_of_lanes"]], filter_df, style_function=style_function)        
+        if include_intersections:    
+            if not "name" in self.intersections.columns:    
+                self.intersections["name"] = self.intersections["Intersection"].map(lambda intersection: intersection.name)        
+            tooltip=folium.features.GeoJsonTooltip(fields=["name"]),    
+            self.plot_folium_df(    
+                folium_map, self.intersections[["geometry", "name"]], filter_df, tooltip=tooltip         
+            )    
+
         if include_people:
-            self.plot_folium_df(folium_map, self.people, filter_df, fields_people)
+            if not "name" in self.people.columns:
+                self.people["name"] = self.people["Person"].map(lambda person: person.name)
+            self.plot_folium_df(folium_map, self.people[["geometry", "name"]], filter_df, tooltip=tooltip)
         return folium_map
