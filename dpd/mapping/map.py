@@ -95,7 +95,7 @@ class Map:
         if include_roads:
             if not "number_of_lanes" in self.roads.columns:
                 self.roads["number_of_lanes"] = self.roads["Road"].map(
-                    lambda road: len(road.lanes)
+                    lambda road: len(road.lanes) - 2
                 )
             style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
             if not "name" in self.roads.columns:

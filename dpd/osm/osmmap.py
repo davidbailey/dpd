@@ -205,7 +205,7 @@ class OSMMap(Map):
                         reversed_segment_road_geometry,
                         segment["end_node"],
                         segment["start_node"],
-                        int(number_of_lanes_backward),
+                        number_of_lanes_backward,
                         cycleway=["cycleway"],
                         max_speed=road["maxspeed"],
                     )
