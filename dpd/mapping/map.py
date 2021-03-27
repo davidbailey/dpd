@@ -93,15 +93,27 @@ class Map:
             filter_df = None
         if include_roads:
             if not "number_of_lanes" in self.roads.columns:
-                self.roads["number_of_lanes"] = self.roads["Road"].map(lambda road: len(road.lanes))
-            style_function = lambda x: {'weight' : x['properties']['number_of_lanes']}
-            self.plot_folium_df(folium_map, self.roads[["geometry", "number_of_lanes"]], filter_df, style_function=style_function)
+                self.roads["number_of_lanes"] = self.roads["Road"].map(
+                    lambda road: len(road.lanes)
+                )
+            style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
+            self.plot_folium_df(
+                folium_map,
+                self.roads[["geometry", "number_of_lanes"]],
+                filter_df,
+                style_function=style_function,
+            )
         if include_intersections:
             if not "name" in self.intersections.columns:
-                self.intersections["name"] = self.intersections["Intersection"].map(lambda intersection: intersection.name)
-            tooltip=folium.features.GeoJsonTooltip(fields=["name"]),
+                self.intersections["name"] = self.intersections["Intersection"].map(
+                    lambda intersection: intersection.name
+                )
+            tooltip = (folium.features.GeoJsonTooltip(fields=["name"]),)
             self.plot_folium_df(
-                folium_map, self.intersections[["geometry", "name"]], filter_df, tooltip=tooltip 
+                folium_map,
+                self.intersections[["geometry", "name"]],
+                filter_df,
+                tooltip=tooltip,
             )
         return folium_map
 

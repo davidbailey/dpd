@@ -188,7 +188,7 @@ class OSMMap(Map):
                     segment["start_node"],
                     segment["end_node"],
                     number_of_lanes_forward,
-                    max_speed = road["maxspeed"]
+                    max_speed=road["maxspeed"],
                 )
                 roads[road_id] = {
                     "geometry": r.geometry,
@@ -205,7 +205,7 @@ class OSMMap(Map):
                         segment["end_node"],
                         segment["start_node"],
                         int(number_of_lanes_backward),
-                        max_speed = road["maxspeed"]
+                        max_speed=road["maxspeed"],
                     )
                     roads[road_id] = {
                         "geometry": r.geometry,

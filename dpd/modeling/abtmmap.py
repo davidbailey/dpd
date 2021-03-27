@@ -231,21 +231,40 @@ class ABTMMap(Map):
             filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
-        if include_roads:    
-            if not "number_of_lanes" in self.roads.columns:    
-                self.roads["number_of_lanes"] = self.roads["Road"].map(lambda road: len(road.lanes))        
-            style_function = lambda x: {'weight' : x['properties']['number_of_lanes']}        
-            self.plot_folium_df(folium_map, self.roads[["geometry", "number_of_lanes"]], filter_df, style_function=style_function)        
-        if include_intersections:    
-            if not "name" in self.intersections.columns:    
-                self.intersections["name"] = self.intersections["Intersection"].map(lambda intersection: intersection.name)        
-            tooltip=folium.features.GeoJsonTooltip(fields=["name"]),    
-            self.plot_folium_df(    
-                folium_map, self.intersections[["geometry", "name"]], filter_df, tooltip=tooltip         
-            )    
+        if include_roads:
+            if not "number_of_lanes" in self.roads.columns:
+                self.roads["number_of_lanes"] = self.roads["Road"].map(
+                    lambda road: len(road.lanes)
+                )
+            style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
+            self.plot_folium_df(
+                folium_map,
+                self.roads[["geometry", "number_of_lanes"]],
+                filter_df,
+                style_function=style_function,
+            )
+        if include_intersections:
+            if not "name" in self.intersections.columns:
+                self.intersections["name"] = self.intersections["Intersection"].map(
+                    lambda intersection: intersection.name
+                )
+            tooltip = (folium.features.GeoJsonTooltip(fields=["name"]),)
+            self.plot_folium_df(
+                folium_map,
+                self.intersections[["geometry", "name"]],
+                filter_df,
+                tooltip=tooltip,
+            )
 
         if include_people:
             if not "name" in self.people.columns:
-                self.people["name"] = self.people["Person"].map(lambda person: person.name)
-            self.plot_folium_df(folium_map, self.people[["geometry", "name"]], filter_df, tooltip=tooltip)
+                self.people["name"] = self.people["Person"].map(
+                    lambda person: person.name
+                )
+            self.plot_folium_df(
+                folium_map,
+                self.people[["geometry", "name"]],
+                filter_df,
+                tooltip=tooltip,
+            )
         return folium_map
