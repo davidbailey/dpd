@@ -3,7 +3,7 @@ import geonetworkx
 import geopandas as gpd
 from matplotlib import pyplot as plt
 from pyproj import CRS
-from shapely.geometry import box
+from shapely.geometry import box, Polygon, LineString
 
 
 class Map:
@@ -59,7 +59,7 @@ class Map:
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if filter_box:
-            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = gpd.GeoDataFrame([Polygon(box(filter_box[0], filter_box[1], filter_box[2], filter_box[3]))], columns=["geometry"])
             filter_df = "EPSG:4326"
         else:
             filter_df = None
@@ -70,8 +70,9 @@ class Map:
         plt.show()
 
     def plot_folium_df(self, folium_map, df, filter_df, **kwargs):
-        if filter_df:
+        if filter_df is not None:
             plot_df = gpd.overlay(df, filter_df, how="intersection")
+            plot_df = plot_df[plot_df["geometry"] != LineString()]
         else:
             plot_df = df
         geojson = folium.GeoJson(plot_df.to_json(), **kwargs)
@@ -87,7 +88,7 @@ class Map:
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if filter_box:
-            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
+            filter_df = gpd.GeoDataFrame([Polygon(box(filter_box[0], filter_box[1], filter_box[2], filter_box[3]))], columns=["geometry"])
             filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
@@ -97,18 +98,32 @@ class Map:
                     lambda road: len(road.lanes)
                 )
             style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
+            if not "name" in self.roads.columns:
+                self.roads["name"] = self.roads["Road"].map(
+                    lambda road: road.name
+                )
+            if not "cycleway" in self.roads.columns:
+                self.roads["cycleway"] = self.roads["Road"].map(
+                    lambda road: road.cycleway.type_ if road.cycleway else False
+                )
+            if not "sidewalk" in self.roads.columns:
+                self.roads["sidewalk"] = self.roads["Road"].map(
+                    lambda road: True if road.sidewalk else False
+                )
+            tooltip = folium.features.GeoJsonTooltip(fields=["name", "number_of_lanes", "cycleway", "sidewalk"])
             self.plot_folium_df(
                 folium_map,
-                self.roads[["geometry", "number_of_lanes"]],
+                self.roads[["geometry", "name", "number_of_lanes", "cycleway", "sidewalk"]],
                 filter_df,
                 style_function=style_function,
+                tooltip=tooltip,
             )
         if include_intersections:
             if not "name" in self.intersections.columns:
                 self.intersections["name"] = self.intersections["Intersection"].map(
                     lambda intersection: intersection.name
                 )
-            tooltip = (folium.features.GeoJsonTooltip(fields=["name"]),)
+            tooltip = folium.features.GeoJsonTooltip(fields=["name"])
             self.plot_folium_df(
                 folium_map,
                 self.intersections[["geometry", "name"]],

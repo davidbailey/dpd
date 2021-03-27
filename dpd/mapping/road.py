@@ -49,8 +49,19 @@ class Road:
         street = r.json()
         lane_number = 0
         self.lanes = [None, None]
+        divider = False
         for segment in street["data"]["street"]["segments"]:
             if segment["type"] == "drive-lane":
                 lane = Lane(self, lane_number)
                 self.lanes.insert(-1, lane)
                 lane_number += 1
+            elif segment["type"] == "divider":
+                divider = True
+            elif segment["type"] == "bike-lane":
+                if divider:
+                    self.cycleway = Cycleway(self, "track")
+                else:
+                    self.cycleway = Cycleway(self, "lane")
+            elif segment["type"] == "sidewalk":
+                self.sidewalk = Sidewalk(self)
+
