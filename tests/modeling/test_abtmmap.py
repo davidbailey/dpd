@@ -5,8 +5,9 @@ from astropy import units
 from pyproj import CRS
 from shapely.geometry import Point, LineString
 
+from dpd.modeling.agents.people.driver import Driver
 from dpd.mapping import Intersection, Lane, Road, Map
-from dpd.modeling import ABTMMap, Driver, TransportationModel
+from dpd.modeling import ABTMMap, TransportationModel
 
 
 class TestABTMMap(unittest.TestCase):

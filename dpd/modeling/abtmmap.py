@@ -14,11 +14,11 @@ from shapely.geometry import box
 from tqdm import tqdm
 
 
+from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
+from dpd.modeling.agents.people.driver import Driver
 from dpd.mapping import Map
 from dpd.werkzeug import WerkzeugThread
-from .driver import Driver
 from .people_flask_app import people_flask_app
-from .yield_intersection import YieldIntersection
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection
