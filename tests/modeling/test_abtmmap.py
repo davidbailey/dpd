@@ -1,6 +1,7 @@
 from itertools import combinations
 import unittest
 
+from astropy import units
 from pyproj import CRS
 from shapely.geometry import Point, LineString
 
@@ -22,7 +23,7 @@ class TestABTMMap(unittest.TestCase):
                 [input_intersection.geometry, output_intersection.geometry]
             )
             self.map_.add_road(
-                Road(name, geometry, input_intersection, output_intersection, 1)
+                Road(name, geometry, input_intersection, output_intersection, 1, max_speed=20 * units.kilometer / units.hour)
             )
         self.model = TransportationModel()
         self.abtmmap = ABTMMap(self.model, self.map_)
