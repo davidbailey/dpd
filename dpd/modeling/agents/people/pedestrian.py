@@ -37,11 +37,8 @@ class Pedestrian(Agent):
                 # if there are no more route segments, we have arrived
                 logging.info("%s arrived" % (self.name,))
                 self.arrived = True
-            else:
-                # walk... no congestion for pedestrians
-                self.move_forward()
         else:
-            logging.info("%s freeflow traffic, no one ahead" % (self.name,))
+            logging.info("%s walking... no congestion for pedestrians" % (self.name,))
             self.move_forward()
 
     def move_forward(self):

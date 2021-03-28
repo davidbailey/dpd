@@ -150,12 +150,13 @@ class OSMMap(Map):
             number_of_lanes_forward = int(road["lanes:forward"])
             if road["lanes:backward"]:
                 number_of_lanes_backward = int(road["lanes:backward"])
-                if number_of_lanes_forward + number_of_lanes_backward != int(
-                    road["lanes"]
-                ):
-                    logging.warning(
-                        "lanes:forward + lanes:backward != lanes %s" % road["name"]
-                    )
+                if road["lanes"]:
+                    if number_of_lanes_forward + number_of_lanes_backward != int(
+                        road["lanes"]
+                    ):
+                        logging.warning(
+                            "lanes:forward + lanes:backward != lanes %s" % road["name"]
+                        )
             elif road["lanes"]:
                 number_of_lanes_backward = int(road["lanes"]) - number_of_lanes_forward
             else:
