@@ -85,6 +85,10 @@ class ABTMMap(Map):
             for lane in road.lanes:
                 if lane is not None:
                     lane.occupants = []
+            if road.cycleway:
+                road.cycleway.occupants = []
+            if road.sidewalk:
+                road.sidewalk.occupants = []
 
     def nodes_to_roads(self, node_ids):
         """Takes a list of node_ids and a map and returns a list or roads."""
