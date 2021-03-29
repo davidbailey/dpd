@@ -209,7 +209,7 @@ class OSMMap(Map):
                 road
             )
             road_segments = self.build_road_segments(road)
-            cycleway_forward, cycleway_backard = self.cycleway_calculator(road)
+            cycleway_forward, cycleway_backward = self.cycleway_calculator(road)
             for segment in road_segments:
                 road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
                 r = Road(
