@@ -64,4 +64,3 @@ class Road:
                     self.cycleway = Cycleway(self, "lane")
             elif segment["type"] == "sidewalk":
                 self.sidewalk = Sidewalk(self)
-

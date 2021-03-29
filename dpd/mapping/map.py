@@ -59,7 +59,14 @@ class Map:
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if filter_box:
-            filter_df = gpd.GeoDataFrame([Polygon(box(filter_box[0], filter_box[1], filter_box[2], filter_box[3]))], columns=["geometry"])
+            filter_df = gpd.GeoDataFrame(
+                [
+                    Polygon(
+                        box(filter_box[0], filter_box[1], filter_box[2], filter_box[3])
+                    )
+                ],
+                columns=["geometry"],
+            )
             filter_df = "EPSG:4326"
         else:
             filter_df = None
@@ -88,7 +95,14 @@ class Map:
         if not folium_map:
             folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if filter_box:
-            filter_df = gpd.GeoDataFrame([Polygon(box(filter_box[0], filter_box[1], filter_box[2], filter_box[3]))], columns=["geometry"])
+            filter_df = gpd.GeoDataFrame(
+                [
+                    Polygon(
+                        box(filter_box[0], filter_box[1], filter_box[2], filter_box[3])
+                    )
+                ],
+                columns=["geometry"],
+            )
             filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
@@ -99,21 +113,23 @@ class Map:
                 )
             style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
             if not "name" in self.roads.columns:
-                self.roads["name"] = self.roads["Road"].map(
-                    lambda road: road.name
-                )
+                self.roads["name"] = self.roads["Road"].map(lambda road: road.name)
             if not "cycleway" in self.roads.columns:
                 self.roads["cycleway"] = self.roads["Road"].map(
-                    lambda road: road.cycleway.type_ if road.cycleway else False
+                    lambda road: road.cycleway.type_ if road.cycleway else None
                 )
             if not "sidewalk" in self.roads.columns:
                 self.roads["sidewalk"] = self.roads["Road"].map(
-                    lambda road: True if road.sidewalk else False
+                    lambda road: "sidewalk" if road.sidewalk else None
                 )
-            tooltip = folium.features.GeoJsonTooltip(fields=["name", "number_of_lanes", "cycleway", "sidewalk"])
+            tooltip = folium.features.GeoJsonTooltip(
+                fields=["name", "number_of_lanes", "cycleway", "sidewalk"]
+            )
             self.plot_folium_df(
                 folium_map,
-                self.roads[["geometry", "name", "number_of_lanes", "cycleway", "sidewalk"]],
+                self.roads[
+                    ["geometry", "name", "number_of_lanes", "cycleway", "sidewalk"]
+                ],
                 filter_df,
                 style_function=style_function,
                 tooltip=tooltip,

@@ -173,6 +173,34 @@ class OSMMap(Map):
             number_of_lanes_backward = 1
         return number_of_lanes_forward, number_of_lanes_backward
 
+    def cycleway_calculator(self, road):
+        cycleway_types = ["lane", "track"]
+        if road["oneway"] == "yes":
+            if road["cycleway"] in cycleway_types:
+                cycleway_forward = road["cycleway"]
+                cycleway_backward = None
+            elif road["cycleway:right"] in cycleway_types:
+                cycleway_forward = road["cycleway:right"]
+                cycleway_backward = None
+            elif road["cycleway:left"] in cycleway_types:
+                cycleway_forward = road["cycleway:left"]
+                cycleway_backward = None
+        else:
+            if road["cycleway"] in cycleway_types:
+                cycleway_forward = road["cycleway"]
+                cycleway_backward = road["cycleway"]
+            elif road["cycleway:right"] in cycleway_types:
+                cycleway_forward = road["cycleway:right"]
+                if road["cycleway:left"] in cycleway_types:
+                    cycleway_backward = road["cycleway:left"]
+            elif road["cycleway:left"] in cycleway_types:
+                cycleway_backward = road["cycleway:left"]
+                cycleway_forward = None
+            else:
+                cycleway_forward = None
+                cycleway_backward = None
+        return cycleway_forward, cycleway_backward
+
     def build_roads(self):
         logging.info("Building roads...")
         roads = {}
@@ -181,6 +209,7 @@ class OSMMap(Map):
                 road
             )
             road_segments = self.build_road_segments(road)
+            cycleway_forward, cycleway_backard = self.cycleway_calculator(road)
             for segment in road_segments:
                 road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
                 r = Road(
@@ -189,14 +218,14 @@ class OSMMap(Map):
                     segment["start_node"],
                     segment["end_node"],
                     number_of_lanes_forward,
-                    cycleway=road["cycleway"],
+                    cycleway=cycleway_forward,
                     max_speed=road["maxspeed"],
                 )
                 roads[road_id] = {
                     "geometry": r.geometry,
                     "Road": r,
                 }
-                if number_of_lanes_backward:
+                if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_road_geometry = LineString(
                         segment["road_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
@@ -207,7 +236,7 @@ class OSMMap(Map):
                         segment["end_node"],
                         segment["start_node"],
                         number_of_lanes_backward,
-                        cycleway=["cycleway"],
+                        cycleway=cycleway_backward,
                         max_speed=road["maxspeed"],
                     )
                     roads[road_id] = {
