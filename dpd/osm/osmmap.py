@@ -185,6 +185,9 @@ class OSMMap(Map):
             elif road["cycleway:left"] in cycleway_types:
                 cycleway_forward = road["cycleway:left"]
                 cycleway_backward = None
+            else:
+                cycleway_forward = None
+                cycleway_backward = None
         else:
             if road["cycleway"] in cycleway_types:
                 cycleway_forward = road["cycleway"]
@@ -193,6 +196,8 @@ class OSMMap(Map):
                 cycleway_forward = road["cycleway:right"]
                 if road["cycleway:left"] in cycleway_types:
                     cycleway_backward = road["cycleway:left"]
+                else:
+                    cycleway_backward = None
             elif road["cycleway:left"] in cycleway_types:
                 cycleway_backward = road["cycleway:left"]
                 cycleway_forward = None
