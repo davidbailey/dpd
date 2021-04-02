@@ -10,8 +10,8 @@ https://github.com/davidbailey/dpd
    notebooks/cba.ipynb
    notebooks/density_and_public_transportation.ipynb
    notebooks/driving.ipynb
-   notebooks/four_step_transportation_model.ipynb
    notebooks/folium_flask_app.ipynb
+   notebooks/four_step_transportation_model.ipynb
    notebooks/gravity_model.ipynb
    notebooks/mca.ipynb
    notebooks/plot_schedule.ipynb
