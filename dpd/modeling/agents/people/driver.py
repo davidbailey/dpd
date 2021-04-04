@@ -18,6 +18,7 @@ class Driver(Agent):
         self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
         self.stopping_distance = 1 * units.meter
         self.acceleration = 2.5 * units.meter / (units.second * units.second)
+        self.deceleration = -self.acceleration
         self.speed = 0 * units.imperial.mile / units.hour
         self.arrived = False
 
@@ -76,7 +77,16 @@ class Driver(Agent):
         )
 
     def stop(self):
-        self.speed = 0 * units.meter / units.second
+        distance, self.speed = step(
+            self.deceleration,
+            self.speed,
+            1 * units.second,
+            0 * units.meter / units.second,
+        )
+        self.length_on_segment += distance
+        self.geometry = self.link.geometry.interpolate(
+            self.length_on_segment.to_value(units.meter)
+        )
 
     def attempt_segment_change(self, segment):
         logging.info("%s attempting segment change" % (self.name,))
