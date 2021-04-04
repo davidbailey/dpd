@@ -28,14 +28,14 @@ class ABTMMap(Map):
     def __init__(self, model, map_):
         self.model = model
         self.intersections = map_.intersections
-        self.roads = map_.roads
+        self.links = map_.links
         self.people = gpd.GeoDataFrame(columns=["geometry", "Person"])
         self.intersections["Intersection"] = self.intersections.apply(
             self.transform_intersection_to_agent_based,
             axis=1,
         )
-        self.roads.apply(self.transform_road_to_agent_based, axis=1)
-        self.clear_lanes()
+        self.links.apply(self.transform_link_to_agent_based, axis=1)
+        self.clear_segments()
 
     def add_person(self, person):
         self.people.loc[person.name] = [
@@ -64,54 +64,50 @@ class ABTMMap(Map):
         self.model.schedule.add(intersection)
         return intersection
 
-    def transform_road_to_agent_based(self, road):
+    def transform_link_to_agent_based(self, link):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        if road["Road"].input_intersection:
-            road["Road"].input_intersection = self.intersections.loc[
-                road["Road"].input_intersection.name
+        if link["Link"].input_intersection:
+            link["Link"].input_intersection = self.intersections.loc[
+                link["Link"].input_intersection.name
             ]["Intersection"]
-        if road["Road"].output_intersection:
-            road["Road"].output_intersection = self.intersections.loc[
-                road["Road"].output_intersection.name
+        if link["Link"].output_intersection:
+            link["Link"].output_intersection = self.intersections.loc[
+                link["Link"].output_intersection.name
             ]["Intersection"]
 
-    def clear_lanes(self):
+    def clear_segments(self):
         """
-        adds occupants to all lanes. can also be run later to clear lanes of occupants from past model
+        adds occupants to all segments. can also be run later to clear segments of occupants from past model
         """
-        for road in self.roads["Road"]:
-            for lane in road.lanes:
-                if lane is not None:
-                    lane.occupants = []
-            if road.cycleway:
-                road.cycleway.occupants = []
-            if road.sidewalk:
-                road.sidewalk.occupants = []
+        for link in self.links["Link"]:
+            for segment in link.segments:
+                if segment is not None:
+                    segment.occupants = []
 
-    def nodes_to_roads(self, node_ids):
-        """Takes a list of node_ids and a map and returns a list or roads."""
+    def nodes_to_links(self, node_ids):
+        """Takes a list of node_ids and a map and returns a list or links."""
         nodes = []
-        # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the roads. this may or may not be true.
+        # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the links. this may or may not be true.
         for node in node_ids:
             if node in self.intersections.index:
                 nodes.append(node)
-        roads = []
+        links = []
         for i in range(len(nodes) - 1):
-            for road in self.intersections.loc[nodes[i]]["Intersection"].output_roads:
+            for link in self.intersections.loc[nodes[i]]["Intersection"].output_links:
                 if (
-                    road.output_intersection
-                    and road.output_intersection.name == nodes[i + 1]
+                    link.output_intersection
+                    and link.output_intersection.name == nodes[i + 1]
                 ):
-                    roads.append(road)
+                    links.append(link)
                     break
-        return roads
+        return links
 
     def create_people_from_od(self, od):
         people = {}
         for _, person in tqdm(od.iterrows(), total=len(od)):
-            route = self.nodes_to_roads(
+            route = self.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
             # todo - add other modes
@@ -162,10 +158,10 @@ class ABTMMap(Map):
             "North America Albers Equal Area Conic"
         ):
             self.transform_intersections_to_aea()
-        if not self.roads.crs == CRS.from_string(
+        if not self.links.crs == CRS.from_string(
             "North America Albers Equal Area Conic"
         ):
-            self.transform_roads_to_aea()
+            self.transform_links_to_aea()
         if not self.people.crs == CRS.from_string(
             "North America Albers Equal Area Conic"
         ):
@@ -201,7 +197,7 @@ class ABTMMap(Map):
     def plot(
         self,
         include_intersections=False,
-        include_roads=False,
+        include_links=False,
         include_people=True,
         filter_box=None,
     ):
@@ -214,8 +210,8 @@ class ABTMMap(Map):
             filter_df = None
         if include_intersections:
             self.plot_df(ax, self.intersections, filter_df)
-        if include_roads:
-            self.plot_df(ax, self.roads, filter_df)
+        if include_links:
+            self.plot_df(ax, self.links, filter_df)
         if include_people:
             self.plot_df(ax, self.people, filter_df)
         plt.show()
@@ -223,7 +219,7 @@ class ABTMMap(Map):
     def plot_folium(
         self,
         include_intersections=False,
-        include_roads=False,
+        include_links=False,
         include_people=True,
         folium_map=None,
         filter_box=None,
@@ -235,15 +231,15 @@ class ABTMMap(Map):
             filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
-        if include_roads:
-            if not "number_of_lanes" in self.roads.columns:
-                self.roads["number_of_lanes"] = self.roads["Road"].map(
-                    lambda road: len(road.lanes)
+        if include_links:
+            if not "number_of_segments" in self.links.columns:
+                self.links["number_of_segments"] = self.links["Link"].map(
+                    lambda link: len(link.segments)
                 )
-            style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
+            style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
             self.plot_folium_df(
                 folium_map,
-                self.roads[["geometry", "number_of_lanes"]],
+                self.links[["geometry", "number_of_segments"]],
                 filter_df,
                 style_function=style_function,
             )
