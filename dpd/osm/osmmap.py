@@ -10,7 +10,7 @@ from shapely.geometry import Point, LineString
 from tqdm import tqdm
 
 
-from dpd.mapping import Intersection, Map, Road
+from dpd.mapping import Intersection, Map, Link
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
@@ -38,12 +38,12 @@ class OSMMap(Map):
         intersections = self.build_intersections()
         self.intersections = gpd.GeoDataFrame.from_dict(intersections, orient="index")
         self.intersections.crs = "EPSG:4326"
-        roads = self.build_roads()
-        self.roads = gpd.GeoDataFrame.from_dict(roads, orient="index")
-        self.roads.crs = "EPSG:4326"
+        links = self.build_links()
+        self.links = gpd.GeoDataFrame.from_dict(links, orient="index")
+        self.links.crs = "EPSG:4326"
         logging.info(
-            "Generated %s intersections and %s roads."
-            % (len(self.intersections), len(self.roads))
+            "Generated %s intersections and %s links."
+            % (len(self.intersections), len(self.links))
         )
 
     def create_node_tags_lookup(self):
@@ -102,12 +102,12 @@ class OSMMap(Map):
             logging.warning("No speed unit: %s" % (speed,))
             return speed_split[0] * DEFAULT_SPEED_UNIT
 
-    def create_road_segment(self, nodes, road_id):
+    def create_link_segment(self, nodes, link_id):
         linestring = []
         for node in nodes:
             coordinates = self.osm._node_coordinates[node]
             linestring.append(Point(coordinates["lon"], coordinates["lat"]))
-        road_geometry = LineString(linestring)
+        link_geometry = LineString(linestring)
         if nodes[0] in self.intersections.index:
             start_node = self.intersections.loc[nodes[0]]["Intersection"]
         else:
@@ -117,135 +117,135 @@ class OSMMap(Map):
         else:
             end_node = None
         return {
-            "road_geometry": road_geometry,
+            "link_geometry": link_geometry,
             "start_node": start_node,
             "end_node": end_node,
-            "road_id": road_id,
+            "link_id": link_id,
         }
 
-    def build_road_segments(self, road):
-        road_segments = []
-        road_id = 0
-        nodes = [road.nodes[0]]
-        for node in road.nodes[1:]:
+    def build_link_segments(self, link):
+        link_segments = []
+        link_id = 0
+        nodes = [link.nodes[0]]
+        for node in link.nodes[1:]:
             nodes.append(node)
             if node in self.intersections.index:
-                road_segments.append(self.create_road_segment(nodes, road_id))
-                road_id += 1
+                link_segments.append(self.create_link_segment(nodes, link_id))
+                link_id += 1
                 nodes = [node]
         if len(nodes) > 1:
-            road_segments.append(self.create_road_segment(nodes, road_id))
-        return road_segments
+            link_segments.append(self.create_link_segment(nodes, link_id))
+        return link_segments
 
-    def lane_calculator(self, road):
-        if road["oneway"] == "yes":
-            if road["lanes:forward"]:
-                number_of_lanes_forward = int(road["lanes:forward"])
-            elif road["lanes"]:
-                number_of_lanes_forward = int(road["lanes"])
+    def lane_calculator(self, link):
+        if link["oneway"] == "yes":
+            if link["lanes:forward"]:
+                number_of_lanes_forward = int(link["lanes:forward"])
+            elif link["lanes"]:
+                number_of_lanes_forward = int(link["lanes"])
             else:
                 number_of_lanes_forward = 1
             number_of_lanes_backward = 0
-        elif road["lanes:forward"]:
-            number_of_lanes_forward = int(road["lanes:forward"])
-            if road["lanes:backward"]:
-                number_of_lanes_backward = int(road["lanes:backward"])
-                if road["lanes"]:
+        elif link["lanes:forward"]:
+            number_of_lanes_forward = int(link["lanes:forward"])
+            if link["lanes:backward"]:
+                number_of_lanes_backward = int(link["lanes:backward"])
+                if link["lanes"]:
                     if number_of_lanes_forward + number_of_lanes_backward != int(
-                        road["lanes"]
+                        link["lanes"]
                     ):
                         logging.warning(
-                            "lanes:forward + lanes:backward != lanes %s" % road["name"]
+                            "lanes:forward + lanes:backward != lanes %s" % link["name"]
                         )
-            elif road["lanes"]:
-                number_of_lanes_backward = int(road["lanes"]) - number_of_lanes_forward
+            elif link["lanes"]:
+                number_of_lanes_backward = int(link["lanes"]) - number_of_lanes_forward
             else:
                 number_of_lanes_backward = 1
-        elif road["lanes"]:
-            if road["lanes"] == "1":
-                logging.warning("two way road with only one lane %s" % road["id"])
+        elif link["lanes"]:
+            if link["lanes"] == "1":
+                logging.warning("two way link with only one lane %s" % link["id"])
                 number_of_lanes_forward = 1
                 number_of_lanes_backward = 1
-            number_of_lanes_forward = math.ceil(int(road["lanes"]) / 2)
-            number_of_lanes_backward = int(road["lanes"]) // 2
+            number_of_lanes_forward = math.ceil(int(link["lanes"]) / 2)
+            number_of_lanes_backward = int(link["lanes"]) // 2
         else:
             number_of_lanes_forward = 1
             number_of_lanes_backward = 1
         return number_of_lanes_forward, number_of_lanes_backward
 
-    def cycleway_calculator(self, road):
+    def cycleway_calculator(self, link):
         cycleway_types = ["lane", "track"]
-        if road["oneway"] == "yes":
-            if road["cycleway"] in cycleway_types:
-                cycleway_forward = road["cycleway"]
+        if link["oneway"] == "yes":
+            if link["cycleway"] in cycleway_types:
+                cycleway_forward = link["cycleway"]
                 cycleway_backward = None
-            elif road["cycleway:right"] in cycleway_types:
-                cycleway_forward = road["cycleway:right"]
+            elif link["cycleway:right"] in cycleway_types:
+                cycleway_forward = link["cycleway:right"]
                 cycleway_backward = None
-            elif road["cycleway:left"] in cycleway_types:
-                cycleway_forward = road["cycleway:left"]
+            elif link["cycleway:left"] in cycleway_types:
+                cycleway_forward = link["cycleway:left"]
                 cycleway_backward = None
             else:
                 cycleway_forward = None
                 cycleway_backward = None
         else:
-            if road["cycleway"] in cycleway_types:
-                cycleway_forward = road["cycleway"]
-                cycleway_backward = road["cycleway"]
-            elif road["cycleway:right"] in cycleway_types:
-                cycleway_forward = road["cycleway:right"]
-                if road["cycleway:left"] in cycleway_types:
-                    cycleway_backward = road["cycleway:left"]
+            if link["cycleway"] in cycleway_types:
+                cycleway_forward = link["cycleway"]
+                cycleway_backward = link["cycleway"]
+            elif link["cycleway:right"] in cycleway_types:
+                cycleway_forward = link["cycleway:right"]
+                if link["cycleway:left"] in cycleway_types:
+                    cycleway_backward = link["cycleway:left"]
                 else:
                     cycleway_backward = None
-            elif road["cycleway:left"] in cycleway_types:
-                cycleway_backward = road["cycleway:left"]
+            elif link["cycleway:left"] in cycleway_types:
+                cycleway_backward = link["cycleway:left"]
                 cycleway_forward = None
             else:
                 cycleway_forward = None
                 cycleway_backward = None
         return cycleway_forward, cycleway_backward
 
-    def build_roads(self):
-        logging.info("Building roads...")
-        roads = {}
-        for _, road in tqdm(self.network.iterrows(), total=len(self.network)):
+    def build_links(self):
+        logging.info("Building links...")
+        links = {}
+        for _, link in tqdm(self.network.iterrows(), total=len(self.network)):
             number_of_lanes_forward, number_of_lanes_backward = self.lane_calculator(
-                road
+                link
             )
-            road_segments = self.build_road_segments(road)
-            cycleway_forward, cycleway_backward = self.cycleway_calculator(road)
-            for segment in road_segments:
-                road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D0"
-                r = Road(
-                    road_id,
-                    segment["road_geometry"],
+            link_segments = self.build_link_segments(link)
+            cycleway_forward, cycleway_backward = self.cycleway_calculator(link)
+            for segment in link_segments:
+                link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D0"
+                r = Link(
+                    link_id,
+                    segment["link_geometry"],
                     segment["start_node"],
                     segment["end_node"],
-                    number_of_lanes_forward,
+                    number_of_lanes=number_of_lanes_forward,
                     cycleway=cycleway_forward,
-                    max_speed=road["maxspeed"],
+                    max_speed=link["maxspeed"],
                 )
-                roads[road_id] = {
+                links[link_id] = {
                     "geometry": r.geometry,
-                    "Road": r,
+                    "Link": r,
                 }
                 if number_of_lanes_backward or cycleway_backward:
-                    reversed_segment_road_geometry = LineString(
-                        segment["road_geometry"].coords[::-1]
+                    reversed_segment_link_geometry = LineString(
+                        segment["link_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
-                    road_id = str(road["id"]) + ":S" + str(segment["road_id"]) + ":D1"
-                    r = Road(
-                        road_id,
-                        reversed_segment_road_geometry,
+                    link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D1"
+                    r = Link(
+                        link_id,
+                        reversed_segment_link_geometry,
                         segment["end_node"],
                         segment["start_node"],
-                        number_of_lanes_backward,
+                        number_of_lanes=number_of_lanes_backward,
                         cycleway=cycleway_backward,
-                        max_speed=road["maxspeed"],
+                        max_speed=link["maxspeed"],
                     )
-                    roads[road_id] = {
+                    links[link_id] = {
                         "geometry": r.geometry,
-                        "Road": r,
+                        "Link": r,
                     }
-        return roads
+        return links
