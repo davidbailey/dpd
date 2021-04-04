@@ -16,7 +16,7 @@ from tqdm import tqdm
 
 from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
 from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
-from dpd.mapping import Map, Lane
+from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
 
@@ -43,7 +43,7 @@ class ABTMMap(Map):
             for segment in link.segments:
                 if type(segment) in [Lane]:
                     segment.allowed_users = [Cyclist, Pedestrian, Driver]
-                else:
+                elif type(segment) in [Sidewalk, Cycleway]:
                     segment.allowed_users = [Cyclist, Pedestrian]
 
     def nodes_to_links(self, node_ids):
