@@ -3,7 +3,7 @@ import unittest
 
 from shapely.geometry import Point, LineString
 
-from dpd.mapping import Intersection, Lane, Road, Map
+from dpd.mapping import Intersection, Map, Link
 
 
 class TestMap(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestMap(unittest.TestCase):
                 [input_intersection.geometry, output_intersection.geometry]
             )
             self.map_.add_link(
-                Road(
+                Link(
                     name,
                     geometry,
                     input_intersection,
