@@ -1,6 +1,6 @@
 class SignalIntersection(YieldIntersection):
     """
-    🚦🚥 We have a signal plan that updates lanes_with_green after time. Traffic follows the signal plan.
+    🚦🚥 We have a signal plan that updates segments_with_green after time. Traffic follows the signal plan.
     """
 
     def __init__(self, intersection, model):
@@ -11,12 +11,12 @@ class SignalIntersection(YieldIntersection):
 
     def create_signal_plan(self):
         signal_plan = []
-        for road in self.input_roads:
-            phase = {"time": 5, "lanes_with_green": []}
-            for lane in road.lanes:
-                phase["lanes_with_green"].append(lane)
+        for link in self.input_links:
+            phase = {"time": 5, "segments_with_green": []}
+            for segment in link.segments:
+                phase["segments_with_green"].append(segment)
         self.signal_plan = signal_plan
-        self.lanes_with_green = signal_plan[0]["lanes_with_green"]
+        self.segments_with_green = signal_plan[0]["segments_with_green"]
 
     def step(self):
         if self.time_in_phase < self.signal_plan[self.phase]["time"]:
@@ -27,10 +27,10 @@ class SignalIntersection(YieldIntersection):
             else:
                 self.phase = 0
             self.time_in_phase = 0
-            self.lanes_with_green = self.signal_plan[self.phase]["lanes_with_green"]
+            self.segments_with_green = self.signal_plan[self.phase]["segments_with_green"]
 
     def new_approach(self, approacher):
-        if approacher.lane in self.lanes_with_green:
+        if approacher.segment in self.segments_with_green:
             approacher.proceed_through_intersection()
         else:
             approacher.stop()

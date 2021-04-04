@@ -12,47 +12,47 @@ class Cyclist(Agent):
         self.geometry = geometry
         self.name = str(unique_id)
         self.route = route
-        self.road = self.route.pop(0)
-        if self.road.cycleway:
-            self.lane = self.road.cycleway
+        self.link = self.route.pop(0)
+        if self.link.cycleway:
+            self.segment = self.link.cycleway
         else:
-            self.lane = self.road.lanes[-2]
-        self.lane.occupants.append(self)
-        self.length_on_lane = self.road.geometry.project(self.geometry) * units.meter
+            self.segment = self.link.segments[-2]
+        self.segment.occupants.append(self)
+        self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
         self.stopping_distance = 1 * units.meter
         self.max_speed = 14 * units.imperial.mile / units.hour
         self.speed = 0 * units.imperial.mile / units.hour
         self.arrived = False
 
     def step(self):
-        if self.length_on_lane >= self.road.geometry.length * units.meter:
+        if self.length_on_segment >= self.link.geometry.length * units.meter:
             logging.info(
-                "%s reached end of lane, pass control to intersection" % (self.name,)
+                "%s reached end of segment, pass control to intersection" % (self.name,)
             )
             if self.route:
                 # if there are still more segments, we are not at the end
-                self.road.output_intersection.new_approach(self)
+                self.link.output_intersection.new_approach(self)
             else:
                 # if there are no more route segments, we have arrived
                 logging.info("%s arrived" % (self.name,))
                 self.arrived = True
-        elif self.lane.occupants.index(self) > 0:
+        elif self.segment.occupants.index(self) > 0:
             logging.info(
-                "%s potential for congestion %s" % (self.name, self.lane.occupants)
+                "%s potential for congestion %s" % (self.name, self.segment.occupants)
             )
-            my_index = self.lane.occupants.index(self)
-            person_in_front_of_me = self.lane.occupants[my_index - 1]
+            my_index = self.segment.occupants.index(self)
+            person_in_front_of_me = self.segment.occupants[my_index - 1]
             if (
-                person_in_front_of_me.length_on_lane
-                < self.length_on_lane + self.stopping_distance
-            ):  # congestion! let's see if we can change lanes
-                if self.road.lanes[self.lane.lane_number + 1]:
-                    if self.attempt_lane_change(
-                        self.road.lanes[self.lane.lane_number + 1]
-                    ):  # returns false if lane change successful, true if unsuccessful
-                        if self.road.lanes[self.lane.lane_number - 1]:
-                            if not self.attempt_lane_change(
-                                self.road.lanes[self.lane.lane_number - 1]
+                person_in_front_of_me.length_on_segment
+                < self.length_on_segment + self.stopping_distance
+            ):  # congestion! let's see if we can change segments
+                if self.link.segments[self.segment.segment_number + 1]:
+                    if self.attempt_segment_change(
+                        self.link.segments[self.segment.segment_number + 1]
+                    ):  # returns false if segment change successful, true if unsuccessful
+                        if self.link.segments[self.segment.segment_number - 1]:
+                            if not self.attempt_segment_change(
+                                self.link.segments[self.segment.segment_number - 1]
                             ):
                                 self.move_forward()
                     else:  # refactor this to a go() function
@@ -67,55 +67,55 @@ class Cyclist(Agent):
             self.move_forward()
 
     def move_forward(self):
-        self.speed = min(self.max_speed, self.road.max_speed)
-        self.length_on_lane += self.speed * 1 * units.second
-        self.geometry = self.road.geometry.interpolate(
-            self.length_on_lane.to_value(units.meter)
+        self.speed = min(self.max_speed, self.link.max_speed)
+        self.length_on_segment += self.speed * 1 * units.second
+        self.geometry = self.link.geometry.interpolate(
+            self.length_on_segment.to_value(units.meter)
         )
 
     def stop(self):
         self.speed = 0 * units.meter / units.second
 
-    def attempt_lane_change(self, lane):
-        logging.info("%s attempting lane change" % (self.name,))
+    def attempt_segment_change(self, segment):
+        logging.info("%s attempting segment change" % (self.name,))
         index_of_new_person_in_front_of_me = bisect.bisect_left(
-            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
-            self.length_on_lane.to_value(units.meter),
+            list(map(lambda x: x.length_on_segment.to_value(units.meter), segment.occupants)),
+            self.length_on_segment.to_value(units.meter),
         )
         index_of_new_person_behind_me = bisect.bisect_right(
-            list(map(lambda x: x.length_on_lane.to_value(units.meter), lane.occupants)),
-            self.length_on_lane.to_value(units.meter),
+            list(map(lambda x: x.length_on_segment.to_value(units.meter), segment.occupants)),
+            self.length_on_segment.to_value(units.meter),
         )
         if index_of_new_person_in_front_of_me > 0:
-            new_person_in_front_of_me = lane[index_of_new_person_in_front_of_me]
+            new_person_in_front_of_me = segment[index_of_new_person_in_front_of_me]
             if (
                 not new_person_in_front_of_me
-                > self.length_on_lane + self.stopping_distance
+                > self.length_on_segment + self.stopping_distance
             ):
                 return True
-        if index_of_new_person_behind_me < len(lane.occupants):
-            new_person_behind_me = lane[index_of_new_person_behind_me]
+        if index_of_new_person_behind_me < len(segment.occupants):
+            new_person_behind_me = segment[index_of_new_person_behind_me]
             if (
-                not new_person_behind_me.length_on_lane
+                not new_person_behind_me.length_on_segment
                 + new_person_behind_me.stopping_distance
-                < self.length_on_lane
+                < self.length_on_segment
             ):
                 return True
-        self.lane.occupants.remove(self)
-        self.lane = lane
-        if index_of_new_person_behind_me < len(lane.occupants):
-            self.lane.occupants.insert(index_of_person_behind_me, self)
+        self.segment.occupants.remove(self)
+        self.segment = segment
+        if index_of_new_person_behind_me < len(segment.occupants):
+            self.segment.occupants.insert(index_of_person_behind_me, self)
         return False
 
     def proceed_through_intersection(self):
-        self.lane.occupants.remove(self)
-        self.road = self.route.pop(0)
-        if self.road.cycleway:
-            self.lane = self.road.cycleway
+        self.segment.occupants.remove(self)
+        self.link = self.route.pop(0)
+        if self.link.cycleway:
+            self.segment = self.link.cycleway
         else:
-            self.lane = self.road.lanes[-2]
-        self.length_on_lane = 0 * units.meter
-        self.lane.occupants.append(self)
-        self.geometry = self.road.geometry.interpolate(
-            self.length_on_lane.to_value(units.meter)
+            self.segment = self.link.segments[-2]
+        self.length_on_segment = 0 * units.meter
+        self.segment.occupants.append(self)
+        self.geometry = self.link.geometry.interpolate(
+            self.length_on_segment.to_value(units.meter)
         )

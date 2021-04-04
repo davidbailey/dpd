@@ -8,8 +8,8 @@ from dpd.mapping import Intersection
 class YieldIntersection(Agent, Intersection):
     """
     Every intersection must have a step(self) method which gets called by the simulation and a new_approach(self, approacher) method which gets called by an approacher.
-    An approacher is anything that approaches the intersection. When it is safe, the intersection will call the approacher.proceed_through_intersection() on the approacher and then it is up to the approacher to proceed to the next lane.
-    The base class here implements no delay and is only realistic for one input to one output lane.
+    An approacher is anything that approaches the intersection. When it is safe, the intersection will call the approacher.proceed_through_intersection() on the approacher and then it is up to the approacher to proceed to the next segment.
+    The base class here implements no delay and is only realistic for one input to one output segment.
     """
 
     def __init__(self, intersection, model):
@@ -19,8 +19,8 @@ class YieldIntersection(Agent, Intersection):
             self,
             intersection.name,
             intersection.geometry,
-            intersection.input_roads,
-            intersection.output_roads,
+            intersection.input_links,
+            intersection.output_links,
         )
 
     def new_approach(self, approacher):

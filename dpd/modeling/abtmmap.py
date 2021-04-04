@@ -15,8 +15,8 @@ from tqdm import tqdm
 
 
 from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
-from dpd.modeling.agents.people.driver import Driver
-from dpd.mapping import Map
+from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
+from dpd.mapping import Map, Lane
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
 
@@ -35,7 +35,35 @@ class ABTMMap(Map):
             axis=1,
         )
         self.links.apply(self.transform_link_to_agent_based, axis=1)
+        self.prepare_links()
         self.clear_segments()
+
+    def prepare_links(self):
+        for link in self.links["Link"]:
+            for segment in link.segments:
+                if type(segment) in [Lane]:
+                    segment.allowed_users = [Cyclist, Pedestrian, Driver]
+                else:
+                    segment.allowed_users = [Cyclist, Pedestrian]
+
+    def nodes_to_links(self, node_ids):
+        """Takes a list of node_ids and a map and returns a list or links."""
+        nodes = []
+        # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the links. this may or may not be true.
+        for node in node_ids:
+            if node in self.intersections.index:
+                nodes.append(node)
+        links = []
+        for i in range(len(nodes) - 1):
+            for link in self.intersections.loc[nodes[i]]["Intersection"].output_links:
+                if (
+                    link.output_intersection
+                    and link.output_intersection.name == nodes[i + 1]
+                ):
+                    links.append(link)
+                    break
+        return links
+
 
     def add_person(self, person):
         self.people.loc[person.name] = [
