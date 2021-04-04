@@ -50,16 +50,16 @@ class Link:
             self.segments.insert(-1, lane)
             segment_number += 1
         if cycleway == "lane":
-            self.segments.insert(-1, Cycleway(self))
+            self.segments.insert(-1, Cycleway(self, segment_number))
             segment_number += 1
         if parking:
-            self.segments.insert(-1, Parking(self, parking))
+            self.segments.insert(-1, Parking(self, segment_number, parking))
             segment_number += 1
         if cycleway == "track":
-            self.segments.insert(-1, Cycleway(self))
+            self.segments.insert(-1, Cycleway(self, segment_number))
             segment_number += 1
         if sidewalk:
-            self.segments.insert(-1, Sidewalk(self))
+            self.segments.insert(-1, Sidewalk(self, segment_number))
             segment_number += 1
         for attribute, value in kwargs.items():
             setattr(self, attribute, value)
@@ -71,15 +71,15 @@ class Link:
         segment_number = 0
         for segment in street["data"]["street"]["segments"]:
             if segment["type"] == "drive-lane":
-                lane = Lane(self, lane_number)
+                lane = Lane(self, segment_number)
                 self.segments.insert(-1, lane)
                 segment_number += 1
             elif segment["type"] == "parking":
-                self.segments.insert(-1, Parking(self))
+                self.segments.insert(-1, Parking(self, segment_number))
                 segment_number += 1
             elif segment["type"] == "bike-lane":
-                self.segments.insert(-1, Cycleway(self))
+                self.segments.insert(-1, Cycleway(self, segment_number))
                 segment_number += 1
             elif segment["type"] == "sidewalk":
-                self.segments.insert(-1, Sidewalk(self))
+                self.segments.insert(-1, Sidewalk(self, segment_number))
                 segment_number += 1
