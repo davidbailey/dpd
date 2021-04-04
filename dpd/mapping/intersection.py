@@ -6,20 +6,20 @@ class Intersection:
     output_lanes are lanes which feed out of the intersection.
     """
 
-    def __init__(self, name, geometry, input_roads=None, output_roads=None):
+    def __init__(self, name, geometry, input_links=None, output_links=None):
         self.name = name
         self.geometry = geometry
-        if input_roads:
-            self.input_roads = input_roads
+        if input_links:
+            self.input_links = input_links
         else:
-            self.input_roads = []
-        if output_roads:
-            self.output_roads = output_roads
+            self.input_links = []
+        if output_links:
+            self.output_links = output_links
         else:
-            self.output_roads = []
+            self.output_links = []
 
-    def add_input_road(self, input_road):
-        self.input_roads.append(input_road)
+    def add_input_link(self, input_link):
+        self.input_links.append(input_link)
 
-    def add_output_road(self, output_road):
-        self.output_roads.append(output_road)
+    def add_output_link(self, output_link):
+        self.output_links.append(output_link)

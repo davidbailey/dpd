@@ -1,7 +1,7 @@
 """
 A link is based on an GMNS link (https://github.com/zephyr-data-specs/GMNS/blob/master/Specification/link.schema.json). However, our links are only one way: all two way links are broken into two one-way links. This means there is only one direction to consider.
 
-Links are made up of one, two, three, or four of the following classes:
+Links are made up of one, two, three, or four of the following Segments:
     1. Lanes. Lanes are wide enough for a motor vehicle. Bicycles and pedestrians may also use segments. Lanes have direction from their parent link.
     2. Cycleways. Cycleways may be found between segments and sidewalks. They are wide enough for a bicycle. Pedestrians may also use segments. Motor vehicles may unfortunately end up in cycleways.
     3. Sidewalks. Sidewalks are on the side of a link. Bicycles and pedestrians may use sidewalks. Motor vehicles may also end up on sidewalks.

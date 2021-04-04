@@ -19,11 +19,11 @@ class TestMap(unittest.TestCase):
             geometry = LineString(
                 [input_intersection.geometry, output_intersection.geometry]
             )
-            self.map_.add_road(
-                Road(name, geometry, input_intersection, output_intersection, 1)
+            self.map_.add_link(
+                Road(name, geometry, input_intersection, output_intersection, number_of_lanes=1)
             )
         self.map_.plot()
-        self.map_.roads.crs = "EPSG:4326"
+        self.map_.links.crs = "EPSG:4326"
         self.map_.intersections.crs = "EPSG:4326"
         self.map_.plot_folium(include_intersections=True)
         self.map_.to_geodigraph()

@@ -8,12 +8,12 @@ from shapely.geometry import box, Polygon, LineString
 
 class Map:
     """
-    A class for creating a road network map that includes roads (made up of lanes) that go between intersections.
+    A class for creating a link network map that includes links (made up of lanes) that go between intersections.
     """
 
     def __init__(self):
         self.intersections = gpd.GeoDataFrame(columns=["geometry", "Intersection"])
-        self.roads = gpd.GeoDataFrame(columns=["geometry", "Road"])
+        self.links = gpd.GeoDataFrame(columns=["geometry", "Link"])
 
     def add_intersection(self, intersection):
         self.intersections.loc[intersection.name] = [
@@ -21,8 +21,8 @@ class Map:
             intersection,
         ]
 
-    def add_road(self, road):
-        self.roads.loc[road.name] = [road.geometry, road]
+    def add_link(self, link):
+        self.links.loc[link.name] = [link.geometry, link]
 
     def transform_intersections_to_aea(self):
         aea = CRS.from_string("North America Albers Equal Area Conic")
@@ -35,16 +35,16 @@ class Map:
         for _, intersection in self.intersections.iterrows():
             intersection["Intersection"].geometry = intersection["geometry"]
 
-    def transform_roads_to_aea(self):
+    def transform_links_to_aea(self):
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.roads.to_crs(aea, inplace=True)
-        for _, road in self.roads.iterrows():
-            road["Road"].geometry = road["geometry"]
+        self.links.to_crs(aea, inplace=True)
+        for _, link in self.links.iterrows():
+            link["Link"].geometry = link["geometry"]
 
-    def transform_roads_to_epsg4326(self):
-        self.roads.to_crs("EPSG:4326", inplace=True)
-        for _, road in self.roads.iterrows():
-            road["Road"].geometry = road["geometry"]
+    def transform_links_to_epsg4326(self):
+        self.links.to_crs("EPSG:4326", inplace=True)
+        for _, link in self.links.iterrows():
+            link["Link"].geometry = link["geometry"]
 
     def plot_df(self, ax, df, filter_df):
         df.plot(ax=ax)
@@ -55,7 +55,7 @@ class Map:
                 horizontalalignment="center",
             )
 
-    def plot(self, include_intersections=False, include_roads=True, filter_box=None):
+    def plot(self, include_intersections=False, include_links=True, filter_box=None):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if filter_box:
@@ -72,8 +72,8 @@ class Map:
             filter_df = None
         if include_intersections:
             self.plot_df(ax, self.intersections, filter_df)
-        if include_roads:
-            self.plot_df(ax, self.roads, filter_df)
+        if include_links:
+            self.plot_df(ax, self.links, filter_df)
         plt.show()
 
     def plot_folium_df(self, folium_map, df, filter_df, **kwargs):
@@ -88,7 +88,7 @@ class Map:
     def plot_folium(
         self,
         include_intersections=False,
-        include_roads=True,
+        include_links=True,
         folium_map=None,
         filter_box=None,
     ):
@@ -106,29 +106,23 @@ class Map:
             filter_df.crs = "EPSG:4326"
         else:
             filter_df = None
-        if include_roads:
-            if not "number_of_lanes" in self.roads.columns:
-                self.roads["number_of_lanes"] = self.roads["Road"].map(
-                    lambda road: len(road.lanes) - 2
+        if include_links:
+            if not "number_of_segments" in self.links.columns:
+                self.links["number_of_segments"] = self.links["Link"].map(
+                    lambda link: len(link.segments) - 2
                 )
-            style_function = lambda x: {"weight": x["properties"]["number_of_lanes"]}
-            if not "name" in self.roads.columns:
-                self.roads["name"] = self.roads["Road"].map(lambda road: road.name)
-            if not "cycleway" in self.roads.columns:
-                self.roads["cycleway"] = self.roads["Road"].map(
-                    lambda road: road.cycleway.type_ if road.cycleway else None
-                )
-            if not "sidewalk" in self.roads.columns:
-                self.roads["sidewalk"] = self.roads["Road"].map(
-                    lambda road: "sidewalk" if road.sidewalk else None
-                )
+            style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
+            if not "name" in self.links.columns:
+                self.links["name"] = self.links["Link"].map(lambda link: link.name)
+            if not "segments" in self.links.columns:
+                self.links["segments"] = self.links["Link"].map(lambda link: str(list(map(type, link.segments))))
             tooltip = folium.features.GeoJsonTooltip(
-                fields=["name", "number_of_lanes", "cycleway", "sidewalk"]
+                fields=["name", "segments"]
             )
             self.plot_folium_df(
                 folium_map,
-                self.roads[
-                    ["geometry", "name", "number_of_lanes", "cycleway", "sidewalk"]
+                self.links[
+                    ["geometry", "name", "number_of_segments", "segments"]
                 ],
                 filter_df,
                 style_function=style_function,
@@ -155,16 +149,16 @@ class Map:
             nodes.append((index, intersection.to_dict()))
         G.add_nodes_from(nodes)
         edges = []
-        for index, road in self.roads.iterrows():
+        for index, link in self.links.iterrows():
             edges.append(
                 (
-                    road["Road"].input_intersection.name
-                    if road["Road"].input_intersection
+                    link["Link"].input_intersection.name
+                    if link["Link"].input_intersection
                     else None,
-                    road["Road"].output_intersection.name
-                    if road["Road"].output_intersection
+                    link["Link"].output_intersection.name
+                    if link["Link"].output_intersection
                     else None,
-                    road.to_dict(),
+                    link.to_dict(),
                 )
             )
         G.add_edges_from(edges)
