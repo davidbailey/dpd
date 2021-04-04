@@ -6,7 +6,7 @@ from pyproj import CRS
 from shapely.geometry import Point, LineString
 
 from dpd.modeling.agents.people.driver import Driver
-from dpd.mapping import Intersection, Lane, Road, Map
+from dpd.mapping import Intersection, Segment, Link, Map
 from dpd.modeling import ABTMMap, TransportationModel
 
 
@@ -23,13 +23,13 @@ class TestABTMMap(unittest.TestCase):
             geometry = LineString(
                 [input_intersection.geometry, output_intersection.geometry]
             )
-            self.map_.add_road(
-                Road(
+            self.map_.add_link(
+                Link(
                     name,
                     geometry,
                     input_intersection,
                     output_intersection,
-                    1,
+                    number_of_lanes=1,
                     max_speed=20 * units.kilometer / units.hour,
                 )
             )
@@ -39,16 +39,16 @@ class TestABTMMap(unittest.TestCase):
             self.model,
             Point(0, 0),
             [
-                self.abtmmap.roads.loc["[0, 1] to [1, 1]"]["Road"],
-                self.abtmmap.roads.loc["[0, 0] to [0, 1]"]["Road"],
+                self.abtmmap.links.loc["[0, 1] to [1, 1]"]["Link"],
+                self.abtmmap.links.loc["[0, 0] to [0, 1]"]["Link"],
             ],
         )
         p2 = Driver(
             self.model,
             Point(0, 1),
             [
-                self.abtmmap.roads.loc["[1, 0] to [1, 1]"]["Road"],
-                self.abtmmap.roads.loc["[0, 1] to [1, 0]"]["Road"],
+                self.abtmmap.links.loc["[1, 0] to [1, 1]"]["Link"],
+                self.abtmmap.links.loc["[0, 1] to [1, 0]"]["Link"],
             ],
         )
         for person in [p1, p2]:
@@ -56,10 +56,10 @@ class TestABTMMap(unittest.TestCase):
 
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.abtmmap.intersections.crs = aea
-        self.abtmmap.roads.crs = aea
+        self.abtmmap.links.crs = aea
         self.abtmmap.people.crs = aea
         trajectories = self.abtmmap.simulate(10)
-        self.abtmmap.plot(include_roads=True)
+        self.abtmmap.plot(include_links=True)
 
 
 if __name__ == "__main__":
