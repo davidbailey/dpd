@@ -69,8 +69,8 @@ class Link:
                 self.lanes.insert(-1, lane)
                 lane_number += 1
             elif segment["type"] == "parking":
-                self.lanes.insert(-1, Parking(self)
+                self.lanes.insert(-1, Parking(self))
             elif segment["type"] == "bike-lane":
-                self.lanes.insert(-1, Cycleway(self)
+                self.lanes.insert(-1, Cycleway(self))
             elif segment["type"] == "sidewalk":
-                self.lanes.insert(-1, Sidewalk(self)
+                self.lanes.insert(-1, Sidewalk(self))
