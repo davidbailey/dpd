@@ -17,7 +17,7 @@ class Driver(Agent):
         self.segment.occupants.append(self)
         self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
         self.stopping_distance = 1 * units.meter
-        self.max_speed = 100 * units.imperial.mile / units.hour
+        self.acceleration = 2.5 * units.meter / (units.second * units.second)
         self.speed = 0 * units.imperial.mile / units.hour
         self.arrived = False
 
@@ -64,8 +64,13 @@ class Driver(Agent):
             self.move_forward()
 
     def move_forward(self):
-        self.speed = min(self.max_speed, self.link.max_speed)
-        self.length_on_segment += self.speed * 1 * units.second
+        distance, self.speed = step(
+            self.acceleration,
+            self.speed,
+            1 * units.second,
+            max_speed=self.link.max_speed,
+        )
+        self.length_on_segment += distance
         self.geometry = self.link.geometry.interpolate(
             self.length_on_segment.to_value(units.meter)
         )
