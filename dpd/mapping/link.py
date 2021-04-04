@@ -20,7 +20,7 @@ from .parking import Parking
 
 class Link:
     """
-    Note: the output_intersection of a road means that road is an input_road of that intersection. And the input_intersection of a road means that road is an output_road of that intersection
+    Note: the output_intersection of a link means that link is an input_link of that intersection. And the input_intersection of a link means that link is an output_link of that intersection
     """
 
     def __init__(
@@ -39,10 +39,10 @@ class Link:
         self.geometry = geometry
         self.input_intersection = input_intersection
         if input_intersection:
-            input_intersection.add_output_road(self)
+            input_intersection.add_output_link(self)
         self.output_intersection = output_intersection
         if output_intersection:
-            output_intersection.add_input_road(self)
+            output_intersection.add_input_link(self)
         self.segments = [None, None]
         segment_number = 0
         for _ in range(number_of_lanes):
