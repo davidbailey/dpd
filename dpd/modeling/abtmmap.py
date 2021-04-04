@@ -64,7 +64,6 @@ class ABTMMap(Map):
                     break
         return links
 
-
     def add_person(self, person):
         self.people.loc[person.name] = [
             person.geometry,

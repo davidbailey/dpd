@@ -20,7 +20,13 @@ class TestMap(unittest.TestCase):
                 [input_intersection.geometry, output_intersection.geometry]
             )
             self.map_.add_link(
-                Road(name, geometry, input_intersection, output_intersection, number_of_lanes=1)
+                Road(
+                    name,
+                    geometry,
+                    input_intersection,
+                    output_intersection,
+                    number_of_lanes=1,
+                )
             )
         self.map_.plot()
         self.map_.links.crs = "EPSG:4326"

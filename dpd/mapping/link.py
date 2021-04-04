@@ -45,7 +45,7 @@ class Link:
             output_intersection.add_input_road(self)
         self.segments = [None, None]
         segment_number = 0
-        for _in range(number_of_lanes):
+        for _ in range(number_of_lanes):
             lane = Lane(self, segment_number)
             self.segments.insert(-1, lane)
             segment_number += 1

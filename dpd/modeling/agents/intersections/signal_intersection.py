@@ -27,7 +27,9 @@ class SignalIntersection(YieldIntersection):
             else:
                 self.phase = 0
             self.time_in_phase = 0
-            self.segments_with_green = self.signal_plan[self.phase]["segments_with_green"]
+            self.segments_with_green = self.signal_plan[self.phase][
+                "segments_with_green"
+            ]
 
     def new_approach(self, approacher):
         if approacher.segment in self.segments_with_green:

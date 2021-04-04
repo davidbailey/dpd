@@ -115,15 +115,13 @@ class Map:
             if not "name" in self.links.columns:
                 self.links["name"] = self.links["Link"].map(lambda link: link.name)
             if not "segments" in self.links.columns:
-                self.links["segments"] = self.links["Link"].map(lambda link: str(list(map(type, link.segments))))
-            tooltip = folium.features.GeoJsonTooltip(
-                fields=["name", "segments"]
-            )
+                self.links["segments"] = self.links["Link"].map(
+                    lambda link: str(list(map(type, link.segments)))
+                )
+            tooltip = folium.features.GeoJsonTooltip(fields=["name", "segments"])
             self.plot_folium_df(
                 folium_map,
-                self.links[
-                    ["geometry", "name", "number_of_segments", "segments"]
-                ],
+                self.links[["geometry", "name", "number_of_segments", "segments"]],
                 filter_df,
                 style_function=style_function,
                 tooltip=tooltip,

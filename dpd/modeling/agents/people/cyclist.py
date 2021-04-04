@@ -79,11 +79,21 @@ class Cyclist(Agent):
     def attempt_segment_change(self, segment):
         logging.info("%s attempting segment change" % (self.name,))
         index_of_new_person_in_front_of_me = bisect.bisect_left(
-            list(map(lambda x: x.length_on_segment.to_value(units.meter), segment.occupants)),
+            list(
+                map(
+                    lambda x: x.length_on_segment.to_value(units.meter),
+                    segment.occupants,
+                )
+            ),
             self.length_on_segment.to_value(units.meter),
         )
         index_of_new_person_behind_me = bisect.bisect_right(
-            list(map(lambda x: x.length_on_segment.to_value(units.meter), segment.occupants)),
+            list(
+                map(
+                    lambda x: x.length_on_segment.to_value(units.meter),
+                    segment.occupants,
+                )
+            ),
             self.length_on_segment.to_value(units.meter),
         )
         if index_of_new_person_in_front_of_me > 0:
