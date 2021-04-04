@@ -1,4 +1,5 @@
 from .intersection import Intersection
+from .segment import Segment
 from .lane import Lane
 from .cycleway import Cycleway
 from .road import Road
