@@ -14,7 +14,6 @@ from shapely.geometry import box
 from tqdm import tqdm
 
 
-from dpd.kinematics import step
 from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
 from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.mapping import Map, Lane, Sidewalk, Cycleway

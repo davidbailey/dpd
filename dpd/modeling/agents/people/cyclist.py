@@ -4,6 +4,7 @@ from astropy import units
 from mesa import Agent
 from uuid import uuid4
 
+from dpd.kinematics import step
 
 class Cyclist(Agent):
     def __init__(self, model, geometry, route):
