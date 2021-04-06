@@ -34,7 +34,7 @@ class Pedestrian(Agent):
             segments = reversed(link.segments)
         else:
             segments = link.segments
-        for segment in segments:
+        for segment in segments[1:-1]:
             if type(self) in segment.allowed_users:
                 segment.occupants.append(self)
                 return segment
@@ -60,6 +60,9 @@ class Pedestrian(Agent):
             self.move_forward()
 
     def move_forward(self):
+        """
+        uses a basic kinematic model (fixed acceleration) to move in one dimmension
+        """
         distance, self.speed = move(
             self.acceleration,
             self.speed,
