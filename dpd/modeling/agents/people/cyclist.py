@@ -3,6 +3,7 @@ import logging
 from astropy import units
 
 from dpd.kinematics import move
+from .pedestrian import Pedestrian
 
 
 class Cyclist(Pedestrian):
@@ -16,7 +17,7 @@ class Cyclist(Pedestrian):
         self.stopping_distance = 1 * units.meter
         self.max_speed = 22 * units.kilometer / units.hour
         self.acceleration = 0.231 * units.meter / (units.second * units.second)
-        self.deceleration = -self.acceleration                  
+        self.deceleration = -self.acceleration
 
     def step(self):
         if self.length_on_segment >= self.link.geometry.length * units.meter:

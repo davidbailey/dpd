@@ -27,8 +27,7 @@ class Pedestrian(Agent):
         # --- class-specific values below ---
         self.max_speed = 3.1 * units.imperial.mile / units.hour
         self.acceleration = self.max_speed / units.second
-        self.deceleration = -self.acceleration    
-
+        self.deceleration = -self.acceleration
 
     def place_person_on_segment(self, link, reversed_=True):
         if reversed_:
@@ -61,17 +60,16 @@ class Pedestrian(Agent):
             self.move_forward()
 
     def move_forward(self):
-        distance, self.speed = move(    
-            self.acceleration,    
-            self.speed,    
-            1 * units.second,    
-            min(max_speed=self.link.max_speed, self.max_speed),
-        )    
+        distance, self.speed = move(
+            self.acceleration,
+            self.speed,
+            1 * units.second,
+            min(self.link.max_speed, self.max_speed),
+        )
         self.length_on_segment += distance
         self.geometry = self.link.geometry.interpolate(
             self.length_on_segment.to_value(units.meter)
         )
-
 
     def proceed_through_intersection(self):
         self.segment.occupants.remove(self)

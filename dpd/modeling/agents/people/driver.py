@@ -3,6 +3,7 @@ import logging
 from astropy import units
 
 from dpd.kinematics import move
+from .pedestrian import Pedestrian
 
 
 class Driver(Pedestrian):
@@ -58,7 +59,6 @@ class Driver(Pedestrian):
         else:
             logging.info("%s freeflow traffic, no one ahead" % (self.name,))
             self.move_forward()
-
 
     def stop(self):
         distance, self.speed = move(
