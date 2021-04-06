@@ -3,14 +3,13 @@ import logging
 import math
 
 from astropy import units
-import geopandas as gpd
 import numpy as np
 from pyrosm import get_data, OSM
 from shapely.geometry import Point, LineString
 from tqdm import tqdm
 
 
-from dpd.mapping import Intersection, Map, Link
+from dpd.mapping import Intersection, Map, Link, GeoObjectDataFrame
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
@@ -36,10 +35,10 @@ class OSMMap(Map):
             self.create_node_tags_lookup()
         )  # Used to find traffic signals, all-way stops
         intersections = self.build_intersections()
-        self.intersections = gpd.GeoDataFrame.from_dict(intersections, orient="index")
+        self.intersections = GeoObjectDataFrame.from_dict(intersections, orient="index")
         self.intersections.crs = "EPSG:4326"
         links = self.build_links()
-        self.links = gpd.GeoDataFrame.from_dict(links, orient="index")
+        self.links = GeoObjectDataFrame.from_dict(links, orient="index")
         self.links.crs = "EPSG:4326"
         logging.info(
             "Generated %s intersections and %s links."
