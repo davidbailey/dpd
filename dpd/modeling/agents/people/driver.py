@@ -1,28 +1,20 @@
 import logging
 
 from astropy import units
-from mesa import Agent
-from uuid import uuid4
 
-from dpd.kinematics import step
+from dpd.kinematics import move
 
 
-class Driver(Agent):
+class Driver(Pedestrian):
+    """
+    A person driving a motor vehicle
+    """
+
     def __init__(self, model, geometry, route):
-        unique_id = uuid4()
-        super().__init__(unique_id, model)
-        self.geometry = geometry
-        self.name = str(unique_id)
-        self.route = route
-        self.link = self.route.pop(0)
-        self.segment = self.link.segments[-2]
-        self.segment.occupants.append(self)
-        self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
+        super().__init__(model, geometry, route)
         self.stopping_distance = 1 * units.meter
         self.acceleration = 2.5 * units.meter / (units.second * units.second)
         self.deceleration = -self.acceleration
-        self.speed = 0 * units.imperial.mile / units.hour
-        self.arrived = False
 
     def step(self):
         if self.length_on_segment >= self.link.geometry.length * units.meter:
@@ -67,7 +59,7 @@ class Driver(Agent):
             self.move_forward()
 
     def move_forward(self):
-        distance, self.speed = step(
+        distance, self.speed = move(
             self.acceleration,
             self.speed,
             1 * units.second,
@@ -79,7 +71,7 @@ class Driver(Agent):
         )
 
     def stop(self):
-        distance, self.speed = step(
+        distance, self.speed = move(
             self.deceleration,
             self.speed,
             1 * units.second,
@@ -130,13 +122,3 @@ class Driver(Agent):
         if index_of_new_person_behind_me < len(segment.occupants):
             self.segment.occupants.insert(index_of_person_behind_me, self)
         return False
-
-    def proceed_through_intersection(self):
-        self.segment.occupants.remove(self)
-        self.link = self.route.pop(0)
-        self.segment = self.link.segments[-2]
-        self.length_on_segment = 0 * units.meter
-        self.segment.occupants.append(self)
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )

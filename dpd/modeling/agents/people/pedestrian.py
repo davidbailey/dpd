@@ -4,10 +4,15 @@ from astropy import units
 from mesa import Agent
 from uuid import uuid4
 
-from dpd.kinematics import step
+from dpd.kinematics import move
 
 
 class Pedestrian(Agent):
+    """
+    A pedestrian is a person travelling on foot, whether walking or running (Wikipedia).
+    The Pedestiran is the base class for all people. E.g. a cyclist or a driver is just a pedestrian riding a bicycle or driving a motor vehicle.
+    """
+
     def __init__(self, model, geometry, route):
         unique_id = uuid4()
         super().__init__(unique_id, model)
@@ -15,17 +20,25 @@ class Pedestrian(Agent):
         self.name = str(unique_id)
         self.route = route
         self.link = self.route.pop(0)
-        if self.link.sidewalk:
-            self.segment = self.link.sidewalk
-        elif self.link.cycleway:
-            self.segment = self.link.cycleway
-        else:
-            self.segment = self.link.segments[-2]
-        self.segment.occupants.append(self)
+        self.segment = self.place_person_on_segment(self.link)
         self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
-        self.max_speed = 3.1 * units.imperial.mile / units.hour
-        self.speed = 0 * units.imperial.mile / units.hour
         self.arrived = False
+        self.speed = 0 * units.imperial.mile / units.hour
+        self.max_speed = 3.1 * units.imperial.mile / units.hour
+
+    def place_person_on_segment(self, link, reversed_=True):
+        if reversed_:
+            segments = reversed(link.segments)
+        else:
+            segments = link.segments
+        for segment in segments:
+            if type(self) in segment.allowed_users:
+                segment.occupants.append(self)
+                return segment
+        raise TypeError(
+            "%s not in allowed_users (%s) on link %s."
+            % (type(self), link.allowed_users, link.name)
+        )
 
     def step(self):
         if self.length_on_segment >= self.link.geometry.length * units.meter:
@@ -53,14 +66,8 @@ class Pedestrian(Agent):
     def proceed_through_intersection(self):
         self.segment.occupants.remove(self)
         self.link = self.route.pop(0)
-        if self.link.sidewalk:
-            self.segment = self.link.sidewalk
-        elif self.link.cycleway:
-            self.segment = self.link.cycleway
-        else:
-            self.segment = self.link.segments[-2]
+        self.segment = self.place_person_on_segment(self.link)
         self.length_on_segment = 0 * units.meter
-        self.segment.occupants.append(self)
         self.geometry = self.link.geometry.interpolate(
             self.length_on_segment.to_value(units.meter)
         )

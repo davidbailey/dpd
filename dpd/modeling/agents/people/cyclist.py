@@ -1,30 +1,19 @@
 import logging
 
 from astropy import units
-from mesa import Agent
-from uuid import uuid4
 
-from dpd.kinematics import step
+from dpd.kinematics import move
 
 
-class Cyclist(Agent):
+class Cyclist(Pedestrian):
+    """
+    A person riding a bicycle
+    """
+
     def __init__(self, model, geometry, route):
-        unique_id = uuid4()
-        super().__init__(unique_id, model)
-        self.geometry = geometry
-        self.name = str(unique_id)
-        self.route = route
-        self.link = self.route.pop(0)
-        if self.link.cycleway:
-            self.segment = self.link.cycleway
-        else:
-            self.segment = self.link.segments[-2]
-        self.segment.occupants.append(self)
-        self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
+        super().__init__(model, geometry, route)
         self.stopping_distance = 1 * units.meter
         self.max_speed = 14 * units.imperial.mile / units.hour
-        self.speed = 0 * units.imperial.mile / units.hour
-        self.arrived = False
 
     def step(self):
         if self.length_on_segment >= self.link.geometry.length * units.meter:
@@ -118,16 +107,3 @@ class Cyclist(Agent):
         if index_of_new_person_behind_me < len(segment.occupants):
             self.segment.occupants.insert(index_of_person_behind_me, self)
         return False
-
-    def proceed_through_intersection(self):
-        self.segment.occupants.remove(self)
-        self.link = self.route.pop(0)
-        if self.link.cycleway:
-            self.segment = self.link.cycleway
-        else:
-            self.segment = self.link.segments[-2]
-        self.length_on_segment = 0 * units.meter
-        self.segment.occupants.append(self)
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )
