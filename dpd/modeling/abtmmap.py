@@ -168,12 +168,6 @@ class ABTMMap(Map):
             lambda person: person.geometry
         )
 
-    def all_people_arrived(self):
-        for person in self.people["Person"]:
-            if not person.arrived:
-                return False
-        return True
-
     def simulate(
         self,
         number_of_rounds=np.inf,
@@ -196,8 +190,7 @@ class ABTMMap(Map):
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
-        round_number = 0
-        while round_number <= number_of_rounds and not self.all_people_arrived():
+        for round_number in range(number_of_rounds):
             logging.info("Simulating round %s" % (round_number,))
             for _, person in self.people.iterrows():
                 if not person["Person"].arrived:
@@ -212,7 +205,6 @@ class ABTMMap(Map):
                 self.post_people("http://localhost:9000/people")
             self.model.step()
             time = time + datetime.timedelta(seconds=1)
-            round_number = round_number + 1
         if post_people:
             werkzeug_thread.stop()
         gpd_trajectories = gpd.GeoDataFrame(trajectories).set_index("time")
