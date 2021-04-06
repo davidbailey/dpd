@@ -13,7 +13,7 @@ class TestMap(unittest.TestCase):
             for y in range(2):
                 self.map_.add_intersection(Intersection(str([x, y]), Point(x, y)))
         for input_intersection, output_intersection in combinations(
-            self.map_.intersections["Intersection"], 2
+            self.map_.intersections["object"], 2
         ):
             name = input_intersection.name + " to " + output_intersection.name
             geometry = LineString(
