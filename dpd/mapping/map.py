@@ -71,7 +71,7 @@ class Map:
         if include_intersections:
             self.intersections.plot_with_labels(ax, filter_box, **kwargs)
         if include_links:
-            self.links.plot_with_labels(ax, self.links, filter_box, **kwargs)
+            self.links.plot_with_labels(ax, filter_box, **kwargs)
         plt.show()
 
     def plot_folium(
@@ -79,7 +79,7 @@ class Map:
     ):
         folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if include_links:
-            self.links.plot_folium_df(folium_map, filter_box, **kwargs)
+            self.links.plot_folium(folium_map, filter_box, **kwargs)
         if include_intersections:
-            self.intersections.plot_folium_df(folium_map, filter_box, **kwargs)
+            self.intersections.plot_folium(folium_map, filter_box, **kwargs)
         return folium_map

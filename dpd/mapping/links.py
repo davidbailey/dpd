@@ -1,3 +1,5 @@
+import folium
+
 from .geoobjectdataframe import GeoObjectDataFrame
 
 

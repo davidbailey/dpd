@@ -1,7 +1,6 @@
 import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
-from shapely.geometry import box, Polygon, LineString
 
 from dpd.geopandas import filter_geodataframe
 
