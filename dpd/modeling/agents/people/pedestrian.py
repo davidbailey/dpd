@@ -22,7 +22,6 @@ class Pedestrian(Agent):
         self.link = self.route.pop(0)
         self.segment = self.place_person_on_segment(self.link)
         self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
-        self.arrived = False
         self.speed = 0 * units.imperial.mile / units.hour
         # --- class-specific values below ---
         self.max_speed = 3.1 * units.imperial.mile / units.hour
@@ -54,7 +53,7 @@ class Pedestrian(Agent):
             else:
                 # if there are no more route segments, we have arrived
                 logging.info("%s arrived" % (self.name,))
-                self.arrived = True
+                self.model.remove(self)
         else:
             logging.info("%s walking... no congestion for pedestrians" % (self.name,))
             self.move_forward()
