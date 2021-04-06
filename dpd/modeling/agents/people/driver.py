@@ -13,6 +13,7 @@ class Driver(Pedestrian):
     def __init__(self, model, geometry, route):
         super().__init__(model, geometry, route)
         self.stopping_distance = 1 * units.meter
+        self.max_speed = 100 * units.imperial.mile / units.hour
         self.acceleration = 2.5 * units.meter / (units.second * units.second)
         self.deceleration = -self.acceleration
 
@@ -58,17 +59,6 @@ class Driver(Pedestrian):
             logging.info("%s freeflow traffic, no one ahead" % (self.name,))
             self.move_forward()
 
-    def move_forward(self):
-        distance, self.speed = move(
-            self.acceleration,
-            self.speed,
-            1 * units.second,
-            max_speed=self.link.max_speed,
-        )
-        self.length_on_segment += distance
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )
 
     def stop(self):
         distance, self.speed = move(

@@ -8,12 +8,15 @@ from dpd.kinematics import move
 class Cyclist(Pedestrian):
     """
     A person riding a bicycle
+    Speed and acceleration from https://www.researchgate.net/publication/223922575.
     """
 
     def __init__(self, model, geometry, route):
         super().__init__(model, geometry, route)
         self.stopping_distance = 1 * units.meter
-        self.max_speed = 14 * units.imperial.mile / units.hour
+        self.max_speed = 22 * units.kilometer / units.hour
+        self.acceleration = 0.231 * units.meter / (units.second * units.second)
+        self.deceleration = -self.acceleration                  
 
     def step(self):
         if self.length_on_segment >= self.link.geometry.length * units.meter:
@@ -56,13 +59,6 @@ class Cyclist(Pedestrian):
         else:
             logging.info("%s freeflow traffic, no one ahead" % (self.name,))
             self.move_forward()
-
-    def move_forward(self):
-        self.speed = min(self.max_speed, self.link.max_speed)
-        self.length_on_segment += self.speed * 1 * units.second
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )
 
     def stop(self):
         self.speed = 0 * units.meter / units.second
