@@ -4,7 +4,7 @@ from astropy import units
 
 from dpd.kinematics import stopping_distance
 
-DECELERATION = - 6 * units.meter / (units.second * units.second)
+DECELERATION = -6 * units.meter / (units.second * units.second)
 INITIAL_VELOCITY = 60 * units.imperial.mile / units.hour
 FINAL_VELOCITY = 0 * units.imperial.mile / units.hour
 
