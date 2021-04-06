@@ -31,7 +31,7 @@ class Pedestrian(Agent):
 
     def place_person_on_segment(self, link, reversed_=True):
         if reversed_:
-            segments = reversed(link.segments)
+            segments = list(reversed(link.segments))
         else:
             segments = link.segments
         for segment in segments[1:-1]:
