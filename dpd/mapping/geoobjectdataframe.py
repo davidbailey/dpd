@@ -5,6 +5,7 @@ from shapely.geometry import box, Polygon, LineString
 
 from dpd.geopandas import filter_geodataframe
 
+
 class GeoObjectDataFrame(gpd.GeoDataFrame):
     """
     A base class for Links and Intersections.
@@ -26,7 +27,6 @@ class GeoObjectDataFrame(gpd.GeoDataFrame):
         for _, object_ in self.iterrows():
             object_["object"].geometry = object_["geometry"]
 
-
     def plot_with_labels(self, ax, filter_box=None, **kwargs):
         if filter_box:
             plot_gdf = filter_geodataframe(self, filter_box)
@@ -46,9 +46,9 @@ class GeoObjectDataFrame(gpd.GeoDataFrame):
         else:
             plot_gdf = self
         if not "name" in plot_gdf.columns:
-            plot_gdf["name"] = plot_gdf["object"].map(
-                lambda object_: object_.name
-            )
+            plot_gdf["name"] = plot_gdf["object"].map(lambda object_: object_.name)
         tooltip = folium.features.GeoJsonTooltip(fields=["name"])
-        geojson = folium.GeoJson(plot_gdf["name", "geometry"].to_json(), tooltip, **kwargs)
+        geojson = folium.GeoJson(
+            plot_gdf["name", "geometry"].to_json(), tooltip, **kwargs
+        )
         geojson.add_to(folium_map)

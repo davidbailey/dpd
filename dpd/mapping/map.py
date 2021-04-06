@@ -25,7 +25,9 @@ class Map:
     def add_link(self, link):
         self.links.loc[link.name] = [link.geometry, link]
 
-    def transform_intersections_to_aea(self): # Let's remove these four functions once nothing references them
+    def transform_intersections_to_aea(
+        self,
+    ):  # Let's remove these four functions once nothing references them
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.intersections.transform(aea)
 
@@ -61,7 +63,7 @@ class Map:
         G.add_edges_from(edges)
         return G
 
-    def plot(self, include_intersections=False, include_links=True, **kwargs)
+    def plot(self, include_intersections=False, include_links=True, **kwargs):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if include_intersections:
@@ -70,16 +72,10 @@ class Map:
             self.links.plot_with_labels(ax, self.links, filter_df, **kwargs)
         plt.show()
 
-    def plot_folium(
-        self,
-        include_intersections=False,
-        include_links=True,
-        **kwargs
-    ):
+    def plot_folium(self, include_intersections=False, include_links=True, **kwargs):
         folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if include_links:
             self.links.plot_folium_df(folium_map, **kwargs)
         if include_intersections:
             self.intersections.plot_folium_df(folium_map, **kwargs)
         return folium_map
-
