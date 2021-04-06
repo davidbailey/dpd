@@ -193,14 +193,13 @@ class ABTMMap(Map):
         for round_number in range(number_of_rounds):
             logging.info("Simulating round %s" % (round_number,))
             for _, person in self.people.iterrows():
-                if not person["Person"].arrived:
-                    trajectories.append(
-                        {
-                            "time": time,
-                            "geometry": person["Person"].geometry,
-                            "name": person.name,
-                        }
-                    )
+                trajectories.append(
+                    {
+                        "time": time,
+                        "geometry": person["Person"].geometry,
+                        "name": person.name,
+                    }
+                )
             if post_people:
                 self.post_people("http://localhost:9000/people")
             self.model.step()
