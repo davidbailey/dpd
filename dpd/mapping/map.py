@@ -63,19 +63,23 @@ class Map:
         G.add_edges_from(edges)
         return G
 
-    def plot(self, include_intersections=False, include_links=True, **kwargs):
+    def plot(
+        self, include_intersections=False, include_links=True, filter_box=None, **kwargs
+    ):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if include_intersections:
-            self.intersections.plot_with_labels(ax, filter_df, **kwargs)
+            self.intersections.plot_with_labels(ax, filter_box, **kwargs)
         if include_links:
-            self.links.plot_with_labels(ax, self.links, filter_df, **kwargs)
+            self.links.plot_with_labels(ax, self.links, filter_box, **kwargs)
         plt.show()
 
-    def plot_folium(self, include_intersections=False, include_links=True, **kwargs):
+    def plot_folium(
+        self, include_intersections=False, include_links=True, filter_box=None, **kwargs
+    ):
         folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if include_links:
-            self.links.plot_folium_df(folium_map, **kwargs)
+            self.links.plot_folium_df(folium_map, filter_box, **kwargs)
         if include_intersections:
-            self.intersections.plot_folium_df(folium_map, **kwargs)
+            self.intersections.plot_folium_df(folium_map, filter_box, **kwargs)
         return folium_map
