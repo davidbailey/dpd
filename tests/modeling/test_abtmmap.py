@@ -17,7 +17,7 @@ class TestABTMMap(unittest.TestCase):
             for y in range(2):
                 self.map_.add_intersection(Intersection(str([x, y]), Point(x, y)))
         for input_intersection, output_intersection in combinations(
-            self.map_.intersections["Intersection"], 2
+            self.map_.intersections["object"], 2
         ):
             name = input_intersection.name + " to " + output_intersection.name
             geometry = LineString(
@@ -39,16 +39,16 @@ class TestABTMMap(unittest.TestCase):
             self.model,
             Point(0, 0),
             [
-                self.abtmmap.links.loc["[0, 1] to [1, 1]"]["Link"],
-                self.abtmmap.links.loc["[0, 0] to [0, 1]"]["Link"],
+                self.abtmmap.links.loc["[0, 1] to [1, 1]"]["object"],
+                self.abtmmap.links.loc["[0, 0] to [0, 1]"]["object"],
             ],
         )
         p2 = Driver(
             self.model,
             Point(0, 1),
             [
-                self.abtmmap.links.loc["[1, 0] to [1, 1]"]["Link"],
-                self.abtmmap.links.loc["[0, 1] to [1, 0]"]["Link"],
+                self.abtmmap.links.loc["[1, 0] to [1, 1]"]["object"],
+                self.abtmmap.links.loc["[0, 1] to [1, 0]"]["object"],
             ],
         )
         for person in [p1, p2]:
