@@ -30,7 +30,7 @@ class ABTMMap(Map):
         self.intersections = map_.intersections
         self.links = map_.links
         self.people = gpd.GeoDataFrame(columns=["geometry", "Person"])
-        self.intersections["Intersection"] = self.intersections.apply(
+        self.intersections["object"] = self.intersections.apply(
             self.transform_intersection_to_agent_based,
             axis=1,
         )
@@ -39,7 +39,7 @@ class ABTMMap(Map):
         self.clear_segments()
 
     def prepare_links(self):
-        for link in self.links["Link"]:
+        for link in self.links["object"]:
             for segment in link.segments:
                 if type(segment) in [Lane]:
                     segment.allowed_users = [Cyclist, Pedestrian, Driver]
@@ -55,7 +55,7 @@ class ABTMMap(Map):
                 nodes.append(node)
         links = []
         for i in range(len(nodes) - 1):
-            for link in self.intersections.loc[nodes[i]]["Intersection"].output_links:
+            for link in self.intersections.loc[nodes[i]]["object"].output_links:
                 if (
                     link.output_intersection
                     and link.output_intersection.name == nodes[i + 1]
@@ -76,18 +76,18 @@ class ABTMMap(Map):
             intersection_type = intersection["Type"]
             if intersection_type == "Signal":
                 intersection = SignalIntersection(
-                    intersection["Intersection"], self.model
+                    intersection["object"], self.model
                 )
             elif intersection_type == "Stop":
                 intersection = StopIntersection(
-                    intersection["Intersection"], self.model
+                    intersection["object"], self.model
                 )
             else:
                 intersection = YieldIntersection(
-                    intersection["Intersection"], self.model
+                    intersection["object"], self.model
                 )
         else:
-            intersection = YieldIntersection(intersection["Intersection"], self.model)
+            intersection = YieldIntersection(intersection["object"], self.model)
         self.model.schedule.add(intersection)
         return intersection
 
@@ -95,20 +95,20 @@ class ABTMMap(Map):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        if link["Link"].input_intersection:
-            link["Link"].input_intersection = self.intersections.loc[
-                link["Link"].input_intersection.name
-            ]["Intersection"]
-        if link["Link"].output_intersection:
-            link["Link"].output_intersection = self.intersections.loc[
-                link["Link"].output_intersection.name
-            ]["Intersection"]
+        if link["object"].input_intersection:
+            link["object"].input_intersection = self.intersections.loc[
+                link["object"].input_intersection.name
+            ]["object"]
+        if link["object"].output_intersection:
+            link["object"].output_intersection = self.intersections.loc[
+                link["object"].output_intersection.name
+            ]["object"]
 
     def clear_segments(self):
         """
         adds occupants to all segments. can also be run later to clear segments of occupants from past model
         """
-        for link in self.links["Link"]:
+        for link in self.links["object"]:
             for segment in link.segments:
                 if segment is not None:
                     segment.occupants = []
@@ -122,7 +122,7 @@ class ABTMMap(Map):
                 nodes.append(node)
         links = []
         for i in range(len(nodes) - 1):
-            for link in self.intersections.loc[nodes[i]]["Intersection"].output_links:
+            for link in self.intersections.loc[nodes[i]]["object"].output_links:
                 if (
                     link.output_intersection
                     and link.output_intersection.name == nodes[i + 1]
@@ -251,7 +251,7 @@ class ABTMMap(Map):
             filter_df = None
         if include_links:
             if not "number_of_segments" in self.links.columns:
-                self.links["number_of_segments"] = self.links["Link"].map(
+                self.links["number_of_segments"] = self.links["object"].map(
                     lambda link: len(link.segments)
                 )
             style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
@@ -263,7 +263,7 @@ class ABTMMap(Map):
             )
         if include_intersections:
             if not "name" in self.intersections.columns:
-                self.intersections["name"] = self.intersections["Intersection"].map(
+                self.intersections["name"] = self.intersections["object"].map(
                     lambda intersection: intersection.name
                 )
             tooltip = (folium.features.GeoJsonTooltip(fields=["name"]),)
