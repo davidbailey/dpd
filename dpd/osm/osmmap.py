@@ -81,7 +81,7 @@ class OSMMap(Map):
             intersections[intersection] = {
                 "geometry": geometry,
                 "Type": type_,
-                "Intersection": Intersection(name, geometry),
+                "object": Intersection(name, geometry),
             }
         return intersections
 
@@ -109,11 +109,11 @@ class OSMMap(Map):
             linestring.append(Point(coordinates["lon"], coordinates["lat"]))
         link_geometry = LineString(linestring)
         if nodes[0] in self.intersections.index:
-            start_node = self.intersections.loc[nodes[0]]["Intersection"]
+            start_node = self.intersections.loc[nodes[0]]["object"]
         else:
             start_node = None
         if nodes[-1] in self.intersections.index:
-            end_node = self.intersections.loc[nodes[-1]]["Intersection"]
+            end_node = self.intersections.loc[nodes[-1]]["object"]
         else:
             end_node = None
         return {
@@ -228,7 +228,7 @@ class OSMMap(Map):
                 )
                 links[link_id] = {
                     "geometry": r.geometry,
-                    "Link": r,
+                    "object": r,
                 }
                 if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_link_geometry = LineString(
@@ -246,6 +246,6 @@ class OSMMap(Map):
                     )
                     links[link_id] = {
                         "geometry": r.geometry,
-                        "Link": r,
+                        "object": r,
                     }
         return links
