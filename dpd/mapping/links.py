@@ -1,6 +1,6 @@
 import folium
 
-from .geoobjectdataframe import GeoObjectDataFrame
+from dpd.geopandas import GeoObjectDataFrame
 
 
 class Links(GeoObjectDataFrame):

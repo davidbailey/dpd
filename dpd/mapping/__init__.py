@@ -1,4 +1,3 @@
-from .geoobjectdataframe import GeoObjectDataFrame
 from .intersection import Intersection
 from .intersections import Intersections
 from .link import Link

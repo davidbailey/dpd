@@ -9,7 +9,8 @@ from shapely.geometry import Point, LineString
 from tqdm import tqdm
 
 
-from dpd.mapping import Intersection, Map, Link, GeoObjectDataFrame
+from dpd.mapping import Intersection, Map, Link
+from dpd.geopandas import GeoObjectDataFrame
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
