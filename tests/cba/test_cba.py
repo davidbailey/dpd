@@ -24,6 +24,7 @@ class TestCBA(unittest.TestCase):
             / self.cba_table["Sum"]["Costs Total"],
             1.9417475728155342,
         )
+        self.cba.cash_flow_diagram()
 
 
 if __name__ == "__main__":

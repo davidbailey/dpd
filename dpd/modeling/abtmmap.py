@@ -66,10 +66,7 @@ class ABTMMap(Map):
         return links
 
     def add_person(self, person):
-        self.people.loc[person.name] = [
-            person.geometry,
-            person,
-        ]
+        self.people.add_object(person)
         self.model.schedule.add(person)
 
     def transform_intersection_to_agent_based(self, intersection):

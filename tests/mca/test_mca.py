@@ -37,6 +37,7 @@ class TestMCA(unittest.TestCase):
             ],
         )
         self.assertEqual(title, "Alternative")
+        self.mca.to_d3()
 
 
 if __name__ == "__main__":

@@ -26,6 +26,8 @@ class TestMap(unittest.TestCase):
                     input_intersection,
                     output_intersection,
                     number_of_lanes=1,
+                    sidewalk=True,
+                    cycleway="track",
                 )
             )
         self.map_.plot(include_intersections=True)
