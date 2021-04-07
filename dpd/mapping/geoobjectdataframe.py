@@ -13,6 +13,9 @@ class GeoObjectDataFrame(gpd.GeoDataFrame):
     def __init__(self, *args, **kwargs):
         if not "columns" in kwargs.keys():
             super().__init__(columns=["geometry", "object"], *args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
+
 
     def add_object(self, object_):
         self.loc[object_.name] = [
