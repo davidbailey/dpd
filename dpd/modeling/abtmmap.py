@@ -19,6 +19,7 @@ from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
+from .people import People
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection
@@ -29,7 +30,7 @@ class ABTMMap(Map):
         self.model = model
         self.intersections = map_.intersections
         self.links = map_.links
-        self.people = gpd.GeoDataFrame(columns=["geometry", "Person"])
+        self.people = People()
         self.intersections["object"] = self.intersections.apply(
             self.transform_intersection_to_agent_based,
             axis=1,
@@ -133,7 +134,7 @@ class ABTMMap(Map):
             )
             # todo - add other modes
             driver = Driver(self.model, person.home_geometry, route)
-            people[driver.name] = {"geometry": driver.geometry, "Person": driver}
+            people[driver.name] = {"geometry": driver.geometry, "object": driver}
             self.model.schedule.add(driver)
         self.people = gpd.GeoDataFrame.from_dict(people, orient="index")
         self.people.crs = "EPSG:4326"
@@ -141,14 +142,10 @@ class ABTMMap(Map):
     def transform_people_to_aea(self):
         logging.info("Transforming people to AEA. This could take a while...")
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.people.to_crs(aea, inplace=True)
-        for _, person in self.people.iterrows():
-            person["Person"].geometry = person["geometry"]
+        self.people.transform(aea)
 
     def transform_people_to_epsg4326(self):
-        self.people.to_crs("EPSG:4326", inplace=True)
-        for _, person in self.people.iterrows():
-            person["Person"].geometry = person["geometry"]
+        self.people.transform("EPSG:4326")
 
     def post_people(self, url):
         self.refresh_people_geometries()
@@ -158,7 +155,7 @@ class ABTMMap(Map):
         self.people.to_crs(crs, inplace=True)
 
     def refresh_people_geometries(self):
-        self.people["geometry"] = self.people["Person"].map(
+        self.people["geometry"] = self.people["object"].map(
             lambda person: person.geometry
         )
 
@@ -190,7 +187,7 @@ class ABTMMap(Map):
                 trajectories.append(
                     {
                         "time": time,
-                        "geometry": person["Person"].geometry,
+                        "geometry": person["object"].geometry,
                         "name": person.name,
                     }
                 )
@@ -212,20 +209,16 @@ class ABTMMap(Map):
         include_links=False,
         include_people=True,
         filter_box=None,
+        **kwargs,
     ):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
-        if filter_box:
-            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
-            filter_df = "EPSG:4326"
-        else:
-            filter_df = None
         if include_intersections:
-            self.plot(ax, self.intersections, filter_df)
+            self.intersections.plot_with_labels(ax, filter_box, **kwargs)
         if include_links:
-            self.plot(ax, self.links, filter_df)
+            self.intersections.plot_with_labels(ax, filter_box, **kwargs)
         if include_people:
-            self.plot(ax, self.people, filter_df)
+            self.people.plot_with_labels(ax, filter_box, **kwargs)
         plt.show()
 
     def plot_folium(
@@ -233,50 +226,14 @@ class ABTMMap(Map):
         include_intersections=False,
         include_links=False,
         include_people=True,
-        folium_map=None,
         filter_box=None,
+        **kwargs,
     ):
-        if not folium_map:
-            folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
-        if filter_box:
-            filter_df = GeoDataFrame(Polygon(box(filter_box)), columns=["geometry"])
-            filter_df.crs = "EPSG:4326"
-        else:
-            filter_df = None
-        if include_links:
-            if not "number_of_segments" in self.links.columns:
-                self.links["number_of_segments"] = self.links["object"].map(
-                    lambda link: len(link.segments)
-                )
-            style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
-            self.plot_folium_df(
-                folium_map,
-                self.links[["geometry", "number_of_segments"]],
-                filter_df,
-                style_function=style_function,
-            )
-        if include_intersections:
-            if not "name" in self.intersections.columns:
-                self.intersections["name"] = self.intersections["object"].map(
-                    lambda intersection: intersection.name
-                )
-            tooltip = (folium.features.GeoJsonTooltip(fields=["name"]),)
-            self.plot_folium_df(
-                folium_map,
-                self.intersections[["geometry", "name"]],
-                filter_df,
-                tooltip=tooltip,
-            )
-
-        if include_people:
-            if not "name" in self.people.columns:
-                self.people["name"] = self.people["Person"].map(
-                    lambda person: person.name
-                )
-            self.plot_folium_df(
-                folium_map,
-                self.people[["geometry", "name"]],
-                filter_df,
-                tooltip=tooltip,
-            )
+        folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
+        if include_links:    
+            self.links.plot_folium(folium_map, filter_box, **kwargs)    
+        if include_intersections:    
+            self.intersections.plot_folium(folium_map, filter_box, **kwargs)    
+        if include_people:    
+            self.people.plot_folium(folium_map, filter_box, **kwargs)    
         return folium_map
