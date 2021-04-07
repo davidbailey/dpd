@@ -30,7 +30,7 @@ class Links(GeoObjectDataFrame):
         tooltip = folium.features.GeoJsonTooltip(fields=["name", "segments"])
         geojson = folium.GeoJson(
             plot_gdf[["name", "geometry", "number_of_segments", "segments"]].to_json(),
-            tooltip,
+            tooltip=tooltip,
             style_function=style_function,
             **kwargs
         )
