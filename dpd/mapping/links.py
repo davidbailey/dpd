@@ -29,7 +29,7 @@ class Links(GeoObjectDataFrame):
         style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
         tooltip = folium.features.GeoJsonTooltip(fields=["name", "segments"])
         geojson = folium.GeoJson(
-            plot_gdf["name", "geometry", "number_of_segments", "segments"].to_json(),
+            plot_gdf[["name", "geometry", "number_of_segments", "segments"]].to_json(),
             tooltip,
             style_function=style_function,
             **kwargs
