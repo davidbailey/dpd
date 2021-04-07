@@ -75,17 +75,11 @@ class ABTMMap(Map):
         if hasattr(intersection, "Type"):
             intersection_type = intersection["Type"]
             if intersection_type == "Signal":
-                intersection = SignalIntersection(
-                    intersection["object"], self.model
-                )
+                intersection = SignalIntersection(intersection["object"], self.model)
             elif intersection_type == "Stop":
-                intersection = StopIntersection(
-                    intersection["object"], self.model
-                )
+                intersection = StopIntersection(intersection["object"], self.model)
             else:
-                intersection = YieldIntersection(
-                    intersection["object"], self.model
-                )
+                intersection = YieldIntersection(intersection["object"], self.model)
         else:
             intersection = YieldIntersection(intersection["object"], self.model)
         self.model.schedule.add(intersection)
