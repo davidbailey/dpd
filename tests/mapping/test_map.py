@@ -28,7 +28,7 @@ class TestMap(unittest.TestCase):
                     number_of_lanes=1,
                 )
             )
-        self.map_.plot()
+        self.map_.plot(include_intersections=True)
         self.map_.links.crs = "EPSG:4326"
         self.map_.intersections.crs = "EPSG:4326"
         self.map_.plot_folium(include_intersections=True)

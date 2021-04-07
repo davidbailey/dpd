@@ -51,11 +51,11 @@ class Map:
         for index, link in self.links.iterrows():
             edges.append(
                 (
-                    link["Link"].input_intersection.name
-                    if link["Link"].input_intersection
+                    link["object"].input_intersection.name
+                    if link["object"].input_intersection
                     else None,
-                    link["Link"].output_intersection.name
-                    if link["Link"].output_intersection
+                    link["object"].output_intersection.name
+                    if link["object"].output_intersection
                     else None,
                     link.to_dict(),
                 )

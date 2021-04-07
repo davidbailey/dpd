@@ -49,6 +49,6 @@ class GeoObjectDataFrame(gpd.GeoDataFrame):
             plot_gdf["name"] = plot_gdf["object"].map(lambda object_: object_.name)
         tooltip = folium.features.GeoJsonTooltip(fields=["name"])
         geojson = folium.GeoJson(
-            plot_gdf[["name", "geometry"]].to_json(), tooltip, **kwargs
+            plot_gdf[["name", "geometry"]].to_json(), tooltip=tooltip, **kwargs
         )
         geojson.add_to(folium_map)
