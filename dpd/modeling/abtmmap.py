@@ -227,11 +227,11 @@ class ABTMMap(Map):
         else:
             filter_df = None
         if include_intersections:
-            self.plot_df(ax, self.intersections, filter_df)
+            self.plot(ax, self.intersections, filter_df)
         if include_links:
-            self.plot_df(ax, self.links, filter_df)
+            self.plot(ax, self.links, filter_df)
         if include_people:
-            self.plot_df(ax, self.people, filter_df)
+            self.plot(ax, self.people, filter_df)
         plt.show()
 
     def plot_folium(
