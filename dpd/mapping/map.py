@@ -19,7 +19,15 @@ class Map:
         G = geonetworkx.GeoDiGraph()
         nodes = []
         for index, intersection in self.intersections.items():
-            nodes.append((index, [{attribute: getattr(intersection, attribute)} for attribute in intersection_attributes]))
+            nodes.append(
+                (
+                    index,
+                    [
+                        {attribute: getattr(intersection, attribute)}
+                        for attribute in intersection_attributes
+                    ],
+                )
+            )
         G.add_nodes_from(nodes)
         edges = []
         for index, link in self.links.items():
@@ -27,7 +35,10 @@ class Map:
                 (
                     link.input_intersection.name if link.input_intersection else None,
                     link.output_intersection.name if link.output_intersection else None,
-                    [{attribute: getattr(link, attribute)} for attribute in link_attributes],
+                    [
+                        {attribute: getattr(link, attribute)}
+                        for attribute in link_attributes
+                    ],
                 )
             )
         G.add_edges_from(edges)
