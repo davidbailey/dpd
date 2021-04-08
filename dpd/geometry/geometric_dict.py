@@ -19,7 +19,9 @@ class GeometricDict(dict):
         self.crs = crs
 
     def to_crs(self, crs):
-        """ Or we could go to_geoseries, to_crs, and then reset... which is faster?"""
+        """
+        Could this be faster? Probably. Geopandas is about 2x faster because they vectorize. However, it is too much overhead to convert to Geopandas, transform, and convert back. Creating the transformer takes about 500ms so we could save the transformer and reuse it for subsequent transformations. We could also try multithreading.
+        """
         transformer = Transformer.from_crs(self.crs, crs)
         for value in self.values():
             lon, lat = value.geometry.xy
