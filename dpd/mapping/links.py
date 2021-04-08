@@ -17,7 +17,7 @@ class Links(GeometricDict):
         gdf["number_of_segments"] = gdf["segments"].map(
             lambda segments: len(segments) - 2
         )
-        gdf["segments"] = gdf["segments"].map(
+        gdf["segment_types"] = gdf["segments"].map(
             lambda segments: str(list(map(type, segments)))
         )
         if filter_box:
@@ -25,9 +25,11 @@ class Links(GeometricDict):
         else:
             plot_gdf = gdf
         style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
-        tooltip = folium.features.GeoJsonTooltip(fields=["name", "segments"])
+        tooltip = folium.features.GeoJsonTooltip(fields=["name", "segment_types"])
         geojson = folium.GeoJson(
-            plot_gdf[["name", "geometry", "number_of_segments", "segments"]].to_json(),
+            plot_gdf[
+                ["name", "geometry", "number_of_segments", "segment_types"]
+            ].to_json(),
             tooltip=tooltip,
             style_function=style_function,
             **kwargs,
