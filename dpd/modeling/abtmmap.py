@@ -33,16 +33,7 @@ class ABTMMap(Map):
         self.people = GeometricDict()
         self.transform_intersections_to_agent_based()
         self.transform_links_to_agent_based()
-        self.prepare_links()
         self.clear_segments()
-
-    def prepare_links(self):
-        for link in self.links.values():
-            for segment in link.segments:
-                if type(segment) in [Lane]:
-                    segment.allowed_users = [Cyclist, Pedestrian, Driver]
-                elif type(segment) in [Sidewalk, Cycleway]:
-                    segment.allowed_users = [Cyclist, Pedestrian]
 
     def nodes_to_links(self, node_ids):
         """Takes a list of node_ids and a map and returns a list or links."""
@@ -98,6 +89,11 @@ class ABTMMap(Map):
                 link.output_intersection = self.intersections[
                     link.output_intersection.name
                 ]
+            for segment in link.segments:
+                if type(segment) in [Lane]:
+                    segment.allowed_users = [Cyclist, Pedestrian, Driver]
+                elif type(segment) in [Sidewalk, Cycleway]:
+                    segment.allowed_users = [Cyclist, Pedestrian]
 
     def clear_segments(self):
         """
@@ -176,7 +172,7 @@ class ABTMMap(Map):
             time = time + datetime.timedelta(seconds=1)
         if post_people:
             werkzeug_thread.stop()
-        gpd_trajectories = gpd.GeoDataFrame(trajectories).set_index("time")
+        gpd_trajectories = gpd.GeoDataFrame(trajectories, crs=aea).set_index("time")
         mpd_trajectories = mpd.TrajectoryCollection(gpd_trajectories, "name")
         return mpd_trajectories
 
