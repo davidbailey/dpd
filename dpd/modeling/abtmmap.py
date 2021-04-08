@@ -147,7 +147,7 @@ class ABTMMap(Map):
 
     def simulate(
         self,
-        number_of_rounds=np.inf,
+        number_of_rounds=10,
         time=datetime.datetime(1970, 1, 1, 0, 0, 0),
         post_people=False,
     ):

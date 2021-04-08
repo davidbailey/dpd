@@ -216,7 +216,7 @@ class OSMMap(Map):
                     segment["end_node"],
                     number_of_lanes=number_of_lanes_forward,
                     cycleway=cycleway_forward,
-                    max_speed=link["maxspeed"],
+                    max_speed=speed_converter(link["maxspeed"]),
                 )
                 if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_link_geometry = LineString(
@@ -230,5 +230,5 @@ class OSMMap(Map):
                         segment["start_node"],
                         number_of_lanes=number_of_lanes_backward,
                         cycleway=cycleway_backward,
-                        max_speed=link["maxspeed"],
+                        max_speed=speed_converter(link["maxspeed"]),
                     )
