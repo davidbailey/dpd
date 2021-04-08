@@ -18,12 +18,12 @@ class TestGeometricDict(unittest.TestCase):
         geometric_dict = GeometricDict()
         geometric_dict[123] = geometric_object
         geometric_dict[234] = geometric_object
+        crs_4326 = CRS.from_epsg(4326)
+        geometric_dict.crs = crs_4326
         geometric_dict.to_geoseries()
         folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         geometric_dict.plot_folium(folium_map)
-        crs_4326 = CRS.from_epsg(4326)
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        geometric_dict.crs = crs_4326
         geometric_dict.to_crs(aea)
 
 
