@@ -36,10 +36,10 @@ class OSMMap(Map):
             self.create_node_tags_lookup()
         )  # Used to find traffic signals, all-way stops
         intersections = self.build_intersections()
-        self.intersections = GeographicDict(intersections)
+        self.intersections = GeometricDict(intersections)
         self.intersections.crs = "EPSG:4326"
         links = self.build_links()
-        self.links = GeographicDict(links)
+        self.links = GeometricDict(links)
         self.links.crs = "EPSG:4326"
         logging.info(
             "Generated %s intersections and %s links."
