@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 
 from dpd.mapping import Intersection, Map, Link
-from dpd.geopandas import GeoObjectDataFrame
+from dpd.geometry import GeographicDict, Links
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
@@ -36,10 +36,10 @@ class OSMMap(Map):
             self.create_node_tags_lookup()
         )  # Used to find traffic signals, all-way stops
         intersections = self.build_intersections()
-        self.intersections = GeoObjectDataFrame.from_dict(intersections, orient="index")
+        self.intersections = GeographicDict(intersections)
         self.intersections.crs = "EPSG:4326"
         links = self.build_links()
-        self.links = GeoObjectDataFrame.from_dict(links, orient="index")
+        self.links = GeographicDict(links)
         self.links.crs = "EPSG:4326"
         logging.info(
             "Generated %s intersections and %s links."
@@ -78,11 +78,8 @@ class OSMMap(Map):
                 type_ = "All-way Stop"
             else:
                 type_ = "Yield"
-            intersections[intersection] = {
-                "geometry": geometry,
-                "Type": type_,
-                "object": Intersection(name, geometry),
-            }
+            intersections[intersection] = Intersection(name, geometry)
+            intersections[intersection].type = type_,
         return intersections
 
     @staticmethod
@@ -108,12 +105,12 @@ class OSMMap(Map):
             coordinates = self.osm._node_coordinates[node]
             linestring.append(Point(coordinates["lon"], coordinates["lat"]))
         link_geometry = LineString(linestring)
-        if nodes[0] in self.intersections.index:
-            start_node = self.intersections.loc[nodes[0]]["object"]
+        if nodes[0] in self.intersections.keys():
+            start_node = self.intersections[nodes[0]]
         else:
             start_node = None
-        if nodes[-1] in self.intersections.index:
-            end_node = self.intersections.loc[nodes[-1]]["object"]
+        if nodes[-1] in self.intersections.keys():
+            end_node = self.intersections[nodes[-1]]
         else:
             end_node = None
         return {
@@ -129,7 +126,7 @@ class OSMMap(Map):
         nodes = [link.nodes[0]]
         for node in link.nodes[1:]:
             nodes.append(node)
-            if node in self.intersections.index:
+            if node in self.intersections.keys():
                 link_segments.append(self.create_link_segment(nodes, link_id))
                 link_id += 1
                 nodes = [node]
@@ -217,7 +214,7 @@ class OSMMap(Map):
             cycleway_forward, cycleway_backward = self.cycleway_calculator(link)
             for segment in link_segments:
                 link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D0"
-                r = Link(
+                links[link_id] = Link(
                     link_id,
                     segment["link_geometry"],
                     segment["start_node"],
@@ -226,16 +223,12 @@ class OSMMap(Map):
                     cycleway=cycleway_forward,
                     max_speed=link["maxspeed"],
                 )
-                links[link_id] = {
-                    "geometry": r.geometry,
-                    "object": r,
-                }
                 if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_link_geometry = LineString(
                         segment["link_geometry"].coords[::-1]
                     )  # Flip it around for the other direction
                     link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D1"
-                    r = Link(
+                    links[link_id] = Link(
                         link_id,
                         reversed_segment_link_geometry,
                         segment["end_node"],
@@ -244,8 +237,4 @@ class OSMMap(Map):
                         cycleway=cycleway_backward,
                         max_speed=link["maxspeed"],
                     )
-                    links[link_id] = {
-                        "geometry": r.geometry,
-                        "object": r,
-                    }
         return links

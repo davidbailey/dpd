@@ -33,6 +33,10 @@ class GeometricDict(dict):
                 data[key][column] = getattr(value, column)
         return GeoDataFrame.from_dict(data=data, orient="index", crs=self.crs)
 
+    def to_json(self, columns=["geometry"]):
+        gdf = self.to_geodataframe(columns=columns)
+        return gdf.to_json()
+
     def plot(self, columns=["geometry"], filter_box=None, **kwargs):   
         gdf = self.to_geodataframe(columns)
         if filter_box:    

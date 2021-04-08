@@ -19,7 +19,7 @@ from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
-from .people import People
+from dpd.geometry import GeographicDict
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection
@@ -30,17 +30,14 @@ class ABTMMap(Map):
         self.model = model
         self.intersections = map_.intersections
         self.links = map_.links
-        self.people = People()
-        self.intersections["object"] = self.intersections.apply(
-            self.transform_intersection_to_agent_based,
-            axis=1,
-        )
-        self.links.apply(self.transform_link_to_agent_based, axis=1)
+        self.people = GeographicDict()
+        self.transform_intersections_to_agent_based()
+        self.transform_links_to_agent_based()
         self.prepare_links()
         self.clear_segments()
 
     def prepare_links(self):
-        for link in self.links["object"]:
+        for link in self.links.values():
             for segment in link.segments:
                 if type(segment) in [Lane]:
                     segment.allowed_users = [Cyclist, Pedestrian, Driver]
@@ -52,11 +49,11 @@ class ABTMMap(Map):
         nodes = []
         # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the links. this may or may not be true.
         for node in node_ids:
-            if node in self.intersections.index:
+            if node in self.intersections.keys():
                 nodes.append(node)
         links = []
         for i in range(len(nodes) - 1):
-            for link in self.intersections.loc[nodes[i]]["object"].output_links:
+            for link in self.intersections[nodes[i]].output_links:
                 if (
                     link.output_intersection
                     and link.output_intersection.name == nodes[i + 1]
@@ -66,41 +63,43 @@ class ABTMMap(Map):
         return links
 
     def add_person(self, person):
-        self.people.add_object(person)
+        """ maybe make People a Class and do this automatically """
+        self.people[person.name] = person
         self.model.schedule.add(person)
 
-    def transform_intersection_to_agent_based(self, intersection):
-        if hasattr(intersection, "Type"):
-            intersection_type = intersection["Type"]
-            if intersection_type == "Signal":
-                intersection = SignalIntersection(intersection["object"], self.model)
-            elif intersection_type == "Stop":
-                intersection = StopIntersection(intersection["object"], self.model)
+    def transform_intersections_to_agent_based(self):
+        for key, intersection in self.intersections.items():
+            if hasattr(intersection, "type_"):
+                intersection_type = intersection["type_"]
+                if intersection_type == "Signal":
+                    self.intersections[key] = SignalIntersection(intersection, self.model)
+                elif intersection_type == "Stop":
+                    self.intersections[key] = StopIntersection(intersection, self.model)
+                else:
+                    self.intersections[key] = YieldIntersection(intersection, self.model)
             else:
-                intersection = YieldIntersection(intersection["object"], self.model)
-        else:
-            intersection = YieldIntersection(intersection["object"], self.model)
-        self.model.schedule.add(intersection)
-        return intersection
+                self.intersections[key] = YieldIntersection(intersection, self.model)
+            self.model.schedule.add(self.intersections[key])
 
-    def transform_link_to_agent_based(self, link):
+    def transform_links_to_agent_based(self):
         """
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
-        if link["object"].input_intersection:
-            link["object"].input_intersection = self.intersections.loc[
-                link["object"].input_intersection.name
-            ]["object"]
-        if link["object"].output_intersection:
-            link["object"].output_intersection = self.intersections.loc[
-                link["object"].output_intersection.name
-            ]["object"]
+        for link in self.links.values():
+            if link.input_intersection:
+                link.input_intersection = self.intersections[
+                    link.input_intersection.name
+                ]
+            if link.output_intersection:
+                link.output_intersection = self.intersections[
+                    link.output_intersection.name
+                ]
 
     def clear_segments(self):
         """
         adds occupants to all segments. can also be run later to clear segments of occupants from past model
         """
-        for link in self.links["object"]:
+        for link in self.links.values():
             for segment in link.segments:
                 if segment is not None:
                     segment.occupants = []
@@ -110,11 +109,11 @@ class ABTMMap(Map):
         nodes = []
         # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the links. this may or may not be true.
         for node in node_ids:
-            if node in self.intersections.index:
+            if node in self.intersections.keys():
                 nodes.append(node)
         links = []
         for i in range(len(nodes) - 1):
-            for link in self.intersections.loc[nodes[i]]["object"].output_links:
+            for link in self.intersections[nodes[i]].output_links:
                 if (
                     link.output_intersection
                     and link.output_intersection.name == nodes[i + 1]
@@ -131,30 +130,16 @@ class ABTMMap(Map):
             )
             # todo - add other modes
             driver = Driver(self.model, person.home_geometry, route)
-            people[driver.name] = {"geometry": driver.geometry, "object": driver}
+            people[driver.name] = driver
             self.model.schedule.add(driver)
-        self.people = gpd.GeoDataFrame.from_dict(people, orient="index")
+        self.people = gpd.GeographicDict(people)
         self.people.crs = "EPSG:4326"
 
-    def transform_people_to_aea(self):
-        logging.info("Transforming people to AEA. This could take a while...")
-        aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.people.transform_crs(aea)
-
-    def transform_people_to_epsg4326(self):
-        self.people.transform_crs("EPSG:4326")
-
     def post_people(self, url):
-        self.refresh_people_geometries()
         crs = self.people.crs
-        self.people.to_crs("EPSG:4326", inplace=True)
-        p = requests.post(url, data={"people": self.people["geometry"].to_json()})
-        self.people.to_crs(crs, inplace=True)
-
-    def refresh_people_geometries(self):
-        self.people["geometry"] = self.people["object"].map(
-            lambda person: person.geometry
-        )
+        self.people.to_crs("EPSG:4326")
+        p = requests.post(url, data={"people": self.people.to_json()})
+        self.people.to_crs(crs)
 
     def simulate(
         self,
@@ -163,28 +148,25 @@ class ABTMMap(Map):
         post_people=False,
     ):
         trajectories = []
-        if not self.intersections.crs == CRS.from_string(
+        aea = CRS.from_string(
             "North America Albers Equal Area Conic"
-        ):
-            self.transform_intersections_to_aea()
-        if not self.links.crs == CRS.from_string(
-            "North America Albers Equal Area Conic"
-        ):
-            self.transform_links_to_aea()
-        if not self.people.crs == CRS.from_string(
-            "North America Albers Equal Area Conic"
-        ):
-            self.transform_people_to_aea()
+        )
+        if not self.intersections.crs == aea:
+            self.intersections.to_crs(aea)
+        if not self.links.crs == aea:
+            self.links.to_crs(aea)
+        if not self.people.crs == aea:
+            self.people.to_crs(aea)
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
         for round_number in range(number_of_rounds):
             logging.info("Simulating round %s" % (round_number,))
-            for _, person in self.people.iterrows():
+            for person in self.people.values():
                 trajectories.append(
                     {
                         "time": time,
-                        "geometry": person["object"].geometry,
+                        "geometry": person.geometry,
                         "name": person.name,
                     }
                 )
@@ -195,8 +177,6 @@ class ABTMMap(Map):
         if post_people:
             werkzeug_thread.stop()
         gpd_trajectories = gpd.GeoDataFrame(trajectories).set_index("time")
-        gpd_trajectories.crs = CRS.from_string("North America Albers Equal Area Conic")
-        gpd_trajectories.to_crs("EPSG:4326", inplace=True)
         mpd_trajectories = mpd.TrajectoryCollection(gpd_trajectories, "name")
         return mpd_trajectories
 
@@ -211,11 +191,11 @@ class ABTMMap(Map):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if include_intersections:
-            self.intersections.plot_with_labels(ax, filter_box, **kwargs)
+            self.intersections.plot(filter_box, ax=ax **kwargs)
         if include_links:
-            self.intersections.plot_with_labels(ax, filter_box, **kwargs)
+            self.intersections.plot(filter_box, ax=ax, **kwargs)
         if include_people:
-            self.people.plot_with_labels(ax, filter_box, **kwargs)
+            self.people.plot(filter_box, ax=ax **kwargs)
         plt.show()
 
     def plot_folium(
