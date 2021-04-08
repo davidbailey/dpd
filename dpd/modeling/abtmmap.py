@@ -210,9 +210,15 @@ class ABTMMap(Map):
     ):
         folium_map = folium.Map(location=(38.9, -77), zoom_start=12)
         if include_links:
-            self.links.plot_folium(folium_map, filter_box, **kwargs)
+            self.links.plot_folium(
+                folium_map=folium_map, filter_box=filter_box, **kwargs
+            )
         if include_intersections:
-            self.intersections.plot_folium(folium_map, filter_box, **kwargs)
+            self.intersections.plot_folium(
+                folium_map=folium_map, filter_box=filter_box, **kwargs
+            )
         if include_people:
-            self.people.plot_folium(folium_map, filter_box, **kwargs)
+            self.people.plot_folium(
+                folium_map=folium_map, filter_box=filter_box, **kwargs
+            )
         return folium_map
