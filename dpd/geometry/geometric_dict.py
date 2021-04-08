@@ -33,7 +33,7 @@ class GeometricDict(dict):
         for key, value in self.items():
             data[key] = {}
             for column in columns:
-                data[key][column] = getattr(column, value)
+                data[key][column] = getattr(value, column)
         return GeoDataFrame.from_dict(data=data, orient="index", crs=self.crs)
 
     def to_json(self, columns=["geometry"]):
