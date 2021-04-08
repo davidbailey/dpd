@@ -35,12 +35,10 @@ class OSMMap(Map):
         self.node_tags = (
             self.create_node_tags_lookup()
         )  # Used to find traffic signals, all-way stops
-        intersections = self.build_intersections()
-        self.intersections = GeometricDict(intersections)
-        self.intersections.crs = "EPSG:4326"
-        links = self.build_links()
-        self.links = GeometricDict(links)
-        self.links.crs = "EPSG:4326"
+        self.intersections = GeometricDict(crs="EPSG:4326")
+        self.build_intersections(self.intersections)
+        self.links = GeometricDict(crs="EPSG:4326")
+        self.build_links(self.links)
         logging.info(
             "Generated %s intersections and %s links."
             % (len(self.intersections), len(self.links))
@@ -51,7 +49,7 @@ class OSMMap(Map):
         tags = np.concatenate([group["tags"] for group in self.osm._nodes])
         return {ids[i]: tags[i] for i in range(0, len(ids))}
 
-    def build_intersections(self):
+    def build_intersections(self, intersections):
         # Find all intersections by going through all the ways in the network and counting how often a node is referenced. If it is referenced more than once, it is an intersection.
         counter = Counter()
         for nodes in self.network.nodes:
@@ -59,7 +57,6 @@ class OSMMap(Map):
                 counter[node] += 1
         intersections_list = [key for key, count in counter.items() if count >= 2]
         logging.info("Building intersections...")
-        intersections = {}
         for intersection in tqdm(intersections_list):
             name = intersection
             coordinates = self.osm._node_coordinates[intersection]
@@ -80,7 +77,6 @@ class OSMMap(Map):
                 type_ = "Yield"
             intersections[intersection] = Intersection(name, geometry)
             intersections[intersection].type = (type_,)
-        return intersections
 
     @staticmethod
     def speed_converter(speed):
@@ -203,9 +199,8 @@ class OSMMap(Map):
                 cycleway_backward = None
         return cycleway_forward, cycleway_backward
 
-    def build_links(self):
+    def build_links(self, links):
         logging.info("Building links...")
-        links = {}
         for _, link in tqdm(self.network.iterrows(), total=len(self.network)):
             number_of_lanes_forward, number_of_lanes_backward = self.lane_calculator(
                 link
@@ -237,4 +232,3 @@ class OSMMap(Map):
                         cycleway=cycleway_backward,
                         max_speed=link["maxspeed"],
                     )
-        return links
