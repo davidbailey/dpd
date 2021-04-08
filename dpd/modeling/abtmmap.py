@@ -19,7 +19,7 @@ from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
-from dpd.geometry import GeographicDict
+from dpd.geometry import GeometricDict
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection
