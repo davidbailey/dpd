@@ -3,6 +3,7 @@ import unittest
 
 from astropy import units
 from shapely.geometry import Point, LineString
+from pyproj import CRS
 
 from dpd.modeling.agents.people.driver import Driver
 from dpd.mapping import Intersection, Segment, Link, Map
@@ -30,6 +31,9 @@ def build_test_map():
             sidewalk=True,
             cycleway="track",
         )
+    aea = CRS.from_string("North America Albers Equal Area Conic")
+    map_intersections.crs = aea
+    map_links.crs = aea
     return map_
 
 

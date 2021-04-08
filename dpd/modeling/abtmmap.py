@@ -147,12 +147,9 @@ class ABTMMap(Map):
     ):
         trajectories = []
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        if not self.intersections.crs == aea:
-            self.intersections.to_crs(aea)
-        if not self.links.crs == aea:
-            self.links.to_crs(aea)
-        if not self.people.crs == aea:
-            self.people.to_crs(aea)
+        self.intersections.to_crs(aea)
+        self.links.to_crs(aea)
+        self.people.to_crs(aea)
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
