@@ -13,7 +13,7 @@ def build_test_map():
     map_ = Map()
     for x in range(2):
         for y in range(2):
-            map_[str([x, y])] = Intersection(str([x, y]), Point(x, y))
+            map_.intersections[str([x, y])] = Intersection(str([x, y]), Point(x, y))
     for input_intersection, output_intersection in combinations(
         map_.intersections.values(), 2
     ):
@@ -21,7 +21,7 @@ def build_test_map():
         geometry = LineString(
             [input_intersection.geometry, output_intersection.geometry]
         )
-        map_[name] = Link(
+        map_.links[name] = Link(
             name,
             geometry,
             input_intersection,
