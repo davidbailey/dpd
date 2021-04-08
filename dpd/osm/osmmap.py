@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 
 from dpd.mapping import Intersection, Map, Link
-from dpd.geometry import GeographicDict, Links
+from dpd.geometry import GeometricDict, Links
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
