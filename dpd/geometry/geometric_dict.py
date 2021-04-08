@@ -33,7 +33,6 @@ class GeometricDict(dict):
         for key, value in self.items():
             data[key] = {}
             for column in columns:
-                print(column)
                 data[key][column] = getattr(value, column)
         return GeoDataFrame.from_dict(data=data, orient="index", crs=self.crs)
 
