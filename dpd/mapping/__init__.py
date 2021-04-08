@@ -1,5 +1,4 @@
 from .intersection import Intersection
-from .intersections import Intersections
 from .link import Link
 from .links import Links
 from .segment import Segment
