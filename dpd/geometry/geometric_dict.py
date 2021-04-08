@@ -20,9 +20,11 @@ class GeometricDict(dict):
 
     def to_crs(self, crs):
         """ Or we could go to_geoseries, to_crs, and then reset... which is faster?"""
-        transformer = Transformer.from_crs(self.crs, crs, always_xy=True)
+        transformer = Transformer.from_crs(self.crs, crs)
         for value in self.values():
-            value.geometry = transform(transformer.transform, value.geometry)
+            lon, lat = value.geometry.xy
+            value.geometry = transformer.transform(lon, lat)
+        self.crs = crs
 
     def to_geoseries(self):
         data = {}
