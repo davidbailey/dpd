@@ -42,16 +42,16 @@ class TestABTMMap(unittest.TestCase):
             self.model,
             Point(0, 0),
             [
-                self.abtmmap.links["[0, 1] to [1, 1]"]["object"],
-                self.abtmmap.links["[0, 0] to [0, 1]"]["object"],
+                self.abtmmap.links["[0, 1] to [1, 1]"],
+                self.abtmmap.links["[0, 0] to [0, 1]"],
             ],
         )
         p2 = Driver(
             self.model,
             Point(0, 1),
             [
-                self.abtmmap.links["[1, 0] to [1, 1]"]["object"],
-                self.abtmmap.links["[0, 1] to [1, 0]"]["object"],
+                self.abtmmap.links["[1, 0] to [1, 1]"],
+                self.abtmmap.links["[0, 1] to [1, 0]"],
             ],
         )
         for person in [p1, p2]:
