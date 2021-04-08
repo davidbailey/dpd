@@ -30,7 +30,7 @@ class ABTMMap(Map):
         self.model = model
         self.intersections = map_.intersections
         self.links = map_.links
-        self.people = GeographicDict()
+        self.people = GeometricDict()
         self.transform_intersections_to_agent_based()
         self.transform_links_to_agent_based()
         self.prepare_links()
@@ -136,7 +136,7 @@ class ABTMMap(Map):
             driver = Driver(self.model, person.home_geometry, route)
             people[driver.name] = driver
             self.model.schedule.add(driver)
-        self.people = gpd.GeographicDict(people)
+        self.people = gpd.GeometricDict(people)
         self.people.crs = "EPSG:4326"
 
     def post_people(self, url):
