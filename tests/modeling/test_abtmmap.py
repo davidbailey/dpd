@@ -9,6 +9,7 @@ from dpd.modeling.agents.people.driver import Driver
 from dpd.mapping import Intersection, Segment, Link, Map
 from dpd.modeling import ABTMMap, TransportationModel
 
+aea = CRS.from_string("North America Albers Equal Area Conic")
 
 def build_test_map():
     map_ = Map()
@@ -31,7 +32,6 @@ def build_test_map():
             sidewalk=True,
             cycleway="track",
         )
-    aea = CRS.from_string("North America Albers Equal Area Conic")
     map_.intersections.crs = aea
     map_.links.crs = aea
     return map_
@@ -42,6 +42,7 @@ class TestABTMMap(unittest.TestCase):
         self.map_ = build_test_map()
         self.model = TransportationModel()
         self.abtmmap = ABTMMap(self.model, self.map_)
+        self.abtmmap.people.crs = aea
         p1 = Driver(
             self.model,
             Point(0, 0),
