@@ -58,11 +58,11 @@ class GeometricDict(dict):
 
     def plot_folium(self, folium_map, columns=["geometry"], filter_box=None, **kwargs):
         gdf = self.to_geodataframe(columns)
+        gdf["name"] = gdf.index
         if filter_box:
             plot_gdf = filter_geodataframe(gdf, filter_box)
         else:
             plot_gdf = gdf
-        plot_gdf["name"] = plot_gdf.index
         tooltip = folium.features.GeoJsonTooltip(fields=["name"])
         geojson = folium.GeoJson(
             plot_gdf[["name", "geometry"]].to_json(), tooltip=tooltip, **kwargs

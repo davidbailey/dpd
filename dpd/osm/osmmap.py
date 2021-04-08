@@ -37,7 +37,7 @@ class OSMMap(Map):
         )  # Used to find traffic signals, all-way stops
         self.intersections = GeometricDict(crs="EPSG:4326")
         self.build_intersections(self.intersections)
-        self.links = GeometricDict(crs="EPSG:4326")
+        self.links = Links(crs="EPSG:4326")
         self.build_links(self.links)
         logging.info(
             "Generated %s intersections and %s links."
