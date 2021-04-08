@@ -6,6 +6,8 @@ from matplotlib import pyplot as plt
 from pyproj import Transformer
 from shapely.ops import transform
 
+from dpd.geopandas import filter_geodataframe
+
 
 class GeometricDict(dict):
     """
