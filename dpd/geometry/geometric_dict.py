@@ -16,7 +16,7 @@ class GeometricDict(dict):
 
     def __init__(self, crs=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.crs = None
+        self.crs = crs
 
     def transform(self, crs):
         """ Or we could go to_geoseries, to_crs, and then reset... which is faster?"""
