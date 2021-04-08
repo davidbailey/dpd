@@ -32,8 +32,8 @@ def build_test_map():
             cycleway="track",
         )
     aea = CRS.from_string("North America Albers Equal Area Conic")
-    map_intersections.crs = aea
-    map_links.crs = aea
+    map_.intersections.crs = aea
+    map_.links.crs = aea
     return map_
 
 
