@@ -24,7 +24,7 @@ class TestGeometricDict(unittest.TestCase):
         crs_4326 = CRS.from_epsg(4326)
         aea = CRS.from_string("North America Albers Equal Area Conic")
         geometric_dict.crs = crs_4326
-        geometric_dict.transform(aea)
+        geometric_dict.to_crs(aea)
 
 
 if __name__ == "__main__":
