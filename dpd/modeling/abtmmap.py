@@ -136,7 +136,7 @@ class ABTMMap(Map):
             driver = Driver(self.model, person.home_geometry, route)
             people[driver.name] = driver
             self.model.schedule.add(driver)
-        self.people = gpd.GeometricDict(people)
+        self.people = GeometricDict(people)
         self.people.crs = "EPSG:4326"
 
     def post_people(self, url):
