@@ -18,7 +18,7 @@ class GeometricDict(dict):
         super().__init__(*args, **kwargs)
         self.crs = crs
 
-    def transform(self, crs):
+    def to_crs(self, crs):
         """ Or we could go to_geoseries, to_crs, and then reset... which is faster?"""
         transformer = Transformer.from_crs(self.crs, crs, always_xy=True)
         for value in self.values():
