@@ -11,12 +11,8 @@ class Links(GeometricDict):
     def plot_folium(self, folium_map, columns=["geometry"], filter_box=None, **kwargs):
         gdf = self.to_geodataframe(columns)
         gdf["name"] = gdf.index
-        gdf["number_of_segments"] = gdf["object"].map(
-            lambda link: len(link.segments) - 2
-        )
-        gdf["segments"] = gdf["object"].map(
-            lambda link: str(list(map(type, link.segments)))
-        )
+        gdf["number_of_segments"] = gdf.map(lambda link: len(link.segments) - 2)
+        gdf["segments"] = gdf.map(lambda link: str(list(map(type, link.segments))))
         if filter_box:
             plot_gdf = filter_geodataframe(gdf, filter_box)
         else:
