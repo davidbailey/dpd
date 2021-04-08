@@ -79,7 +79,7 @@ class OSMMap(Map):
             else:
                 type_ = "Yield"
             intersections[intersection] = Intersection(name, geometry)
-            intersections[intersection].type = type_,
+            intersections[intersection].type = (type_,)
         return intersections
 
     @staticmethod

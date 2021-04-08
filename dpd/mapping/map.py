@@ -25,12 +25,8 @@ class Map:
         for index, link in self.links.items():
             edges.append(
                 (
-                    link.input_intersection.name
-                    if link.input_intersection
-                    else None,
-                    link.output_intersection.name
-                    if link.output_intersection
-                    else None,
+                    link.input_intersection.name if link.input_intersection else None,
+                    link.output_intersection.name if link.output_intersection else None,
                     link,
                 )
             )

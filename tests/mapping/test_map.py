@@ -5,6 +5,7 @@ from shapely.geometry import Point, LineString
 
 from dpd.mapping import Intersection, Map, Link
 
+
 def build_test_map():
     map_ = Map()
     for x in range(2):
@@ -18,16 +19,16 @@ def build_test_map():
             [input_intersection.geometry, output_intersection.geometry]
         )
         map_[name] = Link(
-                name,
-                geometry,
-                input_intersection,
-                output_intersection,
-                number_of_lanes=1,
-                sidewalk=True,
-                cycleway="track",
-            )
+            name,
+            geometry,
+            input_intersection,
+            output_intersection,
+            number_of_lanes=1,
+            sidewalk=True,
+            cycleway="track",
         )
     return map_
+
 
 class TestMap(unittest.TestCase):
     def test_map(self):

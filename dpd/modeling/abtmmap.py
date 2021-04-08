@@ -72,11 +72,15 @@ class ABTMMap(Map):
             if hasattr(intersection, "type_"):
                 intersection_type = intersection["type_"]
                 if intersection_type == "Signal":
-                    self.intersections[key] = SignalIntersection(intersection, self.model)
+                    self.intersections[key] = SignalIntersection(
+                        intersection, self.model
+                    )
                 elif intersection_type == "Stop":
                     self.intersections[key] = StopIntersection(intersection, self.model)
                 else:
-                    self.intersections[key] = YieldIntersection(intersection, self.model)
+                    self.intersections[key] = YieldIntersection(
+                        intersection, self.model
+                    )
             else:
                 self.intersections[key] = YieldIntersection(intersection, self.model)
             self.model.schedule.add(self.intersections[key])
@@ -148,9 +152,7 @@ class ABTMMap(Map):
         post_people=False,
     ):
         trajectories = []
-        aea = CRS.from_string(
-            "North America Albers Equal Area Conic"
-        )
+        aea = CRS.from_string("North America Albers Equal Area Conic")
         if not self.intersections.crs == aea:
             self.intersections.to_crs(aea)
         if not self.links.crs == aea:
@@ -191,11 +193,11 @@ class ABTMMap(Map):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if include_intersections:
-            self.intersections.plot(filter_box, ax=ax **kwargs)
+            self.intersections.plot(filter_box, ax=ax ** kwargs)
         if include_links:
             self.intersections.plot(filter_box, ax=ax, **kwargs)
         if include_people:
-            self.people.plot(filter_box, ax=ax **kwargs)
+            self.people.plot(filter_box, ax=ax ** kwargs)
         plt.show()
 
     def plot_folium(
