@@ -2,37 +2,40 @@ from itertools import combinations
 import unittest
 
 from astropy import units
-from pyproj import CRS
 from shapely.geometry import Point, LineString
 
 from dpd.modeling.agents.people.driver import Driver
 from dpd.mapping import Intersection, Segment, Link, Map
 from dpd.modeling import ABTMMap, TransportationModel
 
+def build_test_map():
+    map_ = Map()
+    for x in range(2):
+        for y in range(2):
+            map_[str([x, y])] = Intersection(str([x, y]), Point(x, y))
+    for input_intersection, output_intersection in combinations(
+        map_.intersections.values(), 2
+    ):
+        name = input_intersection.name + " to " + output_intersection.name
+        geometry = LineString(
+            [input_intersection.geometry, output_intersection.geometry]
+        )
+        map_[name] = Link(
+                name,
+                geometry,
+                input_intersection,
+                output_intersection,
+                number_of_lanes=1,
+                sidewalk=True,
+                cycleway="track",
+            )
+        )
+    return map_
+
 
 class TestABTMMap(unittest.TestCase):
     def test_abtmmap(self):
-        self.map_ = Map()
-        for x in range(2):
-            for y in range(2):
-                self.map_.add_intersection(Intersection(str([x, y]), Point(x, y)))
-        for input_intersection, output_intersection in combinations(
-            self.map_.intersections["object"], 2
-        ):
-            name = input_intersection.name + " to " + output_intersection.name
-            geometry = LineString(
-                [input_intersection.geometry, output_intersection.geometry]
-            )
-            self.map_.add_link(
-                Link(
-                    name,
-                    geometry,
-                    input_intersection,
-                    output_intersection,
-                    number_of_lanes=1,
-                    max_speed=20 * units.kilometer / units.hour,
-                )
-            )
+        self.map_ = build_test_map()
         self.model = TransportationModel()
         self.abtmmap = ABTMMap(self.model, self.map_)
         p1 = Driver(
@@ -53,13 +56,8 @@ class TestABTMMap(unittest.TestCase):
         )
         for person in [p1, p2]:
             self.abtmmap.add_person(person)
-
-        aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.abtmmap.intersections.crs = aea
-        self.abtmmap.links.crs = aea
-        self.abtmmap.people.crs = aea
         trajectories = self.abtmmap.simulate(10)
-        self.abtmmap.plot(include_links=True)
+        self.abtmmap.plot()
 
 
 if __name__ == "__main__":
