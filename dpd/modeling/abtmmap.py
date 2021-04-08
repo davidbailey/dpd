@@ -139,10 +139,10 @@ class ABTMMap(Map):
     def transform_people_to_aea(self):
         logging.info("Transforming people to AEA. This could take a while...")
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.people.transform(aea)
+        self.people.transform_crs(aea)
 
     def transform_people_to_epsg4326(self):
-        self.people.transform("EPSG:4326")
+        self.people.transform_crs("EPSG:4326")
 
     def post_people(self, url):
         self.refresh_people_geometries()

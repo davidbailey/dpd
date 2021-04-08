@@ -22,7 +22,7 @@ class GeoObjectDataFrame(gpd.GeoDataFrame):
             object_,
         ]
 
-    def transform(crs):
+    def transform_crs(crs):
         # CRS.from_string("North America Albers Equal Area Conic")
         # "EPSG:4326"
         self.to_crs(crs, inplace=True)

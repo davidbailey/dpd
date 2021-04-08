@@ -29,17 +29,17 @@ class Map:
         self,
     ):  # Let's remove these four functions once nothing references them
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.intersections.transform(aea)
+        self.intersections.transform_crs(aea)
 
     def transform_intersections_to_epsg4326(self):
-        self.intersections.transform("EPSG:4326")
+        self.intersections.transform_crs("EPSG:4326")
 
     def transform_links_to_aea(self):
         aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.links.transform(aea)
+        self.links.transform_crs(aea)
 
     def transform_links_to_epsg4326(self):
-        self.links.transform("EPSG:4326")
+        self.links.transform_crs("EPSG:4326")
 
     def to_geodigraph(self):
         G = geonetworkx.GeoDiGraph()
