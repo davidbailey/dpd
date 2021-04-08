@@ -127,16 +127,14 @@ class ABTMMap(Map):
         return links
 
     def create_people_from_od(self, od):
-        people = {}
         for _, person in tqdm(od.iterrows(), total=len(od)):
             route = self.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
             # todo - add other modes
             driver = Driver(self.model, person.home_geometry, route)
-            people[driver.name] = driver
+            self.people[driver.name] = driver
             self.model.schedule.add(driver)
-        self.people = GeometricDict(people)
         self.people.crs = "EPSG:4326"
 
     def post_people(self, url):
