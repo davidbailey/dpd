@@ -22,11 +22,9 @@ class GeometricDict(dict):
         """
         Could this be faster? Probably. Geopandas is about 2x faster because they vectorize. However, it is too much overhead to convert to Geopandas, transform, and convert back. Creating the transformer takes about 500ms so we could save the transformer and reuse it for subsequent transformations. We could also try multithreading.
         """
-        transformer = Transformer.from_crs(self.crs, crs)
+        transformer = Transformer.from_crs(self.crs, crs, always_xy=True)
         for value in self.values():
-            lon, lat = value.geometry.xy
-            value.geometry = transformer.transform(lon, lat)
-        self.crs = crs
+            value.geometry = transform(transformer.transform, value.geometry)
 
     def to_geoseries(self):
         data = {}
