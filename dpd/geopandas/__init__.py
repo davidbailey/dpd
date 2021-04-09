@@ -1,2 +1,1 @@
 from .filter_geodataframe import filter_geodataframe
-from .geoobjectdataframe import GeoObjectDataFrame
