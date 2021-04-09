@@ -25,6 +25,7 @@ class GeometricDict(dict):
         transformer = Transformer.from_crs(self.crs, crs, always_xy=True)
         for value in self.values():
             value.geometry = transform(transformer.transform, value.geometry)
+        self.crs = crs
 
     def to_geoseries(self):
         data = {}

@@ -18,6 +18,7 @@ from dpd.modeling.agents.intersections.yield_intersection import YieldIntersecti
 from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
+from .people import People
 from .people_flask_app import people_flask_app
 from dpd.geometry import GeometricDict
 
@@ -30,7 +31,7 @@ class ABTMMap(Map):
         self.model = model
         self.intersections = map_.intersections
         self.links = map_.links
-        self.people = GeometricDict()
+        self.people = People()
         self.transform_intersections_to_agent_based()
         self.transform_links_to_agent_based()
         self.clear_segments()
@@ -132,7 +133,6 @@ class ABTMMap(Map):
             driver = Driver(self.model, person.home_geometry, route)
             self.people[driver.name] = driver
             self.model.schedule.add(driver)
-        self.people.crs = "EPSG:4326"
 
     def post_people(self, url):
         people = self.people.to_geopandas()
@@ -149,7 +149,7 @@ class ABTMMap(Map):
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.intersections.to_crs(aea)
         self.links.to_crs(aea)
-        self.people.crs = aea
+        self.people.crs = self.links.crs
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
