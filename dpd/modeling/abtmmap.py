@@ -81,6 +81,7 @@ class ABTMMap(Map):
         this must be run after transform_intersection_to_agent_based creates new Intersection objects.
         """
         for link in self.links.values():
+            link.length = link.geometry.length
             if link.input_intersection:
                 link.input_intersection = self.intersections[
                     link.input_intersection.name

@@ -20,7 +20,7 @@ class Cyclist(Pedestrian):
         self.deceleration = -self.acceleration
 
     def step(self):
-        if self.length_on_segment >= self.link.geometry.length * units.meter:
+        if self.length_on_segment >= self.link.length * units.meter:
             logging.info(
                 "%s reached end of segment, pass control to intersection" % (self.name,)
             )

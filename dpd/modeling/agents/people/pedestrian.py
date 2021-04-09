@@ -16,17 +16,23 @@ class Pedestrian(Agent):
     def __init__(self, model, geometry, route):
         unique_id = uuid4()
         super().__init__(unique_id, model)
-        self.geometry = geometry
         self.name = str(unique_id)
         self.route = route
         self.link = self.route.pop(0)
         self.segment = self.place_person_on_segment(self.link)
-        self.length_on_segment = self.link.geometry.project(self.geometry) * units.meter
+        self.length_on_segment = self.link.geometry.project(geometry) * units.meter
         self.speed = 0 * units.imperial.mile / units.hour
         # --- class-specific values below ---
         self.max_speed = 3.1 * units.imperial.mile / units.hour
         self.acceleration = self.max_speed / units.second
         self.deceleration = -self.acceleration
+
+    @property
+    def geometry(self):
+        geometry = self.link.geometry.interpolate(
+            self.length_on_segment.to_value(units.meter)
+        )
+        return geometry
 
     def place_person_on_segment(self, link, reversed_=True):
         if reversed_:
@@ -43,7 +49,7 @@ class Pedestrian(Agent):
         )
 
     def step(self):
-        if self.length_on_segment >= self.link.geometry.length * units.meter:
+        if self.length_on_segment >= self.link.length * units.meter:
             logging.info(
                 "%s reached end of segment, pass control to intersection" % (self.name,)
             )
@@ -69,15 +75,9 @@ class Pedestrian(Agent):
             min(self.link.max_speed, self.max_speed),
         )
         self.length_on_segment += distance
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )
 
     def proceed_through_intersection(self):
         self.segment.occupants.remove(self)
         self.link = self.route.pop(0)
         self.segment = self.place_person_on_segment(self.link)
         self.length_on_segment = 0 * units.meter
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )

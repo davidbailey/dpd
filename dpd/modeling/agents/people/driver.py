@@ -19,7 +19,7 @@ class Driver(Pedestrian):
         self.deceleration = -self.acceleration
 
     def step(self):
-        if self.length_on_segment >= self.link.geometry.length * units.meter:
+        if self.length_on_segment >= self.link.length * units.meter:
             logging.info(
                 "%s reached end of segment, pass control to intersection" % (self.name,)
             )
@@ -68,9 +68,6 @@ class Driver(Pedestrian):
             0 * units.meter / units.second,
         )
         self.length_on_segment += distance
-        self.geometry = self.link.geometry.interpolate(
-            self.length_on_segment.to_value(units.meter)
-        )
 
     def attempt_segment_change(self, segment):
         logging.info("%s attempting segment change" % (self.name,))
