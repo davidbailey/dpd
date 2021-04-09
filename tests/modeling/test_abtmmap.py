@@ -11,6 +11,7 @@ from dpd.modeling import ABTMMap, TransportationModel
 
 aea = CRS.from_string("North America Albers Equal Area Conic")
 
+
 def build_test_map():
     map_ = Map()
     for x in range(2):
@@ -31,6 +32,7 @@ def build_test_map():
             number_of_lanes=1,
             sidewalk=True,
             cycleway="track",
+            max_speed=25 * units.imperial.mile / units.hour,
         )
     map_.intersections.crs = aea
     map_.links.crs = aea
