@@ -184,11 +184,11 @@ class ABTMMap(Map):
         fig = plt.figure(figsize=(18, 16))
         ax = fig.add_subplot(111)
         if include_intersections:
-            self.intersections.plot(filter_box, ax=ax **kwargs)
+            self.intersections.plot(filter_box, ax=ax, **kwargs)
         if include_links:
             self.intersections.plot(filter_box, ax=ax, **kwargs)
         if include_people:
-            self.people.plot(filter_box, ax=ax **kwargs)
+            self.people.plot(filter_box, ax=ax, **kwargs)
         plt.show()
 
     def plot_folium(
