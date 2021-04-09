@@ -47,7 +47,7 @@ class GeometricDict(dict):
     def plot(self, columns=["geometry"], filter_box=None, **kwargs):
         gdf = self.to_geodataframe(columns)
         if filter_box:
-            plot_gdf = filter_geodataframe(gdf, filter_box)
+            plot_gdf = filter_geodataframe(gdf, filter_box=filter_box)
         else:
             plot_gdf = gdf
         plot_gdf.plot(**kwargs)
