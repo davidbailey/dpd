@@ -135,10 +135,9 @@ class ABTMMap(Map):
         self.people.crs = "EPSG:4326"
 
     def post_people(self, url):
-        crs = self.people.crs
-        self.people.to_crs("EPSG:4326")
-        p = requests.post(url, data={"people": self.people.to_json()})
-        self.people.to_crs(crs)
+        people = self.people.to_geopandas()
+        people.to_crs("EPSG:4326")
+        p = requests.post(url, data={"people": people.to_json()})
 
     def simulate(
         self,
@@ -150,7 +149,7 @@ class ABTMMap(Map):
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.intersections.to_crs(aea)
         self.links.to_crs(aea)
-        self.people.to_crs(aea)
+        self.people.crs = aea
         if post_people:
             werkzeug_thread = WerkzeugThread(people_flask_app())
             werkzeug_thread.start()
