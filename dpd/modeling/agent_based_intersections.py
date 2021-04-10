@@ -46,4 +46,3 @@ class AgentBasedIntersections(AgentBasedDict):
                     links.append(link)
                     break
         return links
-
