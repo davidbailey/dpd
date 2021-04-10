@@ -24,8 +24,9 @@ class People(AgentBasedDict):
 
     def __init__(self, map_, crs=None, *args, **kwargs):
         super().__init__(crs=crs, *args, **kwargs)
-        self.intersections = AgentBasedIntersections(data=map_.intersections)
-        self.links = AgentBasedLinks(data=map_.links, intersections=self.intersections)
+        self.intersections = AgentBasedIntersections(map_.intersections)
+        self.links = AgentBasedLinks(map_.links)
+        self.links.update_intersections(self.intersections)
 
         self.data_collector = DataCollector(agent_reporters={"geometry": "geometry"})
 

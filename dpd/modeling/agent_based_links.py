@@ -17,11 +17,13 @@ class AgentBasedLinks(GeometricDict):
                     segment.allowed_users = [Cyclist, Pedestrian, Driver]
                 elif type(segment) in [Sidewalk, Cycleway]:
                     segment.allowed_users = [Cyclist, Pedestrian]
+        self.clear_all_segments()
+
+    def update_intersections(self, intersections):
             if link.input_intersection:
                 link.input_intersection = intersections[link.input_intersection.name]
             if link.output_intersection:
                 link.output_intersection = intersections[link.output_intersection.name]
-        self.clear_all_segments()
 
     def clear_all_segments(self):
         """
