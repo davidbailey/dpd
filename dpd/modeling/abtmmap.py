@@ -6,6 +6,7 @@ from astropy import units
 import folium
 import geopandas as gpd
 from matplotlib import pyplot as plt
+from mesa.datacollection import DataCollector
 import movingpandas as mpd
 import numpy as np
 from pyproj import CRS
@@ -129,9 +130,9 @@ class ABTMMap(Map):
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
             # todo - add other modes
-            driver = Driver(self.model, person.home_geometry, route)
+            driver = Driver(self.people.model, person.home_geometry, route)
             self.people[driver.name] = driver
-            self.model.schedule.add(driver)
+            self.people.model.schedule.add(driver)
 
     def simulate(
         self,
@@ -149,6 +150,7 @@ class ABTMMap(Map):
             werkzeug_thread.start()
         for round_number in range(number_of_rounds):
             logging.info("Simulating round %s" % (round_number,))
+            self.people.data_collector.collect(self.people.model)
             for person in self.people.values():
                 trajectories.append(
                     {
@@ -160,6 +162,7 @@ class ABTMMap(Map):
             if post_people:
                 self.people.post_people("http://localhost:9000/people")
             self.model.step()
+            self.people.model.step()
             time = time + datetime.timedelta(seconds=1)
         if post_people:
             werkzeug_thread.stop()
