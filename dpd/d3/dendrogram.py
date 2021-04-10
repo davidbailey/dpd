@@ -78,7 +78,6 @@ def dendrogram(d):
         .style("font-size", "18px")
         .text(function(d) { return d.data.name});
     </script>
-    
     """
     )
     svg = """

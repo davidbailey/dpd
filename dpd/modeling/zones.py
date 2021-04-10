@@ -56,7 +56,7 @@ class Zones(geopandas.GeoDataFrame):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
-        if not "centroid" in self.columns:
+        if "centroid" not in self.columns:
             self.calculate_centroids()
         self["aea_centroid"] = self.centroid.to_crs(
             "North America Albers Equal Area Conic"
@@ -106,7 +106,7 @@ class Zones(geopandas.GeoDataFrame):
             raise AttributeError(
                 "Graph not built yet. Please run Zones.buid_graph and OriginDestinationDataFrame.route_assignment() first."
             )
-        if not "centroid" in self.columns:
+        if "centroid" not in self.columns:
             self["centroid"] = self.geometry.map(
                 lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
             )
