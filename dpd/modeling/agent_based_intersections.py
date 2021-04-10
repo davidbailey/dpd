@@ -14,21 +14,17 @@ class AgentBasedIntersections(AgentBasedDict):
     A container for agent-based Intersections
     """
 
-    def __init__(self, crs=None, *args, **kwargs):
-        super().__init__(crs=crs, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         for key, intersection in self.items():
             if hasattr(intersection, "type_"):
                 intersection_type = intersection["type_"]
                 if intersection_type == "Signal":
-                    self.intersections[key] = SignalIntersection(
-                        intersection, self.model
-                    )
+                    self[key] = SignalIntersection(intersection, self.model)
                 elif intersection_type == "Stop":
-                    self.intersections[key] = StopIntersection(intersection, self.model)
+                    self[key] = StopIntersection(intersection, self.model)
                 else:
-                    self.intersections[key] = YieldIntersection(
-                        intersection, self.model
-                    )
+                    self[key] = YieldIntersection(intersection, self.model)
             else:
-                self.intersections[key] = YieldIntersection(intersection, self.model)
-            self.model.schedule.add(self.intersections[key])
+                self[key] = YieldIntersection(intersection, self.model)
+            self.model.schedule.add(self[key])

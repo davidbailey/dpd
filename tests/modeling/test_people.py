@@ -46,16 +46,16 @@ class TestPeople(unittest.TestCase):
             self.people.model,
             Point(0, 0),
             [
-                self.abtmmap.links["[0, 1] to [1, 1]"],
-                self.abtmmap.links["[0, 0] to [0, 1]"],
+                self.people.links["[0, 1] to [1, 1]"],
+                self.people.links["[0, 0] to [0, 1]"],
             ],
         )
         p2 = Driver(
             self.people.model,
             Point(0, 1),
             [
-                self.abtmmap.links["[1, 0] to [1, 1]"],
-                self.abtmmap.links["[0, 1] to [1, 0]"],
+                self.people.links["[1, 0] to [1, 1]"],
+                self.people.links["[0, 1] to [1, 0]"],
             ],
         )
         for person in [p1, p2]:

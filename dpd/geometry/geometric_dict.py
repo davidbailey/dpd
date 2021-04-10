@@ -1,3 +1,5 @@
+from collections import UserDict
+
 import folium
 from geopandas import GeoDataFrame, GeoSeries
 from matplotlib import pyplot as plt
@@ -7,14 +9,18 @@ from shapely.ops import transform
 from dpd.geopandas import filter_geodataframe
 
 
-class GeometricDict(dict):
+class GeometricDict(UserDict):
     """
     A dictionsary of objects with a .geometry
     """
 
-    def __init__(self, crs=None, *args, **kwargs):
+    def __init__(self, dict=None, crs=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.crs = crs
+        if dict is not None:
+            self.update(dict)
+            if hasattr(dict, "crs"):
+                self.crs = dict.crs
 
     def to_crs(self, crs):
         """
