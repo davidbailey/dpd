@@ -2,7 +2,6 @@ import logging
 
 from astropy import units
 
-from dpd.kinematics import move
 from .pedestrian import Pedestrian
 
 

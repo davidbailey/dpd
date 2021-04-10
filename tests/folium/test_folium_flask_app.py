@@ -1,8 +1,5 @@
 import unittest
 
-import folium
-import pandas
-
 from dpd.folium import folium_flask_app
 
 

@@ -5,7 +5,6 @@ import pandas
 from dpd.osrm import route
 from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 from dpd.shapely import random_point_in_polygon
-from dpd.utils import epsg4326_to_aea
 
 
 class OriginDestinationDataFrame(pandas.DataFrame):

@@ -8,7 +8,7 @@ from mesa.datacollection import DataCollector
 from tqdm import tqdm
 from pyproj import CRS
 
-from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
+from dpd.modeling.agents.people import Driver
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
 from .agent_based_dict import AgentBasedDict
@@ -61,7 +61,6 @@ class People(AgentBasedDict):
             route = self.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
-            # todo - add other modes
             driver = Driver(self.model, person.home_geometry, route)
             self.add_person(driver)
 

@@ -1,7 +1,4 @@
-from shapely.geometry import Point
 import pandas
-
-from dpd.utils import epsg4326_to_aea
 
 
 class CentroidDistanceDataFrame(pandas.DataFrame):
