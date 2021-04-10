@@ -88,6 +88,6 @@ class People(AgentBasedDict):
             self.intersections.model.step()
             self.data_collector.collect(self.model)
             if post_people_url:
-                self.people.post_people(post_people_url)
+                self.post_people(post_people_url)
         if post_people_url:
             werkzeug_thread.stop()
