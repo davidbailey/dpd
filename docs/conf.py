@@ -16,7 +16,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
-import dpd  # noqa: F401
+import dpd  # noqa: F401,E402
 
 
 # -- Project information -----------------------------------------------------

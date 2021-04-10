@@ -8,7 +8,7 @@ YEAR = "2017"
 
 class TestOriginDestinationDataFrame(unittest.TestCase):
     def test_origin_destination_dataframe(self):
-        od = OriginDestinationDataFrame.from_lodes(ST, YEAR)
+        OriginDestinationDataFrame.from_lodes(ST, YEAR)
 
 
 if __name__ == "__main__":

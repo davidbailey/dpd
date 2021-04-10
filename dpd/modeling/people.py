@@ -67,7 +67,7 @@ class People(AgentBasedDict):
     def post_people(self, url):
         people = self.to_geopandas()
         people.to_crs("EPSG:4326")
-        p = requests.post(url, data={"people": people.to_json()})
+        return requests.post(url, data={"people": people.to_json()})
 
     def get_agent_vars_geodataframe(self, start_time=datetime(1970, 1, 1, 0, 0, 0)):
         gdf = geopandas.GeoDataFrame(self.data_collector.get_agent_vars_dataframe())
