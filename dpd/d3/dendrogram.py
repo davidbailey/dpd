@@ -80,7 +80,7 @@ def dendrogram(d):
     </script>
     """
     )
-    svg = """
+    svg = r"""
     <script>
     var svg = document.getElementById("svg");
     var serializer = new XMLSerializer();

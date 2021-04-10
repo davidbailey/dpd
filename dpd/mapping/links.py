@@ -24,7 +24,9 @@ class Links(GeometricDict):
             plot_gdf = filter_geodataframe(gdf, filter_box)
         else:
             plot_gdf = gdf
-        style_function = lambda x: {"weight": x["properties"]["number_of_segments"]}
+        style_function = lambda x: {  # noqa: E731
+            "weight": x["properties"]["number_of_segments"]
+        }
         tooltip = folium.features.GeoJsonTooltip(fields=["name", "segment_types"])
         geojson = folium.GeoJson(
             plot_gdf[

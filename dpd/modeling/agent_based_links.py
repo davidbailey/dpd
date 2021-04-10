@@ -8,8 +8,8 @@ class AgentBasedLinks(GeometricDict):
     A continer for agent-based Links
     """
 
-    def __init__(self, data={}, intersections=None, crs=None, *args, **kwargs):
-        super().__init__(data=data, crs=crs, *args, **kwargs)
+    def __init__(self, intersections=None, crs=None, *args, **kwargs):
+        super().__init__(crs=crs, *args, **kwargs)
         for link in self.values():
             link.length = link.geometry.length
             for segment in link.segments:

@@ -1,5 +1,3 @@
-from collections import UserDict
-
 import folium
 from geopandas import GeoDataFrame, GeoSeries
 from matplotlib import pyplot as plt
