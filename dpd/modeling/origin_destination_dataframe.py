@@ -80,7 +80,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
 
     def add_route_hw_from_osrm(self, url_base, mode):
         # check if home and work exist, if not, create them
-        if not "home_geometry" in self.columns and "work_geometry" in self.columns:
+        if "home_geometry" not in self.columns and "work_geometry" in self.columns:
             raise RuntimeError(
                 "No home_geometry and/or work_geometry. Please run add_geometry_from_zones first"
             )

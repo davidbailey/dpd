@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import logging
 
 import geopandas
 import movingpandas

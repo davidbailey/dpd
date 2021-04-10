@@ -80,7 +80,7 @@ class OSMMap(Map):
 
     @staticmethod
     def speed_converter(speed):
-        if speed == None:
+        if speed is None:
             return DEFAULT_SPEED
         speed_split = speed.split()
         if len(speed_split) == 2:

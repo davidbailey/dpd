@@ -1,3 +1,6 @@
+from dpd.mapping import Intersection
+
+
 class StopIntersection(Intersection):
     """
     🛑 Two-way and four-way stop intersections are the same. The only difference is if some segments have priority over the stop sign (segments_with_priority).

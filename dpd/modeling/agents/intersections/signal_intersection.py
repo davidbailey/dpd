@@ -1,3 +1,6 @@
+from .yield_intersection import YieldIntersection
+
+
 class SignalIntersection(YieldIntersection):
     """
     🚦🚥 We have a signal plan that updates segments_with_green after time. Traffic follows the signal plan.

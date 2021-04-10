@@ -1,5 +1,6 @@
 from itertools import combinations
 
+from shapely.geometry import LineString
 from shapely.ops import linemerge
 
 
@@ -12,11 +13,13 @@ def find_way_in_ways(ways, points, buffer_distance=None):
                 if buffer_distance:
                     if all(
                         [
-                            linestring.intersects(s.location.buffer(buffer_distance))
+                            linestring.intersects(
+                                point.location.buffer(buffer_distance)
+                            )
                             for point in points
                         ]
                     ):
                         return linestring
                 else:
-                    if all([linestring.intersects(s.location) for point in points]):
+                    if all([linestring.intersects(point.location) for point in points]):
                         return linestring

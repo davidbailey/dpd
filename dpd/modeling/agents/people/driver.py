@@ -108,5 +108,5 @@ class Driver(Pedestrian):
         self.segment.occupants.remove(self)
         self.segment = segment
         if index_of_new_person_behind_me < len(segment.occupants):
-            self.segment.occupants.insert(index_of_person_behind_me, self)
+            self.segment.occupants.insert(index_of_new_person_behind_me, self)
         return False
