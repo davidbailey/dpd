@@ -20,10 +20,11 @@ class AgentBasedLinks(GeometricDict):
         self.clear_all_segments()
 
     def update_intersections(self, intersections):
-        if link.input_intersection:
-            link.input_intersection = intersections[link.input_intersection.name]
-        if link.output_intersection:
-            link.output_intersection = intersections[link.output_intersection.name]
+        for link in self.values():
+            if link.input_intersection:
+                link.input_intersection = intersections[link.input_intersection.name]
+            if link.output_intersection:
+                link.output_intersection = intersections[link.output_intersection.name]
 
     def clear_all_segments(self):
         """
