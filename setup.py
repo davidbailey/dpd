@@ -37,5 +37,5 @@ setup(
         "us",
         "werkzeug",
     ],
-    tests_requires=["black", "coveralls", "pytest", "pytest-cov"],
+    tests_requires=["black", "coveralls", "flake8", "pytest", "pytest-cov"],
 )

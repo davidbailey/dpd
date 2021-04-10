@@ -1,3 +1,5 @@
+from collections import UserDict
+
 import folium
 from geopandas import GeoDataFrame, GeoSeries
 from matplotlib import pyplot as plt
@@ -7,7 +9,7 @@ from shapely.ops import transform
 from dpd.geopandas import filter_geodataframe
 
 
-class GeometricDict(dict):
+class GeometricDict(UserDict):
     """
     A dictionsary of objects with a .geometry
     """

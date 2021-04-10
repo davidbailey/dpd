@@ -3,6 +3,7 @@ black
 bs4
 contextily
 coveralls
+flake8
 flask
 folium
 geonetworkx
