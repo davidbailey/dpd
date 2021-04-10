@@ -1,16 +1,9 @@
-import datetime
 import logging
 
-
-from astropy import units
 import folium
-import geopandas as gpd
 from matplotlib import pyplot as plt
-from mesa.datacollection import DataCollector
-import movingpandas as mpd
 import numpy as np
 from pyproj import CRS
-from shapely.geometry import box
 from tqdm import tqdm
 
 
@@ -20,7 +13,6 @@ from dpd.mapping import Map, Lane, Sidewalk, Cycleway
 from dpd.werkzeug import WerkzeugThread
 from .people import People
 from .people_flask_app import people_flask_app
-from dpd.geometry import GeometricDict
 
 SignalIntersection = YieldIntersection
 StopIntersection = YieldIntersection
@@ -53,11 +45,6 @@ class ABTMMap(Map):
                     links.append(link)
                     break
         return links
-
-    def add_person(self, person):
-        """ maybe make People a Class and do this automatically """
-        self.people[person.name] = person
-        self.model.schedule.add(person)
 
     def transform_intersections_to_agent_based(self):
         for key, intersection in self.intersections.items():
@@ -131,16 +118,13 @@ class ABTMMap(Map):
             )
             # todo - add other modes
             driver = Driver(self.people.model, person.home_geometry, route)
-            self.people[driver.name] = driver
-            self.people.model.schedule.add(driver)
+            self.people.add_person(driver)
 
     def simulate(
         self,
         number_of_rounds=10,
-        time=datetime.datetime(1970, 1, 1, 0, 0, 0),
         post_people=False,
     ):
-        trajectories = []
         aea = CRS.from_string("North America Albers Equal Area Conic")
         self.intersections.to_crs(aea)
         self.links.to_crs(aea)
@@ -151,24 +135,12 @@ class ABTMMap(Map):
         for round_number in range(number_of_rounds):
             logging.info("Simulating round %s" % (round_number,))
             self.people.data_collector.collect(self.people.model)
-            for person in self.people.values():
-                trajectories.append(
-                    {
-                        "time": time,
-                        "geometry": person.geometry,
-                        "name": person.name,
-                    }
-                )
             if post_people:
                 self.people.post_people("http://localhost:9000/people")
             self.model.step()
             self.people.model.step()
-            time = time + datetime.timedelta(seconds=1)
         if post_people:
             werkzeug_thread.stop()
-        gpd_trajectories = gpd.GeoDataFrame(trajectories, crs=aea).set_index("time")
-        mpd_trajectories = mpd.TrajectoryCollection(gpd_trajectories, "name")
-        return mpd_trajectories
 
     def plot(
         self,
