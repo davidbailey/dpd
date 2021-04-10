@@ -40,27 +40,9 @@ class People(AgentBasedDict):
         self[person.name] = person
         self.model.schedule.add(person)
 
-    def nodes_to_links(self, node_ids):
-        """Takes a list of node_ids and a map and returns a list or links."""
-        nodes = []
-        # first we filter through all the nodes and find those that are actually intersections. for those that are not intersections, we assume they are part of the links. this may or may not be true.
-        for node in node_ids:
-            if node in self.intersections.keys():
-                nodes.append(node)
-        links = []
-        for i in range(len(nodes) - 1):
-            for link in self.intersections[nodes[i]].output_links:
-                if (
-                    link.output_intersection
-                    and link.output_intersection.name == nodes[i + 1]
-                ):
-                    links.append(link)
-                    break
-        return links
-
     def create_people_from_od(self, od):
         for _, person in tqdm(od.iterrows(), total=len(od)):
-            route = self.nodes_to_links(
+            route = self.intersections.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
             driver = Driver(self.model, person.home_geometry, route)
