@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 import movingpandas as mpd
 import numpy as np
 from pyproj import CRS
-import requests
 from shapely.geometry import box
 from tqdm import tqdm
 
@@ -134,11 +133,6 @@ class ABTMMap(Map):
             self.people[driver.name] = driver
             self.model.schedule.add(driver)
 
-    def post_people(self, url):
-        people = self.people.to_geopandas()
-        people.to_crs("EPSG:4326")
-        p = requests.post(url, data={"people": people.to_json()})
-
     def simulate(
         self,
         number_of_rounds=10,
@@ -164,7 +158,7 @@ class ABTMMap(Map):
                     }
                 )
             if post_people:
-                self.post_people("http://localhost:9000/people")
+                self.people.post_people("http://localhost:9000/people")
             self.model.step()
             time = time + datetime.timedelta(seconds=1)
         if post_people:
