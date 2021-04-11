@@ -15,6 +15,7 @@ from .people_flask_app import people_flask_app
 from .agent_based_dict import AgentBasedDict
 from .agent_based_intersections import AgentBasedIntersections
 from .agent_based_links import AgentBasedLinks
+from .mode_choice_model import ModeChoiceModel
 
 
 class People(AgentBasedDict):
@@ -41,11 +42,16 @@ class People(AgentBasedDict):
         self.model.schedule.add(person)
 
     def create_people_from_od(self, od):
+        mode_choice_model = ModeChoiceModel()
+        mode_choice_model.add_mode(Driver, .8)
+        mode_choice_model.add_mode(Cyclist, .1)
+        mode_choice_model.add_mode(Pedestrian, .1)
         for _, person in tqdm(od.iterrows(), total=len(od)):
             route = self.intersections.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]
             )
-            driver = Driver(self.model, person.home_geometry, route)
+            mode = mode_choice_model.predict()
+            person = mode(self.model, person.home_geometry, route)
             self.add_person(driver)
 
     def post_people(self, url):
