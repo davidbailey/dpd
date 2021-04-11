@@ -9,7 +9,7 @@ from mesa.datacollection import DataCollector
 from tqdm import tqdm
 from pyproj import CRS
 
-from dpd.modeling.agents.people import Driver
+from dpd.modeling.agents.people import Pedestrian, Cyclist, Driver
 from dpd.werkzeug import WerkzeugThread
 from .people_flask_app import people_flask_app
 from .agent_based_dict import AgentBasedDict
@@ -52,7 +52,7 @@ class People(AgentBasedDict):
             )
             mode = mode_choice_model.predict()
             person = mode(self.model, person.home_geometry, route)
-            self.add_person(driver)
+            self.add_person(person)
 
     def post_people(self, url):
         people = self.to_geopandas()

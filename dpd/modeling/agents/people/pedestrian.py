@@ -81,3 +81,4 @@ class Pedestrian(Agent):
         self.link = self.route.pop(0)
         self.segment = self.place_person_on_segment(self.link)
         self.length_on_segment = 0 * units.meter
+        self.move_forward()
