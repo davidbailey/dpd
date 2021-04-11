@@ -21,13 +21,10 @@ class StopIntersection(Intersection):
 
     def new_approach(self, approacher):
         if approacher.segment in self.segments_with_priority:
-            # print(approacher.name, "We have priority. We are going.")
             approacher.proceed_through_intersection()
             self.intersection_clear = False
         elif self.intersection_clear:
-            # print(approacher.name, "Intersection clear. We are going.")
             approacher.proceed_through_intersection()
             self.intersection_clear = False
         else:
-            # print(approacher.name, "🛑")
             approacher.stop()

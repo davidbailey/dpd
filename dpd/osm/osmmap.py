@@ -39,6 +39,7 @@ class OSMMap(Map):
         self.build_intersections(self.intersections)
         self.links = Links(crs="EPSG:4326")
         self.build_links(self.links)
+        self.look_for_stop_signs()
         logging.info(
             "Generated %s intersections and %s links."
             % (len(self.intersections), len(self.links))
@@ -232,3 +233,8 @@ class OSMMap(Map):
                         cycleway=cycleway_backward,
                         max_speed=self.speed_converter(link["maxspeed"]),
                     )
+
+    def look_for_stop_signs(self):
+        for intersection in self.intersections:
+            if not hasattr(intersection, "type_"):
+                pass
