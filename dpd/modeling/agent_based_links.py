@@ -20,6 +20,7 @@ class AgentBasedLinks(GeometricDict):
         self.clear_all_segments()
 
     def update_intersections(self, intersections):
+        """This method is redundant to Intersections.update_links. Call one or the other."""
         for link in self.values():
             if link.input_intersection:
                 link.input_intersection = intersections[link.input_intersection.name]

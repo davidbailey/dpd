@@ -29,6 +29,16 @@ class AgentBasedIntersections(AgentBasedDict):
                 self[key] = YieldIntersection(intersection, self.model)
             self.model.schedule.add(self[key])
 
+
+    def update_links(self, links):
+        """This method is redundant to Links.update_intersections. Call one or the other."""
+        for intersection in self.values():
+            for link in intersection.input_links:
+                link.output_intersection = self
+            for link in intersection.output_links:    
+                link.input_intersection = self
+
+
     def nodes_to_links(self, node_ids):
         """Takes a list of node_ids and a map and returns a list or links."""
         nodes = []
