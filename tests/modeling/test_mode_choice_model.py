@@ -1,6 +1,6 @@
 import unittest
 
-from dpd.modeling import ModeChoiceModel 
+from dpd.modeling import ModeChoiceModel
 
 
 class TestModeChoiceModel(unittest.TestCase):
