@@ -1,11 +1,10 @@
 from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
 
-# from dpd.modeling.agents.intersections.stop_intersection import StopIntersection
+from dpd.modeling.agents.intersections.stop_intersection import StopIntersection
 # from dpd.modeling.agents.intersections.signal_intersection import SignalIntersection
 
 from .agent_based_dict import AgentBasedDict
 
-StopIntersection = YieldIntersection
 SignalIntersection = YieldIntersection
 
 
