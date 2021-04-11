@@ -43,9 +43,9 @@ class People(AgentBasedDict):
 
     def create_people_from_od(self, od):
         mode_choice_model = ModeChoiceModel()
-        mode_choice_model.add_mode(Driver, .8)
-        mode_choice_model.add_mode(Cyclist, .1)
-        mode_choice_model.add_mode(Pedestrian, .1)
+        mode_choice_model.add_mode(Driver, 0.8)
+        mode_choice_model.add_mode(Cyclist, 0.1)
+        mode_choice_model.add_mode(Pedestrian, 0.1)
         for _, person in tqdm(od.iterrows(), total=len(od)):
             route = self.intersections.nodes_to_links(
                 person.routes[0]["legs"][0]["annotation"]["nodes"]

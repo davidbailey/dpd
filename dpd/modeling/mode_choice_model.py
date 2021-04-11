@@ -1,5 +1,6 @@
 from numpy.random import choice
 
+
 class ModeChoiceModel:
     def __init__(self, modes=[], probabilities=[]):
         self.modes = modes
