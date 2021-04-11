@@ -8,3 +8,4 @@ from .agent_based_intersections import AgentBasedIntersections
 from .agent_based_links import AgentBasedLinks
 from .people import People
 from .people_flask_app import people_flask_app
+from .mode_choice_model import ModeChoiceModel
