@@ -15,6 +15,21 @@ from dpd.geometry import GeometricDict
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
 
+ROAD_HIERARCHY = [  # https://wiki.openstreetmap.org/wiki/Key:highway
+    "motorway",
+    "motorway_link",
+    "trunk",
+    "trunk_link",
+    "primary",
+    "primary_link",
+    "secondary",
+    "secondary_link",
+    "tertiary",
+    "tertiary_link",
+    "unclassified",
+    "residential",
+]
+
 
 class OSMMap(Map):
     def __init__(self, region):
