@@ -42,11 +42,11 @@ class MultipleCriteriaAnalysis:
             mca.attributes = list(mca.mca.index[0])
             mca.monte_carlo = True
         else:
-            mca.mca = pandas.DataFrame.read_csv(mca_file)
+            mca.mca = pandas.read_csv(mca_file)
             mca.attributes = list(mca.mca.index)
             mca.monte_carlo = False
         mca.alternatives = list(mca.mca.columns)
-        mca.weights = pandas.Series.read_csv(weights_file)
+        mca.weights = pandas.read_csv(weights_file)
         return mca
 
     def to_csvs(self, mca_file="mca.csv", weights_file="weights.csv"):
