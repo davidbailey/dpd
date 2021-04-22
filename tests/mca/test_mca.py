@@ -38,6 +38,8 @@ class TestMCA(unittest.TestCase):
         )
         self.assertEqual(title, "Alternative")
         self.mca.to_d3()
+        self.mca.to_csvs()
+        self.mca.from_csvs()
 
 
 if __name__ == "__main__":
