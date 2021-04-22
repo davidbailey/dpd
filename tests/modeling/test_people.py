@@ -5,7 +5,7 @@ from astropy import units
 from shapely.geometry import Point, LineString
 from pyproj import CRS
 
-from dpd.modeling.agents.people.driver import Driver
+from dpd.modeling.agents.people.driver import Driver, Pedestrian, Cyclist
 from dpd.mapping import Intersection, Link, Map
 from dpd.modeling import People
 
@@ -50,7 +50,7 @@ class TestPeople(unittest.TestCase):
                 self.people.links["[0, 0] to [0, 1]"],
             ],
         )
-        p2 = Driver(
+        p2 = Cyclist(
             self.people.model,
             Point(0, 1),
             [
@@ -58,7 +58,15 @@ class TestPeople(unittest.TestCase):
                 self.people.links["[0, 1] to [1, 0]"],
             ],
         )
-        for person in [p1, p2]:
+        p3 = Pedestrian(
+            self.people.model,
+            Point(1, 0),
+            [
+                self.people.links["[1, 0] to [1, 1]"],
+                self.people.links["[0, 1] to [1, 0]"],
+            ],
+        )
+        for person in [p1, p2, p3]:
             self.people.add_person(person)
         self.people.simulate(10)
         self.people.plot()
