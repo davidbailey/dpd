@@ -5,7 +5,9 @@ from astropy import units
 from shapely.geometry import Point, LineString
 from pyproj import CRS
 
-from dpd.modeling.agents.people.driver import Driver, Pedestrian, Cyclist
+from dpd.modeling.agents.people.driver import Driver
+from dpd.modeling.agents.people.pedestrian import Pedestrian
+from dpd.modeling.agents.people.cyclist import Cyclist
 from dpd.mapping import Intersection, Link, Map
 from dpd.modeling import People
 
