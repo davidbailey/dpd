@@ -59,7 +59,7 @@ class Pedestrian(Agent):
             else:
                 # if there are no more route segments, we have arrived
                 logging.info("%s arrived" % (self.name,))
-                self.model.remove(self)
+                self.model.schedule.remove(self)
         else:
             logging.info("%s walking... no congestion for pedestrians" % (self.name,))
             self.move_forward()
