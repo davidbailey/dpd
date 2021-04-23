@@ -3,7 +3,7 @@ python: 3.9
 install:
   - sudo apt update
   - sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev
-  - FORCE_CYTHON=1 pip install --upgrade -r requirements.txt
+  - pip install --upgrade -r requirements.txt
   - pip install -e .
 script:
   - black --check . 
