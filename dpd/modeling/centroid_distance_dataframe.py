@@ -2,14 +2,14 @@ import pandas
 
 
 class CentroidDistanceDataFrame(pandas.DataFrame):
-    """"""
+    """ """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     @staticmethod
     def from_centroids(centroids):
-        """"""
+        """ """
         origin_list = []
         for origin_point in centroids:
             destination_list = []

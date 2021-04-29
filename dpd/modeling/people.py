@@ -32,7 +32,7 @@ class People(AgentBasedDict):
         self.data_collector = DataCollector(agent_reporters={"geometry": "geometry"})
 
     def to_crs(self, crs):
-        """"""
+        """ """
         raise NotImplementedError(
             "I'm not able to change the crs on People. Maybe create a GeoDataFrame and then change the crs."
         )
