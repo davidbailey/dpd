@@ -215,6 +215,31 @@ class OSMMap(Map):
                 cycleway_backward = None
         return cycleway_forward, cycleway_backward
 
+    def sidewalk_calculator(self, link):
+        if hasattr(link, "foot"):
+            if link["foot"] == "no":
+                return False
+            else:
+                return True
+        if hasattr(link, "highway"):
+            if link["highway"] == "motorway":
+                return False
+        return True
+
+    def banned_modes(self, link):
+        """
+        Determine if any modes are banned on a link. Not used for now: we will trust the routing engine."
+        """
+        banned_modes = []
+        if hasattr(link, "bicycle"):
+            if link["bicycle"] == "no":
+                banned_modes.append("bicycle")
+        if hasattr(link, "highway"):
+            if link["highway"] == "pedestrian":
+                banned_modes.append("bicycle")
+                banned_modes.append("driver")
+        return set(banned_modes)
+
     def build_links(self, links):
         logging.info("Building links...")
         for _, link in tqdm(self.network.iterrows(), total=len(self.network)):
@@ -223,6 +248,7 @@ class OSMMap(Map):
             )
             link_segments = self.build_link_segments(link)
             cycleway_forward, cycleway_backward = self.cycleway_calculator(link)
+            sidewalk = self.sidewalk_calculator(link)
             for segment in link_segments:
                 link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D0"
                 links[link_id] = Link(
@@ -230,10 +256,9 @@ class OSMMap(Map):
                     segment["link_geometry"],
                     segment["start_node"],
                     segment["end_node"],
-                    number_of_lanes=number_of_lanes_forward,
-                    cycleway=cycleway_forward,
                     max_speed=self.speed_converter(link["maxspeed"]),
                 )
+                links[link_id].update_segments_from_osm(number_of_lanes=number_of_lanes_forward, cycleway=cycleway_forward, sidewalk=sidewalk)
                 if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_link_geometry = LineString(
                         segment["link_geometry"].coords[::-1]
@@ -244,10 +269,9 @@ class OSMMap(Map):
                         reversed_segment_link_geometry,
                         segment["end_node"],
                         segment["start_node"],
-                        number_of_lanes=number_of_lanes_backward,
-                        cycleway=cycleway_backward,
                         max_speed=self.speed_converter(link["maxspeed"]),
                     )
+                    links[link_id].update_segments_from_osm(number_of_lanes=number_of_lanes_backward, cycleway=cycleway_backward, sidewalk=sidewalk)
 
     def look_for_stop_signs(self):
         for intersection in self.intersections:

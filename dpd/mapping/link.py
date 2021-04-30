@@ -27,22 +27,33 @@ class Link:
         self,
         name,
         geometry,
+        segments,
         input_intersection=None,
         output_intersection=None,
-        number_of_lanes=0,
-        parking=None,
-        cycleway=None,
-        sidewalk=None,
+        opposite_direction_link=None,
         **kwargs
     ):
         self.name = name
         self.geometry = geometry
+        self.segments = segments
         self.input_intersection = input_intersection
         if input_intersection:
             input_intersection.add_output_link(self)
         self.output_intersection = output_intersection
         if output_intersection:
             output_intersection.add_input_link(self)
+        self.opposite_direction_link = opposite_direction_link
+        # kwargs are useful for setting things like max_speed
+        for attribute, value in kwargs.items():
+            setattr(self, attribute, value)
+
+    def update_segments_from_osm(
+        self
+        number_of_lanes=0,
+        parking=None,
+        cycleway=None,
+        sidewalk=None,
+    ):
         self.segments = [None, None]
         segment_number = 0
         for _ in range(number_of_lanes):
