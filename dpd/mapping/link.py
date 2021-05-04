@@ -48,7 +48,7 @@ class Link:
             setattr(self, attribute, value)
 
     def update_segments_from_osm(
-        self
+        self,
         number_of_lanes=0,
         parking=None,
         cycleway=None,
