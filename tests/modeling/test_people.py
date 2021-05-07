@@ -27,6 +27,7 @@ def build_test_map():
         map_.links[name] = Link(
             name,
             geometry,
+            segments[],
             input_intersection,
             output_intersection,
             number_of_lanes=1,
@@ -34,6 +35,7 @@ def build_test_map():
             cycleway="track",
             max_speed=25 * units.imperial.mile / units.hour,
         )
+        map_.links.update_segments_from_osm(number_of_lanes=1, sidewalk=True, cycleway="track")
     return map_
 
 
