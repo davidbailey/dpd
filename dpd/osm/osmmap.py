@@ -258,7 +258,11 @@ class OSMMap(Map):
                     segment["end_node"],
                     max_speed=self.speed_converter(link["maxspeed"]),
                 )
-                links[link_id].update_segments_from_osm(number_of_lanes=number_of_lanes_forward, cycleway=cycleway_forward, sidewalk=sidewalk)
+                links[link_id].update_segments_from_osm(
+                    number_of_lanes=number_of_lanes_forward,
+                    cycleway=cycleway_forward,
+                    sidewalk=sidewalk,
+                )
                 if number_of_lanes_backward or cycleway_backward:
                     reversed_segment_link_geometry = LineString(
                         segment["link_geometry"].coords[::-1]
@@ -271,7 +275,11 @@ class OSMMap(Map):
                         segment["start_node"],
                         max_speed=self.speed_converter(link["maxspeed"]),
                     )
-                    links[link_id].update_segments_from_osm(number_of_lanes=number_of_lanes_backward, cycleway=cycleway_backward, sidewalk=sidewalk)
+                    links[link_id].update_segments_from_osm(
+                        number_of_lanes=number_of_lanes_backward,
+                        cycleway=cycleway_backward,
+                        sidewalk=sidewalk,
+                    )
 
     def look_for_stop_signs(self):
         for intersection in self.intersections:
