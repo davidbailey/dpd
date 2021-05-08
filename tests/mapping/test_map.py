@@ -1,6 +1,7 @@
 from itertools import combinations
 import unittest
 
+from astropy import units
 from shapely.geometry import Point, LineString
 
 from dpd.mapping import Intersection, Map, Link
