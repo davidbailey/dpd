@@ -72,8 +72,6 @@ class Link:
         if sidewalk:
             self.segments.insert(-1, Sidewalk(self, segment_number))
             segment_number += 1
-        for attribute, value in kwargs.items():
-            setattr(self, attribute, value)
 
     def update_segments_from_streetmix(self, url):
         r = requests.get(url)
