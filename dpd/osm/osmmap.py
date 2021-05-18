@@ -292,10 +292,10 @@ class OSMMap(Map):
                         intersection.input_links,
                     )
                 )
-                highest_link_value = min(link_values)
-                priority_links = []
-                for link in intersection.input_links:
-                    if HIGHWAY_HIERARCHY.index(link.highway) <= highest_link_value:
-                        priority_links.append(link)
-                if priority_links:
+                if link_values:
+                    highest_link_value = min(link_values)
+                    priority_links = []
+                    for link in intersection.input_links:
+                        if HIGHWAY_HIERARCHY.index(link.highway) == highest_link_value:
+                            priority_links.append(link)
                     intersection.priority_links = priority_links
