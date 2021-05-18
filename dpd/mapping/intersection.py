@@ -20,7 +20,6 @@ class Intersection:
         for attribute, value in kwargs.items():
             setattr(self, attribute, value)
 
-
     def add_input_link(self, input_link):
         self.input_links.append(input_link)
 

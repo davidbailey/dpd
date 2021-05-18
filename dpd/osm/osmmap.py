@@ -257,7 +257,7 @@ class OSMMap(Map):
                     segment["start_node"],
                     segment["end_node"],
                     max_speed=self.speed_converter(link["maxspeed"]),
-                    highway=highway
+                    highway=highway,
                 )
                 links[link_id].update_segments_from_osm(
                     number_of_lanes=number_of_lanes_forward,
@@ -275,7 +275,7 @@ class OSMMap(Map):
                         segment["end_node"],
                         segment["start_node"],
                         max_speed=self.speed_converter(link["maxspeed"]),
-                        highway=highway
+                        highway=highway,
                     )
                     links[link_id].update_segments_from_osm(
                         number_of_lanes=number_of_lanes_backward,
@@ -286,7 +286,12 @@ class OSMMap(Map):
     def look_for_stop_signs(self):
         for intersection in self.intersections:
             if intersection.type_ == "Yield":
-                link_values = list(map(lambda link:, HIGHWAY_HIERARCHY.index(link.highway), intersection.input_links))
+                link_values = list(
+                    map(
+                        lambda link: HIGHWAY_HIERARCHY.index(link.highway),
+                        intersection.input_links,
+                    )
+                )
                 highest_link_value = min(link_values)
                 priority_links = []
                 for link in intersection.input_links:
