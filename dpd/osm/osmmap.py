@@ -15,7 +15,7 @@ from dpd.geometry import GeometricDict
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour
 
-ROAD_HIERARCHY = [  # https://wiki.openstreetmap.org/wiki/Key:highway
+HIGHWAY_HIERARCHY = [  # https://wiki.openstreetmap.org/wiki/Key:highway
     "motorway",
     "motorway_link",
     "trunk",
@@ -91,8 +91,7 @@ class OSMMap(Map):
                 type_ = "All-way Stop"
             else:
                 type_ = "Yield"
-            intersections[intersection] = Intersection(name, geometry)
-            intersections[intersection].type = (type_,)
+            intersections[intersection] = Intersection(name, geometry, type_=type_)
 
     @staticmethod
     def speed_converter(speed):
@@ -249,6 +248,7 @@ class OSMMap(Map):
             link_segments = self.build_link_segments(link)
             cycleway_forward, cycleway_backward = self.cycleway_calculator(link)
             sidewalk = self.sidewalk_calculator(link)
+            highway = link["highway"]
             for segment in link_segments:
                 link_id = str(link["id"]) + ":S" + str(segment["link_id"]) + ":D0"
                 links[link_id] = Link(
@@ -257,6 +257,7 @@ class OSMMap(Map):
                     segment["start_node"],
                     segment["end_node"],
                     max_speed=self.speed_converter(link["maxspeed"]),
+                    highway=highway
                 )
                 links[link_id].update_segments_from_osm(
                     number_of_lanes=number_of_lanes_forward,
@@ -274,6 +275,7 @@ class OSMMap(Map):
                         segment["end_node"],
                         segment["start_node"],
                         max_speed=self.speed_converter(link["maxspeed"]),
+                        highway=highway
                     )
                     links[link_id].update_segments_from_osm(
                         number_of_lanes=number_of_lanes_backward,
@@ -283,5 +285,12 @@ class OSMMap(Map):
 
     def look_for_stop_signs(self):
         for intersection in self.intersections:
-            if not hasattr(intersection, "type_"):
-                pass
+            if intersection.type_ == "Yield":
+                link_values = list(map(lambda link:, HIGHWAY_HIERARCHY.index(link.highway), intersection.input_links))
+                highest_link_value = min(link_values)
+                priority_links = []
+                for link in intersection.input_links:
+                    if HIGHWAY_HIERARCHY.index(link.highway) <= highest_link_value:
+                        priority_links.append(link)
+                if priority_links:
+                    intersection.priority_links = priority_links

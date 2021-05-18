@@ -6,7 +6,7 @@ class Intersection:
     output_lanes are lanes which feed out of the intersection.
     """
 
-    def __init__(self, name, geometry, input_links=None, output_links=None):
+    def __init__(self, name, geometry, input_links=None, output_links=None, **kwargs):
         self.name = name
         self.geometry = geometry
         if input_links:
@@ -17,6 +17,9 @@ class Intersection:
             self.output_links = output_links
         else:
             self.output_links = []
+        for attribute, value in kwargs.items():
+            setattr(self, attribute, value)
+
 
     def add_input_link(self, input_link):
         self.input_links.append(input_link)
