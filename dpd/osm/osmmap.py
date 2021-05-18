@@ -284,7 +284,7 @@ class OSMMap(Map):
                     )
 
     def look_for_stop_signs(self):
-        for intersection in self.intersections:
+        for intersection in self.intersections.values():
             if intersection.type_ == "Yield":
                 link_values = list(
                     map(
