@@ -1,6 +1,6 @@
 import logging
 import os.path
-import subprocess
+import subprocess # nosec
 
 from dpd.utils import download_file
 
@@ -19,7 +19,7 @@ class OSRM:
 
     def extract(self, *args, **kwargs):
         logging.info("Extracting " + self.filename)
-        return subprocess.run(
+        return subprocess.run( # nosec
             [
                 "osrm-extract",
                 "-p",
@@ -34,9 +34,9 @@ class OSRM:
         if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm"):
             self.extract()
         logging.info("Contracting " + self.filename)
-        return subprocess.run(["osrm-contract", self.filename], *args, **kwargs)
+        return subprocess.run(["osrm-contract", self.filename], *args, **kwargs) # nosec
 
     def routed(self, *args, **kwargs):
         if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm.hsgr"):
             self.contract()
-        return subprocess.Popen(["osrm-routed", self.filename], *args, **kwargs)
+        return subprocess.Popen(["osrm-routed", self.filename], *args, **kwargs) # nosec

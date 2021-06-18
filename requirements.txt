@@ -1,4 +1,5 @@
 astropy
+bandit
 black
 bs4
 contextily

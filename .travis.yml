@@ -8,6 +8,7 @@ install:
 script:
   - black --check . 
   - flake8
+  - bandit -r .
   - pytest --cov=dpd
 after_success:
   - coveralls
