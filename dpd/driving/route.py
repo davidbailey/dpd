@@ -35,7 +35,7 @@ class Route(geopandas.GeoDataFrame):
             dpd.driving.Route: a route table
         """
         aea_way = epsg4326_to_aea(way)
-        index = list(map(Point, zip(aea_way.xy[0], aea_way.xy[1])))
+        index = list(map(str, zip(way.xy[0], way.xy[1])))
         geometry = list(map(Point, zip(aea_way.xy[0], aea_way.xy[1])))
         super().__init__(geometry, columns=["geometry"], index=index)
         self.crs = "North America Albers Equal Area Conic"
