@@ -19,8 +19,11 @@ class Trip(MovingDict):
     def plot_schedule(self, **kwargs):
         geodataframe = self.to_geodataframe(columns=["name", "geometry", "distance"])
         geodataframe["distance"].plot(**kwargs)
+        annotated_stops = []
         for idx, row in geodataframe.iterrows():
-            plt.annotate(
-                text=row["name"],
-                xy=(idx, row["distance"])
-            )
+            if row["name"] not in annotated_stops:
+                plt.annotate(
+                    text=row["name"],
+                    xy=(idx, row["distance"])
+                )
+            annotated_stops.append(row["name"])
