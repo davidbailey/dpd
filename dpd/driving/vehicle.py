@@ -16,7 +16,7 @@ class Vehicle:
     def accelerate_or_decelerate(self, distance, acceleration_or_deceleration):
         speed_before_segment = self.speed
         self.speed = np.sqrt(
-            speed_before_segment ** 2 + 2 * acceleration_or_deceleration * distance
+            speed_before_segment**2 + 2 * acceleration_or_deceleration * distance
         )
         time = (self.speed - speed_before_segment) / acceleration_or_deceleration
         self.segments.append(
@@ -42,7 +42,7 @@ class Vehicle:
         )
 
     def accelerate_and_go(self, speed_limit, distance):
-        accelerate_distance = (speed_limit ** 2 - self.speed ** 2) / (
+        accelerate_distance = (speed_limit**2 - self.speed**2) / (
             2 * self.acceleration
         )
         if accelerate_distance <= distance:
@@ -54,7 +54,7 @@ class Vehicle:
 
     def accelerate_and_decelerate(self, speed, distance, speed_limit):
         deceleration_distance = (
-            2 * self.acceleration * distance + speed ** 2 - speed_limit ** 2
+            2 * self.acceleration * distance + speed**2 - speed_limit**2
         ) / (2 * (self.acceleration - self.deceleration))
         self.accelerate_or_decelerate(
             distance - deceleration_distance, self.acceleration
@@ -64,7 +64,7 @@ class Vehicle:
     def fix_overspeed(self, speed_limit, distance, fix_overspeed_distance=0):
         last_segment = self.segments.pop()
         fix_overspeed_distance = fix_overspeed_distance + last_segment["distance"]
-        if speed_limit ** 2 > last_segment[
+        if speed_limit**2 > last_segment[
             "speed_before_segment"
         ] ** 2 + 2 * self.deceleration * (fix_overspeed_distance):
             self.accelerate_and_decelerate(

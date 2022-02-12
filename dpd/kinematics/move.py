@@ -14,5 +14,5 @@ def move(acceleration, initial_velocity, time, max_speed=None):
         ]  # multiply 0 by accelration in case a units library (e.g. astropy.units) is used
         distance = distance_accelerating + distance_constant_speed
     else:
-        distance = initial_velocity * time + 0.5 * acceleration * time ** 2
+        distance = initial_velocity * time + 0.5 * acceleration * time**2
     return distance, final_velocity

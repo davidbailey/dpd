@@ -5,7 +5,7 @@ from jinja2 import Template
 
 class ClickForMarkerWithCallback(folium.ClickForMarker):
     _template = Template(
-        u"""
+        """
             {% macro script(this, kwargs) %}
                 function newMarker(e){
                     var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});

@@ -1,6 +1,7 @@
 from .geometric_dict import GeometricDict
 from movingpandas import Trajectory
 
+
 class MovingDict(GeometricDict):
     """
     A dictionsary of objects with a .geometry and a datetime index.

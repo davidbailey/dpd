@@ -69,7 +69,9 @@ class Route(geopandas.GeoDataFrame):
                 else LineString([row["geometry"], row["after_geometry"]]).length,
                 axis=1,
             )
-        self["total_distance_to_this_point"] = self["distance_to_next_point"].shift(1).cumsum().fillna(0)
+        self["total_distance_to_this_point"] = (
+            self["distance_to_next_point"].shift(1).cumsum().fillna(0)
+        )
         self["before_geometry"] = self["geometry"].shift(1)
         self["radius_of_curvature"] = self.apply(
             lambda row: 5000
@@ -123,7 +125,13 @@ class Route(geopandas.GeoDataFrame):
                 )
         return Route(way, stops, *args, **kwargs)
 
-    def drive_vehicle(self, vehicle, buffer=0.0, dwell_time=timedelta(seconds=0), start_time=datetime.now()):
+    def drive_vehicle(
+        self,
+        vehicle,
+        buffer=0.0,
+        dwell_time=timedelta(seconds=0),
+        start_time=datetime.now(),
+    ):
         """
         A way to have a vehicle "drive" along a route to generate the time between stops
 
@@ -136,9 +144,19 @@ class Route(geopandas.GeoDataFrame):
         trip = Trip()
         stops = self[self.stop_name != ""].index.values.tolist()
         stop = stops.pop(0)
-        trip.add_stop(geometry=stop["geometry"], name=stop["stop_name"], distance=0, arrival_time=start_time)
+        trip.add_stop(
+            geometry=stop["geometry"],
+            name=stop["stop_name"],
+            distance=0,
+            arrival_time=start_time,
+        )
         current_time = start_time + dwell_time
-        trip.add_stop(geometry=stop["geometry"], name=stop["stop_name"], distance=0, departure_time=current_time)
+        trip.add_stop(
+            geometry=stop["geometry"],
+            name=stop["stop_name"],
+            distance=0,
+            departure_time=current_time,
+        )
         for next_stop in stops:
             speed_limits = list(self[stop:next_stop].speed_limit)[:-1]
             speed_limits.append(
@@ -146,10 +164,22 @@ class Route(geopandas.GeoDataFrame):
             )  # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
             lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
-            current_time += timedelta(vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1))  # subtract 1 to cancel out adding the extra speed limit and length
+            current_time += timedelta(
+                vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
+            )  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
-            trip.add_stop(geometry=stop["geometry"], name=stop["stop_name"], distance=stop["total_distance"], arrival_time=current_time)
+            trip.add_stop(
+                geometry=stop["geometry"],
+                name=stop["stop_name"],
+                distance=stop["total_distance"],
+                arrival_time=current_time,
+            )
             current_time += dwell_time
-            trip.add_stop(geometry=stop["geometry"], name=stop["stop_name"], distance=stop["total_distance"], departure_time=current_time)
+            trip.add_stop(
+                geometry=stop["geometry"],
+                name=stop["stop_name"],
+                distance=stop["total_distance"],
+                departure_time=current_time,
+            )
         trip.crs = self.crs
         return trip

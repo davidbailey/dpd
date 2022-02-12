@@ -6,4 +6,4 @@ class GravityModel:
         self.d = d
 
     def compute(self, mass_a, mass_b, distance):
-        return self.G * (mass_a ** self.a * mass_b ** self.b) / distance ** self.d
+        return self.G * (mass_a**self.a * mass_b**self.b) / distance**self.d

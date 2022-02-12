@@ -21,14 +21,14 @@ import dpd  # noqa: F401,E402
 
 # -- Project information -----------------------------------------------------
 
-project = u"dpd"
-copyright = u"2020, David Bailey"
-author = u"David Bailey"
+project = "dpd"
+copyright = "2020, David Bailey"
+author = "David Bailey"
 
 # The short X.Y version
-version = u""
+version = ""
 # The full version, including alpha/beta/rc tags
-release = u""
+release = ""
 
 
 # -- General configuration ---------------------------------------------------
@@ -64,7 +64,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = [u"_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -126,7 +126,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "dpd.tex", u"dpd Documentation", u"David Bailey", "manual")
+    (master_doc, "dpd.tex", "dpd Documentation", "David Bailey", "manual")
 ]
 
 
@@ -134,7 +134,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "dpd", u"dpd Documentation", [author], 1)]
+man_pages = [(master_doc, "dpd", "dpd Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -146,7 +146,7 @@ texinfo_documents = [
     (
         master_doc,
         "dpd",
-        u"dpd Documentation",
+        "dpd Documentation",
         author,
         "dpd",
         "One line description of project.",
