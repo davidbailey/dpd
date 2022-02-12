@@ -142,4 +142,4 @@ class Route(geopandas.GeoDataFrame):
             
             time_between_stops.append(vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1)  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
-            return time_between_stops
+        return time_between_stops
