@@ -128,6 +128,7 @@ class Route(geopandas.GeoDataFrame):
             buffer (float): a multiplier to control for timetable padding
             dwell_time (int): the dwell time for each stop (in seconds)
         """
+        time_between_stops = []
         self["time_to_next_stop"] = 0
         stops = self[self.stop_name != ""].index.values.tolist()
         stop = stops.pop(0)
@@ -138,7 +139,7 @@ class Route(geopandas.GeoDataFrame):
             )  # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
             lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
-            self.at[stop, "time_to_next_stop"] = (
-                vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
-            )  # subtract 1 to cancel out adding the extra speed limit and length
+            
+            time_between_stops.append(vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1)  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
+            return time_between_stops
