@@ -4,6 +4,7 @@ import numpy as np
 from shapely.geometry import LineString, Point
 from shapely.ops import linemerge
 
+from .trip import Trip
 from dpd.geometry import radius_of_curvature
 from dpd.utils import epsg4326_to_aea
 
@@ -66,6 +67,7 @@ class Route(geopandas.GeoDataFrame):
                 else LineString([row["geometry"], row["after_geometry"]]).length,
                 axis=1,
             )
+        self["total_distance_to_this_point"] = self["distance_to_next_point"].shift(1).cumsum().fillna(0)
         self["before_geometry"] = self["geometry"].shift(1)
         self["radius_of_curvature"] = self.apply(
             lambda row: 5000
