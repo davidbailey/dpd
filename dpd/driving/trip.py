@@ -17,7 +17,7 @@ class Trip(MovingDict):
             self.data[departure_time] = Stop(name=name, geometry=geometry, distance = distance, **kwargs)
 
     def plot_schedule(self, **kwargs):
-        geodataframe = self.to_geodataframe(columns=["geometry", "distance"])
+        geodataframe = self.to_geodataframe(columns=["name", "geometry", "distance"])
         geodataframe["distance"].plot(**kwargs)
         for idx, row in geodataframe.iterrows():
             plt.annotate(
