@@ -21,7 +21,6 @@ class Route(geopandas.GeoDataFrame):
         max_cant=0.1524,
         max_cant_deficiency=0.075,
         gague=1.435,
-        dwell_time=45,
     ):
         """
         Args:
@@ -31,7 +30,6 @@ class Route(geopandas.GeoDataFrame):
             max_cant: (float): the maximum allowable cant (in meters)
             max_cant_deficiency (float): the maximum allowable cant deficiency (in meters)
             gague (float): the track gague (in meters)
-            dwell_time (int): the dwell time for each stop (in seconds)
 
         Returns:
             dpd.driving.Route: a route table
@@ -87,9 +85,6 @@ class Route(geopandas.GeoDataFrame):
         self.max_cant: float = max_cant
         self.max_cant_deficiency: float = max_cant_deficiency
         self.gague: float = gague
-        self["dwell_time"] = self.apply(
-            lambda row: 0 if row["stop_name"] == "" else dwell_time, axis=1
-        )
 
     def from_osm(osm, relation, *args, **kwargs):
         """
@@ -124,13 +119,14 @@ class Route(geopandas.GeoDataFrame):
                 )
         return Route(way, stops, *args, **kwargs)
 
-    def add_vehicle(self, vehicle, buffer=0.0):
+    def drive_vehicle(self, vehicle, buffer=0.0, dwell_time=0):
         """
         A way to have a vehicle "drive" along a route to generate the time between stops
 
         Args:
             vehicle (dpd.driving.Vehicle): the vehicle to drive along the route
             buffer (float): a multiplier to control for timetable padding
+            dwell_time (int): the dwell time for each stop (in seconds)
         """
         self["time_to_next_stop"] = 0
         stops = self[self.stop_name != ""].index.values.tolist()
@@ -146,25 +142,3 @@ class Route(geopandas.GeoDataFrame):
                 vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
             )  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
-
-    def folium_map(self, map=None):
-        """
-        A shortcut to create a folium map of the route.
-
-        Args:
-            map (folium.Map): an existing map to add the route to
-
-        Returns:
-            map (folium.Map): the map with the route on it
-        """
-        if not map:
-            map = folium.Map(
-                location=[
-                    self["geometry"].to_crs(epsg="4326")[0].xy[1][0],
-                    self["geometry"].to_crs(epsg="4326")[0].xy[0][0],
-                ]
-            )
-        map.add_children(
-            folium.features.GeoJson(self["geometry"].to_crs(epsg="4326").to_json())
-        )
-        return map
