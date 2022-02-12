@@ -1,3 +1,4 @@
+from .stop import Stop
 from dpd.geometry import MovingDict
 import matplotlib.pyplot as plt
 
@@ -11,9 +12,9 @@ class Trip(MovingDict):
 
     def add_stop(self, geometry, distance, name="", arrival_time=None, departure_time=None, **kwargs):
         if  arrival_time:
-            self.data[arrival_time] = {"geometry": geometry, "distance": distance, "name": name, **kwargs}
+            self.data[arrival_time] = Stop(name=name, geometry=geometry, distance = distance, **kwargs)
         if departure_time:
-            self.data[departure_time] = {"geometry": geometry, "distance": distance, "name": name, **kwargs}
+            self.data[departure_time] = Stop(name=name, geometry=geometry, distance = distance, **kwargs)
 
     def plot_schedule(self, **kwargs):
         geodataframe = self.to_geodataframe(columns=["geometry", "distance"])
