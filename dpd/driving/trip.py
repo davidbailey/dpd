@@ -36,7 +36,7 @@ class Trip(MovingDict):
     @staticmethod
     def _stop_id_to_distance(feed, aea_line, stop_id):
         stop = feed.stops[feed.stops.stop_id == stop_id]
-        stop_point = shapely.geometry.point.Point(stop.stop_lon, stop.stop_lat)
+        stop_point = Point(stop.stop_lon, stop.stop_lat)
         stop_point_aea = epsg4326_to_aea(stop_point)
         distance = aea_line.project(stop_point_aea)
         return distance
@@ -73,7 +73,7 @@ class Trip(MovingDict):
         for index, stop in d.iterrows():
             trip.add_stop(
                 name="",
-                geometry=Point(0,0),
+                geometry=Point(stop["stop_lon"], stop["stop_lat"]),
                 distance=stop["distance"],
                 arrival_time=stop["arrival_time_object"],
                 departure_time=stop["departure_time_object"]
