@@ -69,11 +69,10 @@ class Trip(MovingDict):
             d["arrival_time_object"] = d.arrival_time.map(timestring_to_timeobject)
             d["departure_time_object"] = d.departure_time.map(timestring_to_timeobject)
             d["distance"] = d.stop_id.map(stop_id_to_distance_cached)
-            plt.plot(d.arrival_time_object, d.distance / 1000)
         for index, stop in d.iterrows():
             trip.add_stop(
                 name="",
-                geometry=Point(stop["stop_lon"], stop["stop_lat"]),
+                geometry=Point(feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lon"], feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lat"]),
                 distance=stop["distance"],
                 arrival_time=stop["arrival_time_object"],
                 departure_time=stop["departure_time_object"]
