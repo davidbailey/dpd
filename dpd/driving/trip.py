@@ -41,7 +41,7 @@ class Trip(MovingDict):
         distance = aea_line.project(stop_point_aea)
         return distance
 
-    def from_gtfs(self, feed, route_id, service_id, shape_id=None):
+    def from_gtfs(feed, route_id, service_id, shape_id=None):
         """
         A way to build a trip from GTFS data.
         Args:
@@ -63,7 +63,7 @@ class Trip(MovingDict):
         @lru_cache(maxsize=128)  # adds a little complexity, but reduces runtime by half :)
         def stop_id_to_distance_cached(stop_id):
             return _stop_id_to_distance(feed, aea_line, stop_id)
-        trip = self.__init__()
+        trip = Trip()
         for trip_id in trips:
             d = feed.stop_times[feed.stop_times["trip_id"] == trip_id].copy()
             d["arrival_time_object"] = d.arrival_time.map(timestring_to_timeobject)
