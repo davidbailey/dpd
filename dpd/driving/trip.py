@@ -32,7 +32,8 @@ class Trip(MovingDict):
             self.data[departure_time] = Stop(
                 name=name, geometry=geometry, distance=distance, **kwargs
             )
- 
+
+    @staticmethod
     def _stop_id_to_distance(feed, aea_line, stop_id):
         stop = feed.stops[feed.stops.stop_id == stop_id]
         stop_point = shapely.geometry.point.Point(stop.stop_lon, stop.stop_lat)
@@ -40,7 +41,7 @@ class Trip(MovingDict):
         distance = aea_line.project(stop_point_aea)
         return distance
 
-    def from_gtfs(feed, route_id, service_id, shape_id=None):
+    def from_gtfs(self, feed, route_id, service_id, shape_id=None):
         """
         A way to build a trip from GTFS data.
         Args:
