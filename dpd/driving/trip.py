@@ -62,7 +62,7 @@ class Trip(MovingDict):
         
         @lru_cache(maxsize=128)  # adds a little complexity, but reduces runtime by half :)
         def stop_id_to_distance_cached(stop_id):
-            return _stop_id_to_distance(feed, aea_line, stop_id)
+            return trip._stop_id_to_distance(feed, aea_line, stop_id)
         trip = Trip()
         for trip_id in trips:
             d = feed.stop_times[feed.stop_times["trip_id"] == trip_id].copy()
