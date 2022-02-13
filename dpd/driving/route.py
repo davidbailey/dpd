@@ -145,15 +145,15 @@ class Route(geopandas.GeoDataFrame):
         stops = self[self.stop_name != ""].index.values.tolist()
         stop = stops.pop(0)
         trip.add_stop(
-            geometry=stop["geometry"],
-            name=stop["stop_name"],
+            geometry=self["geometry"][stop],
+            name=self["stop_name"][stop],
             distance=0,
             arrival_time=start_time,
         )
         current_time = start_time + dwell_time
         trip.add_stop(
-            geometry=stop["geometry"],
-            name=stop["stop_name"],
+            geometry=self["geometry"][stop],
+            name=self["stop_name"][stop],
             distance=0,
             departure_time=current_time,
         )
@@ -165,20 +165,20 @@ class Route(geopandas.GeoDataFrame):
             lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
             current_time += timedelta(
-                vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
+                seconds=vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
             )  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
             trip.add_stop(
-                geometry=stop["geometry"],
-                name=stop["stop_name"],
-                distance=stop["total_distance"],
+                geometry=self["geometry"][stop],
+                name=self["stop_name"][stop],
+                distance=self["total_distance_to_this_point"][stop],
                 arrival_time=current_time,
             )
             current_time += dwell_time
             trip.add_stop(
-                geometry=stop["geometry"],
-                name=stop["stop_name"],
-                distance=stop["total_distance"],
+                geometry=self["geometry"][stop],
+                name=self["stop_name"][stop],
+                distance=self["total_distance_to_this_point"][stop],
                 departure_time=current_time,
             )
         trip.crs = self.crs
