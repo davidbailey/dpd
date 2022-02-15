@@ -1,3 +1,5 @@
+from math import sqrt
+
 def find_center_from_points_and_radius(point1, point2, radius, right_handed):
     """
     Finds the center of a circle with a given radius such that point1 and point2 are on the circumference of the circle.
