@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def radius_of_curvature(p0, p1, p2):
+def radius_of_curvature_from_two_circumference_and_center(p0, p1, p2):
     """
     Calculates the radius of curvurature of a circle where p0 and p2 are on the circumference and p1 is the center. 
     Based on https://stackoverflow.com/questions/1211212/how-to-calculate-an-angle-from-three-points and https://en.wikipedia.org/wiki/Degree_of_curvature.
