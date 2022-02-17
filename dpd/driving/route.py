@@ -8,7 +8,7 @@ from shapely.geometry.multilinestring import MultiLineString
 from shapely.ops import linemerge
 
 from .trip import Trip
-from dpd.geometry import radius_of_curvature
+from dpd.geometry import circle_from_three_circumference_points
 from dpd.utils import epsg4326_to_aea
 
 
@@ -77,11 +77,11 @@ class Route(geopandas.GeoDataFrame):
         self["radius_of_curvature"] = self.apply(
             lambda row: 5000
             if row["before_geometry"] is None or row["after_geometry"] is None
-            else radius_of_curvature(
+            else circle_from_three_circumference_points(
                 (row["before_geometry"].x, row["before_geometry"].y),
                 (row["geometry"].x, row["geometry"].y),
                 (row["after_geometry"].x, row["after_geometry"].y),
-            ),
+            )[1],
             axis=1,
         )
         self["speed_limit"] = self["radius_of_curvature"].apply(
