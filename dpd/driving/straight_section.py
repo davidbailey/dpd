@@ -1,3 +1,5 @@
+from shapely.geometry import LineString
+
 class StraightSection:
     """
     a straight section
