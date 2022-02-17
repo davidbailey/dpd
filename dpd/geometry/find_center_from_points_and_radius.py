@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 def find_center_from_points_and_radius(point1, point2, radius, right_handed):
     """
     Finds the center of a circle with a given radius such that point1 and point2 are on the circumference of the circle.
@@ -13,14 +14,14 @@ def find_center_from_points_and_radius(point1, point2, radius, right_handed):
     y1 = point1.y
     x2 = point2.x
     y2 = point2.y
-    
-    q = sqrt((x2-x1)**2 + (y2-y1)**2)
 
-    y3 = (y1+y2)/2
-    x3 = (x1+x2)/2
+    q = sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-    base_x = sqrt(radius**2-(q/2)**2)*(y1-y2)/q
-    base_y = sqrt(radius**2-(q/2)**2)*(x2-x1)/q
+    y3 = (y1 + y2) / 2
+    x3 = (x1 + x2) / 2
+
+    base_x = sqrt(radius**2 - (q / 2) ** 2) * (y1 - y2) / q
+    base_y = sqrt(radius**2 - (q / 2) ** 2) * (x2 - x1) / q
 
     if right_handed:
         center_x2 = x3 - base_x
@@ -30,4 +31,3 @@ def find_center_from_points_and_radius(point1, point2, radius, right_handed):
         center_x1 = x3 + base_x
         center_y1 = y3 + base_y
         return [center_x1, center_y1]
-

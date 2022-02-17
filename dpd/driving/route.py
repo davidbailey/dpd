@@ -107,8 +107,17 @@ class Route(geopandas.GeoDataFrame):
         ways = [
             osm.ways[member["ref"]].geo
             for member in osm.relations[relation]["members"]
-            if member["type"] == "way" and member["role"] not in ["stop_entry_only","stop_exit_only","platform_entry_only","platform_exit_only","stop","platform"]
+            if member["type"] == "way"
+            and member["role"]
+            not in [
+                "stop_entry_only",
+                "stop_exit_only",
+                "platform_entry_only",
+                "platform_exit_only",
+                "stop",
+                "platform",
             ]
+        ]
         ways_merged = linemerge(ways)
         if type(ways_merged) == MultiLineString:
             longest_length = 0
@@ -176,7 +185,8 @@ class Route(geopandas.GeoDataFrame):
             lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
             lengths.append(0.00001)
             current_time += timedelta(
-                seconds=vehicle.drive_between_stops(speed_limits, lengths)["time"].sum() - 1
+                seconds=vehicle.drive_between_stops(speed_limits, lengths)["time"].sum()
+                - 1
             )  # subtract 1 to cancel out adding the extra speed limit and length
             stop = next_stop
             trip.add_stop(

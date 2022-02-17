@@ -7,7 +7,7 @@ from dpd.driving import StraightSection
 
 class TestStraightSection(unittest.TestCase):
     def test_straight_section(self):
-        straight_section = StraightSection(Point(0,0), Point(1,0))
+        straight_section = StraightSection(Point(0, 0), Point(1, 0))
         self.assertEqual(straight_section.speed_limit, None)
         self.assertEqual(straight_section.geometry.length, 1.0)
 

@@ -53,16 +53,22 @@ class Trip(MovingDict):
             dpd.driving.Trip: a Trip
         """
         trips = feed.trips[
-            (feed.trips["route_id"] == route_id) & (feed.trips["service_id"] == service_id)
+            (feed.trips["route_id"] == route_id)
+            & (feed.trips["service_id"] == service_id)
         ]["trip_id"]
         if not shape_id:
-            shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[0]
+            shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[
+                0
+            ]
         line = feed.build_geometry_by_shape([shape_id])[shape_id]
         aea_line = epsg4326_to_aea(line)
-        
-        @lru_cache(maxsize=128)  # adds a little complexity, but reduces runtime by half :)
+
+        @lru_cache(
+            maxsize=128
+        )  # adds a little complexity, but reduces runtime by half :)
         def stop_id_to_distance_cached(stop_id):
             return trip._stop_id_to_distance(feed, aea_line, stop_id)
+
         trip = Trip()
         for trip_id in trips:
             d = feed.stop_times[feed.stop_times["trip_id"] == trip_id].copy()
@@ -72,10 +78,13 @@ class Trip(MovingDict):
         for index, stop in d.iterrows():
             trip.add_stop(
                 name="",
-                geometry=Point(feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lon"], feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lat"]),
+                geometry=Point(
+                    feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lon"],
+                    feed.stops[feed.stops.stop_id == stop["stop_id"]]["stop_lat"],
+                ),
                 distance=stop["distance"],
                 arrival_time=stop["arrival_time_object"],
-                departure_time=stop["departure_time_object"]
+                departure_time=stop["departure_time_object"],
             )
         return trip
 
@@ -85,8 +94,5 @@ class Trip(MovingDict):
         annotated_stops = []
         for idx, row in geodataframe.iterrows():
             if row["name"] not in annotated_stops:
-                plt.annotate(
-                    text=row["name"],
-                    xy=(idx, row["distance"])
-                )
+                plt.annotate(text=row["name"], xy=(idx, row["distance"]))
             annotated_stops.append(row["name"])
