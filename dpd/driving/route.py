@@ -4,6 +4,7 @@ import folium
 import geopandas
 import numpy as np
 from shapely.geometry import LineString, Point
+from shapely.geometry.multilinestring import MultiLineString
 from shapely.ops import linemerge
 
 from .trip import Trip
@@ -106,9 +107,19 @@ class Route(geopandas.GeoDataFrame):
         ways = [
             osm.ways[member["ref"]].geo
             for member in osm.relations[relation]["members"]
-            if member["type"] == "way" and member["role"] == ""
-        ]
-        way = linemerge(ways)
+            if member["type"] == "way" and member["role"] not in ["stop_entry_only","stop_exit_only","platform_entry_only","platform_exit_only","stop","platform"]
+            ]
+        ways_merged = linemerge(ways)
+        if type(ways_merged) == MultiLineString:
+            longest_length = 0
+            for way in ways_merged:
+                if way.length > longest_length:
+                    longest_length = way.length
+                    longest_way = way
+            way = longest_way
+        else:
+            way = ways_merged
+
         stops = []
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
