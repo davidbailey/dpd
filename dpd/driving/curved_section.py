@@ -1,3 +1,4 @@
+from numpy import sqrt
 from shapely.geometry import LineString
 
 from dpd.geometry import draw_arc
@@ -24,6 +25,6 @@ class CurvedSection:
         number_of_points=16
     ):
         self.geometry = LineString(draw_arc(start_point, end_point, radius_of_curvature, right_handed=right_handed, number_of_points=number_of_points))
-        self.speed_limit = np.sqrt(
+        self.speed_limit = sqrt(
                 9.8 * (max_cant + max_cant_deficiency) * radius_of_curvature / gague
             )
