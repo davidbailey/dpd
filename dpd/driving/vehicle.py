@@ -47,6 +47,12 @@ class Vehicle:
         )
 
     def accelerate_and_go(self, speed_limit, distance):
+        """
+        The case where the vehicle starts a segment slower than the segment's speed limit.
+        Two outcomes: 
+        1. the vehicle accelerates to the segment's speed limit and drives at the speed limit
+        2. the vehicle accelerates, but does not reach the speed limit.
+        """
         accelerate_distance = (speed_limit**2 - self.speed**2) / (
             2 * self.acceleration
         )
