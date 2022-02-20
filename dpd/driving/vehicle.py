@@ -81,7 +81,7 @@ class Vehicle:
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration, intermediate_speed_limit)
         else:
             deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.acceleration)
-            self.accelerate_and_go(intermeidate_speed_limit, distance - deceleration_distance)
+            self.accelerate_and_go(intermediate_speed_limit, distance - deceleration_distance)
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
 
     def fix_overspeed(self, speed_limit, distance, fix_overspeed_distance=0):
