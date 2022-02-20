@@ -36,7 +36,7 @@ class Vehicle:
         """
         Add a segment with constant speed
         """
-        if distance = 0:
+        if distance == 0:
             time = 0
         else:
             time = distance / self.speed
