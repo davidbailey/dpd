@@ -36,7 +36,10 @@ class Vehicle:
         """
         Add a segment with constant speed
         """
-        time = distance / self.speed
+        if distance = 0:
+            time = 0
+        else:
+            time = distance / self.speed
         self.segments.append(
             {
                 "speed_before_segment": self.speed,
