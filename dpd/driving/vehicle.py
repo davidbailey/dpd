@@ -12,7 +12,7 @@ class Vehicle:
         self.acceleration = max_acceleration
         self.deceleration = max_deceleration
 
-    def accelerate_or_decelerate(self, distance, acceleration_or_deceleration):
+    def accelerate_or_decelerate(self, distance, acceleration_or_deceleration, speed_limit):
         """
         Add a segment with constant acceleration (or deceleration
         """
@@ -25,6 +25,7 @@ class Vehicle:
             {
                 "speed_before_segment": speed_before_segment,
                 "speed_after_segment": self.speed,
+                "speed_limit": speed_limit,
                 "distance": distance,
                 "time": time,
                 "acceleration": acceleration_or_deceleration,
@@ -40,6 +41,7 @@ class Vehicle:
             {
                 "speed_before_segment": self.speed,
                 "speed_after_segment": self.speed,
+                "speed_limit": self.speed,
                 "distance": distance,
                 "time": time,
                 "acceleration": 0,
@@ -57,23 +59,30 @@ class Vehicle:
             2 * self.acceleration
         )
         if accelerate_distance <= distance:
-            self.accelerate_or_decelerate(accelerate_distance, self.acceleration)
+            self.accelerate_or_decelerate(accelerate_distance, self.acceleration, speed_limit)
             self.speed = speed_limit
             self.go(distance - accelerate_distance)
         else:
-            self.accelerate_or_decelerate(distance, self.acceleration)
+            self.accelerate_or_decelerate(distance, self.acceleration, speed_limit)
 
-    def accelerate_go_and_decelerate(self, speed, distance, speed_limit):
+    def accelerate_go_and_decelerate(self, speed, distance, intermediate_speed_limit, final_speed_limit):
         """
-        The case where the vehicle accelerates and then immediately decelerates.
+        There are two cases:
+        1. The vehicle never reaches the speed limit of the segment: it accelerates and then decelerates.
+        2. The vehicle reaches the speed limit of segment: it accelerates, goes at the speed limit, then decelerates.
         This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
         And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
         """
-        deceleration_distance = (speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
-        self.accelerate_or_decelerate(
-            distance - deceleration_distance, self.acceleration
-        )
-        self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
+        deceleration_distance = (final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
+        if sqrt(speed**2 + 2 * self.acceleration * (distance - deceleration_distance)) <= intermediate_speed_limit: 
+            self.accelerate_or_decelerate(
+                distance - deceleration_distance, self.acceleration
+            )
+            self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
+         else:
+            deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.acceleration)
+            self.accelerate_and_go(intermeidate_speed_limit, distance - deceleration_distance)
+            self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
 
     def fix_overspeed(self, speed_limit, distance, fix_overspeed_distance=0):
         """
@@ -91,6 +100,7 @@ class Vehicle:
             self.accelerate_go_and_decelerate(
                 last_segment["speed_before_segment"],
                 fix_overspeed_distance,
+                last_segment["speed_limit"],
                 speed_limit,
             )
         else:
