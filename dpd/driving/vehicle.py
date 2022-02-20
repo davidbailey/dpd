@@ -7,13 +7,15 @@ class Vehicle:
     Describes a rail or road vehicle and includes methods to drive it along a line
     """
 
-    def __init__(self, max_speed, max_acceleration, max_deceleration, name=""):
+    def __init__(self, max_speed, max_acceleration, max_deceleration):
         self.max_speed = max_speed
         self.acceleration = max_acceleration
         self.deceleration = max_deceleration
-        self.name = name
 
     def accelerate_or_decelerate(self, distance, acceleration_or_deceleration):
+        """
+        Add a segment with constant acceleration (or deceleration
+        """
         speed_before_segment = self.speed
         self.speed = np.sqrt(
             speed_before_segment**2 + 2 * acceleration_or_deceleration * distance
@@ -30,6 +32,9 @@ class Vehicle:
         )
 
     def go(self, distance):
+        """
+        Add a segment with constant speed
+        """
         time = distance / self.speed
         self.segments.append(
             {
@@ -78,6 +83,9 @@ class Vehicle:
         self.go(distance)
 
     def drive_single_segment(self, speed_limit, distance):
+        """
+        Drives a single segment. Three outcomes: 1. Acceleration 2. Constant speed 3. Speed is greater than the Speed Limit and will be fixed.
+        """
         speed_limit = min(speed_limit, self.max_speed)
         if self.speed < speed_limit:
             self.accelerate_and_go(speed_limit, distance)
