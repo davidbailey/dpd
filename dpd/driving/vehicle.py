@@ -79,7 +79,7 @@ class Vehicle:
                 distance - deceleration_distance, self.acceleration
             )
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
-         else:
+        else:
             deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.acceleration)
             self.accelerate_and_go(intermeidate_speed_limit, distance - deceleration_distance)
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration)
