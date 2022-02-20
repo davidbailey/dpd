@@ -66,10 +66,10 @@ class Vehicle:
     def accelerate_and_decelerate(self, speed, distance, speed_limit):
         """
         The case where the vehicle accelerates and then immediately decelerates.
+        This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
+        And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
         """
-        deceleration_distance = (
-            2 * self.acceleration * distance + speed**2 - speed_limit**2
-        ) / (2 * (self.acceleration - self.deceleration))
+        deceleration_distance = (speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
         self.accelerate_or_decelerate(
             distance - deceleration_distance, self.acceleration
         )
