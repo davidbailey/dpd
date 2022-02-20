@@ -90,9 +90,10 @@ class Vehicle:
                 index
             )
         else:
-            self.fix_overspeed(speed_limit, distance, index, fix_overspeed_distance)
+            self.fix_overspeed(speed_limit, 0, index, fix_overspeed_distance)
         self.speed = speed_limit
-        self.go(distance, index)
+        if distance:
+            self.go(distance, index)
 
     def drive_single_segment(self, speed_limit, distance, index):
         """
