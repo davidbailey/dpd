@@ -24,15 +24,12 @@ jobs:
       run: |
         sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
         python -m pip install --upgrade pip
-        pip install flake8 pytest cartopy==0.19.0.post1
+        pip install cartopy==0.19.0.post1
         pip install -r requirements.txt
-    - name: Lint with flake8
+    - name: Lint with black, flake8, bandit
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         black --check .
+        flake8
         bandit -r .
     - name: Test with pytest
       run: |
