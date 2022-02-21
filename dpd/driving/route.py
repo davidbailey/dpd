@@ -102,7 +102,7 @@ class Route(GeoDataFrame):
                 {
                     "distance": [0, 0],
                     "time": [0, dwell_time],
-                    "name": [self.stops.name[0], self.stops.name[0]],
+                    "name": [self.stops.name.iloc[0], self.stops.name.iloc[0]],
                 }
             ),
         ]
