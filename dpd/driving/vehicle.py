@@ -12,7 +12,9 @@ class Vehicle:
         self.acceleration = max_acceleration
         self.deceleration = max_deceleration
 
-    def accelerate_or_decelerate(self, distance, acceleration_or_deceleration, speed_limit):
+    def accelerate_or_decelerate(
+        self, distance, acceleration_or_deceleration, speed_limit
+    ):
         """
         Add a segment with constant acceleration (or deceleration
         """
@@ -58,7 +60,7 @@ class Vehicle:
     def accelerate_and_go(self, speed_limit, distance):
         """
         The case where the vehicle starts a segment slower than the segment's speed limit.
-        Two outcomes: 
+        Two outcomes:
         1. the vehicle accelerates to the segment's speed limit and drives at the speed limit
         2. the vehicle accelerates, but does not reach the speed limit.
         """
@@ -66,13 +68,17 @@ class Vehicle:
             2 * self.acceleration
         )
         if accelerate_distance <= distance:
-            self.accelerate_or_decelerate(accelerate_distance, self.acceleration, speed_limit)
+            self.accelerate_or_decelerate(
+                accelerate_distance, self.acceleration, speed_limit
+            )
             self.speed = speed_limit
             self.go(distance - accelerate_distance)
         else:
             self.accelerate_or_decelerate(distance, self.acceleration, speed_limit)
 
-    def accelerate_go_and_decelerate(self, speed, distance, intermediate_speed_limit, final_speed_limit):
+    def accelerate_go_and_decelerate(
+        self, speed, distance, intermediate_speed_limit, final_speed_limit
+    ):
         """
         There are two cases:
         1. The vehicle never reaches the speed limit of the segment: it accelerates and then decelerates.
@@ -80,17 +86,34 @@ class Vehicle:
         This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
         And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
         """
-        deceleration_distance = (final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
+        deceleration_distance = (
+            final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance
+        ) / (2 * (self.deceleration - self.acceleration))
         self.speed = speed
-        if np.sqrt(speed**2 + 2 * self.acceleration * (distance - deceleration_distance)) <= intermediate_speed_limit: 
-            self.accelerate_or_decelerate(
-                distance - deceleration_distance, self.acceleration, intermediate_speed_limit
+        if (
+            np.sqrt(
+                speed**2 + 2 * self.acceleration * (distance - deceleration_distance)
             )
-            self.accelerate_or_decelerate(deceleration_distance, self.deceleration, intermediate_speed_limit)
+            <= intermediate_speed_limit
+        ):
+            self.accelerate_or_decelerate(
+                distance - deceleration_distance,
+                self.acceleration,
+                intermediate_speed_limit,
+            )
+            self.accelerate_or_decelerate(
+                deceleration_distance, self.deceleration, intermediate_speed_limit
+            )
         else:
-            deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.deceleration)
-            self.accelerate_and_go(intermediate_speed_limit, distance - deceleration_distance)
-            self.accelerate_or_decelerate(deceleration_distance, self.deceleration, intermediate_speed_limit)
+            deceleration_distance = (
+                final_speed_limit**2 - intermediate_speed_limit**2
+            ) / (2 * self.deceleration)
+            self.accelerate_and_go(
+                intermediate_speed_limit, distance - deceleration_distance
+            )
+            self.accelerate_or_decelerate(
+                deceleration_distance, self.deceleration, intermediate_speed_limit
+            )
 
     def fix_overspeed(self, speed_limit, distance, fix_overspeed_distance=0):
         """

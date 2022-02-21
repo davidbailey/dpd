@@ -10,9 +10,7 @@ def draw_arc(start_point, end_point, radius, right_handed, number_of_points):
     center = find_center_from_points_and_radius(
         start_point, end_point, radius, right_handed=right_handed
     )
-    chord = numpy.linspace(
-        start_point, end_point, number_of_points
-    )
+    chord = numpy.linspace(start_point, end_point, number_of_points)
     vectors = chord - center
     magnitudes = numpy.linalg.norm(vectors, axis=1)
     factors = radius / magnitudes
