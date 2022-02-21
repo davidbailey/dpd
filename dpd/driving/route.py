@@ -93,11 +93,11 @@ class Route(GeoDataFrame):
             speed_limits.append(speed_limits_mapped[-1])
             return speed_limits
 
-    def drive(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1)):
+    def drive(self, vehicle, dwell_time):
         self.to_crs("North America Albers Equal Area Conic", inplace=True)
         distances = self.distances
         speed_limits = self.speed_limits
-        trip = [
+        segments = [
             DataFrame.from_dict(
                 {
                     "distance": [0, 0],
@@ -107,14 +107,14 @@ class Route(GeoDataFrame):
             ),
         ]
         for i in range(len(self.stops.index) - 1):
-            trip.append(
+            segments.append(
                 vehicle.drive_between_stops(
                     speed_limits[self.stops.index[i] : self.stops.index[i + 1] - 1]
                     + [0],
                     distances[self.stops.index[i] : self.stops.index[i + 1] - 1] + [0],
                 )
             )
-            trip.append(
+            segments.append(
                 DataFrame.from_dict(
                     {
                         "distance": [0, 0],
@@ -126,7 +126,10 @@ class Route(GeoDataFrame):
                     }
                 )
             )
-        trip = concat(trip, ignore_index=True)
+        return concat(segments, ignore_index=True)
+    
+    def trip(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1)):
+        trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
         trip["timedelta"] = trip.total_time.map(lambda x: timedelta(seconds=x))
         trip["datetime"] = trip.timedelta + start_time

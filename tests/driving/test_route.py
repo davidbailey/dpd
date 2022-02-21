@@ -11,19 +11,9 @@ osm.download_relation(relation)
 
 class TestRoute(unittest.TestCase):
     def test_route(self):
-        self.vehicle = Vehicle(24.5872, 1.3, -1.3, name="max_speed_55_mph_vehicle")
-        self.route = Route.from_osm(osm, relation, tolerance=10)
-        self.route.add_vehicle(self.vehicle)
-        self.assertAlmostEqual(
-            51.0,
-            (
-                self.route[self.route.stop_name != ""]["time_to_next_stop"].sum()
-                + self.route.dwell_time.sum()
-                - 45
-            )
-            / 60,
-            delta=1,
-        )
+        self.vehicle = Vehicle(24.5872, .5, -.5)
+        self.route = Route.from_osm_relation(osm, relation)
+        self.trip = self.route.drive(self.vehicle, 45)
 
 
 if __name__ == "__main__":
