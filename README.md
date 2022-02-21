@@ -1,6 +1,7 @@
 # dpd
 
-[![Build Status](https://travis-ci.com/davidbailey/dpd.svg?branch=trunk)](https://travis-ci.com/davidbailey/dpd)
+[![Build Status](https://github.com/davidbailey/dpd/actions/workflows/python-app/badge.svg)]
+
 [![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=trunk)](https://coveralls.io/github/davidbailey/dpd?branch=trunk)
 [![Documentation Status](https://readthedocs.org/projects/dpd/badge/?version=latest)](https://dpd.readthedocs.io/en/latest/?badge=latest)
 
