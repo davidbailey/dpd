@@ -76,7 +76,7 @@ class Vehicle:
         This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
         And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
         """
-        deceleration_distance = (2 * self.acceleration * distance + speed**2 - final_speed_limit**2) / (2 * (self.acceleration - self.deceleration))
+        deceleration_distance = (final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
         if np.sqrt(speed**2 + 2 * self.acceleration * (distance - deceleration_distance)) <= intermediate_speed_limit: 
             self.accelerate_or_decelerate(
                 distance - deceleration_distance, self.acceleration, intermediate_speed_limit
