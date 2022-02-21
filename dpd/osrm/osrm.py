@@ -34,13 +34,13 @@ class OSRM:
         if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm"):
             self.extract()
         logging.info("Contracting " + self.filename)
-        return subprocess.run(
+        return subprocess.run(  # nosec
             ["osrm-contract", self.filename], *args, **kwargs
-        )  # nosec
+        )
 
     def routed(self, *args, **kwargs):
         if not os.path.isfile(self.filename.split(".osm.pbf")[0] + ".osrm.hsgr"):
             self.contract()
-        return subprocess.Popen(
+        return subprocess.Popen(  # nosec
             ["osrm-routed", self.filename], *args, **kwargs
-        )  # nosec
+        )
