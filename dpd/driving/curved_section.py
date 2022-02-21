@@ -20,7 +20,7 @@ class CurvedSection:
         start_point,
         end_point,
         radius_of_curvature,
-        right_handed=True,
+        right_handed,
         max_cant=0.1524,
         max_cant_deficiency=0.075,
         gague=1.435,
@@ -28,8 +28,8 @@ class CurvedSection:
     ):
         self.geometry = LineString(
             draw_arc(
-                start_point,
-                end_point,
+                (start_point.coords[0]),
+                (end_point.coords[0]),
                 radius_of_curvature,
                 right_handed=right_handed,
                 number_of_points=number_of_points,

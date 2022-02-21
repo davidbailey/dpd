@@ -17,9 +17,13 @@ class Vehicle:
         Add a segment with constant acceleration (or deceleration
         """
         speed_before_segment = self.speed
-        self.speed = np.sqrt(
-            speed_before_segment**2 + 2 * acceleration_or_deceleration * distance
-        )
+        if 0 > speed_before_segment**2 + 2 * acceleration_or_deceleration * distance:
+            # this can be very close to zero, but negative which results in nan below
+            self.speed = 0
+        else:
+            self.speed = np.sqrt(
+                speed_before_segment**2 + 2 * acceleration_or_deceleration * distance
+            )
         time = (self.speed - speed_before_segment) / acceleration_or_deceleration
         self.segments.append(
             {
@@ -76,14 +80,15 @@ class Vehicle:
         This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
         And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
         """
-        deceleration_distance = (2 * self.acceleration * distance + speed**2 - final_speed_limit**2) / (2 * (self.acceleration - self.deceleration))
+        deceleration_distance = (final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance) / (2 * (self.deceleration - self.acceleration))
+        self.speed = speed
         if np.sqrt(speed**2 + 2 * self.acceleration * (distance - deceleration_distance)) <= intermediate_speed_limit: 
             self.accelerate_or_decelerate(
                 distance - deceleration_distance, self.acceleration, intermediate_speed_limit
             )
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration, intermediate_speed_limit)
         else:
-            deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.acceleration)
+            deceleration_distance = (final_speed_limit**2 - intermediate_speed_limit**2) / (2 * self.deceleration)
             self.accelerate_and_go(intermediate_speed_limit, distance - deceleration_distance)
             self.accelerate_or_decelerate(deceleration_distance, self.deceleration, intermediate_speed_limit)
 

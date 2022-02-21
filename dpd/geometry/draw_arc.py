@@ -11,7 +11,7 @@ def draw_arc(start_point, end_point, radius, right_handed, number_of_points):
         start_point, end_point, radius, right_handed=right_handed
     )
     chord = numpy.linspace(
-        [start_point.x, start_point.y], [end_point.x, end_point.y], number_of_points
+        start_point, end_point, number_of_points
     )
     vectors = chord - center
     magnitudes = numpy.linalg.norm(vectors, axis=1)
