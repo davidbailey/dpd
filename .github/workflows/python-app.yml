@@ -22,7 +22,7 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev
+        sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install -r requirements.txt
