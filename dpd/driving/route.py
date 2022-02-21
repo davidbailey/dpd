@@ -127,7 +127,7 @@ class Route(GeoDataFrame):
                 )
             )
         return concat(segments, ignore_index=True)
-    
+
     def trip(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1)):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
