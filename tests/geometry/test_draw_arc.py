@@ -1,7 +1,7 @@
 from math import pi
 import unittest
 
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Point
 
 from dpd.geometry import draw_arc
 
