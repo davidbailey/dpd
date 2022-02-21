@@ -1,109 +1,114 @@
-from datetime import datetime, timedelta
-
-import folium
-import geopandas
-import numpy as np
-from shapely.geometry import LineString, Point
-from shapely.geometry.multilinestring import MultiLineString
+from geopandas import GeoDataFrame
+from numpy import sqrt
+from pandas import concat, DataFrame
+from pyproj import CRS
+from shapely.geometry import MultiLineString, Point
 from shapely.ops import linemerge
 
-from .trip import Trip
+
 from dpd.geometry import circle_from_three_circumference_points
-from dpd.utils import epsg4326_to_aea
 
-
-class Route(geopandas.GeoDataFrame):
+class Route(GeoDataFrame):
     """
-    A way to keep track of all the points that make up a route. We can then calculate their radius of curvature and their speed limit. Then we can have a vehicle drive the route to give us an idea of travel time.
+    the route a vehicle takes
     """
 
-    def __init__(
-        self,
-        way,
-        stops=[],
-        tolerance=None,
-        max_cant=0.1524,
-        max_cant_deficiency=0.075,
-        gague=1.435,
-    ):
+    def __init__(self, data, gague=1.435, max_cant=0.1524, max_cant_deficiency=0.075, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
+        self.gague = gague
+        self.max_cant = max_cant
+        self.max_cant_deficiency = max_cant_deficiency
+        
+    @property
+    def stops(self):
+        return self[self["name"].notnull()]
+    
+    @property
+    def distances(self):
         """
-        Args:
-            way (shapely.geometry.LineString): a LineString that contains the route the vehicle follows in EPSG:4326
-            stops ([{"geo": shapely.geometry.Point, "name": str}]): a list of "stops" that have a name and a geometry
-            tolerance (int): the minimum distance (in meters) for which to keep neighboring stops so they do not create unrealistic curves
-            max_cant: (float): the maximum allowable cant (in meters)
-            max_cant_deficiency (float): the maximum allowable cant deficiency (in meters)
-            gague (float): the track gague (in meters)
-
-        Returns:
-            dpd.driving.Route: a route table
+        Returns a list of distances between every pair of points along the route.
+        The length of the list is one less than the number of points on the route.
         """
-        aea_way = epsg4326_to_aea(way)
-        index = list(map(str, zip(way.xy[0], way.xy[1])))
-        geometry = list(map(Point, zip(aea_way.xy[0], aea_way.xy[1])))
-        super().__init__(geometry, columns=["geometry"], index=index)
-        self.crs = "North America Albers Equal Area Conic"
-        self["stop_name"] = ""
-        for stop in stops:
-            self.at[stop["geo"], "stop_name"] = stop["name"]
-        self["after_geometry"] = self["geometry"].shift(-1)
-        self["distance_to_next_point"] = self.apply(
-            lambda row: None
-            if not row["after_geometry"]
-            else LineString([row["geometry"], row["after_geometry"]]).length,
-            axis=1,
-        )
-        if (
-            tolerance
-        ):  # not perfect (e.g. it is possible we will compeltely remove a segment where there are many close points and we really wanted to keep one or two)
-            self.drop(
-                self[
-                    (self["distance_to_next_point"] < tolerance)
-                    & (self["stop_name"] == "")
-                ].index,
-                inplace=True,
-            )
-            self["after_geometry"] = self["geometry"].shift(-1)
-            self["distance_to_next_point"] = self.apply(
-                lambda row: None
-                if not row["after_geometry"]
-                else LineString([row["geometry"], row["after_geometry"]]).length,
-                axis=1,
-            )
-        self["total_distance_to_this_point"] = (
-            self["distance_to_next_point"].shift(1).cumsum().fillna(0)
-        )
-        self["before_geometry"] = self["geometry"].shift(1)
-        self["radius_of_curvature"] = self.apply(
-            lambda row: 5000
-            if row["before_geometry"] is None or row["after_geometry"] is None
-            else circle_from_three_circumference_points(
-                (row["before_geometry"].x, row["before_geometry"].y),
-                (row["geometry"].x, row["geometry"].y),
-                (row["after_geometry"].x, row["after_geometry"].y),
-            )[1],
-            axis=1,
-        )
-        self["speed_limit"] = self["radius_of_curvature"].apply(
-            lambda radius_of_curvature: np.sqrt(
-                9.8 * (max_cant + max_cant_deficiency) * radius_of_curvature / gague
-            )
-        )
-        self.max_cant: float = max_cant
-        self.max_cant_deficiency: float = max_cant_deficiency
-        self.gague: float = gague
-
-    def from_osm(osm, relation, *args, **kwargs):
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        distances = []
+        for i in range(len(self) - 1):
+            distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i+1]))
+        return distances
+    
+    @property
+    def radius_of_curvature(self):
         """
-        A way to build a route from OpenStreetMaps data
+        Returns a list of the radii of curvature between every three points along the route.
+        The lenght of the list is two less than the number of points on the route.
+        """
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        radius_of_curvature = []
+        for i in range(len(self) - 2):
+            radius_of_curvature.append(circle_from_three_circumference_points(
+                (self.geometry.iloc[i].x, self.geometry.iloc[i].y),
+                (self.geometry.iloc[i+1].x, self.geometry.iloc[i+1].y),
+                (self.geometry.iloc[i+2].x, self.geometry.iloc[i+2].y)
+            )[1])
+        return radius_of_curvature
 
+    def speed_limit(self, radius_of_curvature):
+        return sqrt(9.8 * (self.max_cant + self.max_cant_deficiency) * radius_of_curvature / self.gague)
+    
+    @property
+    def speed_limits(self, which_radius="both"):
+        """
+        Returns a list of maximum speeds between every pair of points along the route based on the radius of curvature.
+        The length of the list is one less than the number of points on the route.
+        """
+        radius_of_curvature = self.radius_of_curvature
+        speed_limits_mapped = list(map(self.speed_limit, radius_of_curvature))
+        if which_radius == "first":
+            return [None] + speed_limits_mapped
+        elif which_radius == "last":
+            return speed_limits_mapped + [None]
+        elif which_radius == "both":
+            speed_limits = [speed_limits_mapped[0]]
+            for i in range(len(speed_limits_mapped) - 1):
+                speed_limits.append(min(speed_limits_mapped[i], speed_limits_mapped[i+1]))
+            speed_limits.append(speed_limits_mapped[-1])
+            return speed_limits
+
+
+    def drive(self, vehicle, dwell_time, start_time=datetime(1970,1,1)):
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        distances = self.distances
+        speed_limits = self.speed_limits
+        trip = [
+            DataFrame.from_dict({"distance": [0, 0], "time": [0, dwell_time], "name": [self.stops.name[0], self.stops.name[0]]}),
+        ]
+        for i in range(len(self.stops.index) - 1):
+            trip.append(vehicle.drive_between_stops(
+                speed_limits[self.stops.index[i]:self.stops.index[i+1]-1] + [0],
+                distances[self.stops.index[i]:self.stops.index[i+1]-1] + [0]
+            ))
+            trip.append(DataFrame.from_dict({"distance": [0, 0], "time": [0, dwell_time], "name": [self.stops.name[self.stops.index[i+1]], self.stops.name[self.stops.index[i+1]]]}))
+        trip = concat(trip, ignore_index=True)
+        trip["total_time"] = trip.time.cumsum()
+        trip["timedelta"] = trip.total_time.map(lambda x: timedelta(seconds=x))
+        trip["datetime"] = trip.timedelta + start_time
+        trip["total_distance"] = trip.distance.cumsum()
+        trip.set_index("datetime", inplace=True)
+        return trip
+
+
+    def from_gtfs(gtfs, *args, **kwargs):
+        pass
+
+    def from_osm_relation(osm, relation, *args, **kwargs):
+        """
+        Build a route from OpenStreetMaps data
         Args:
             osm (dpd.OSM.osm): the osm that contains the route as a relation
             relation (int): the relation to build a route for
         Returns:
-            dpd.driving.Route: a route table
+            dpd.driving.Route: a route to drive
         """
-
+        route = []
         ways = [
             osm.ways[member["ref"]].geo
             for member in osm.relations[relation]["members"]
@@ -119,7 +124,7 @@ class Route(geopandas.GeoDataFrame):
             ]
         ]
         ways_merged = linemerge(ways)
-        if type(ways_merged) == MultiLineString:
+        if type(ways_merged) == MultiLineString: # the relation may contain multiple, disconnected ways: pick the longest one
             longest_length = 0
             for way in ways_merged:
                 if way.length > longest_length:
@@ -128,79 +133,11 @@ class Route(geopandas.GeoDataFrame):
             way = longest_way
         else:
             way = ways_merged
-
-        stops = []
+        for i in range(len(way.coords)):
+            route.append({"geometry": Point(way.coords[i][0], way.coords[i][1])})
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
-                stops.append(
-                    {
-                        "geo": str(
-                            (
-                                osm.nodes[member["ref"]].geo.xy[0][0],
-                                osm.nodes[member["ref"]].geo.xy[1][0],
-                            )
-                        ),
-                        "name": osm.nodes[member["ref"]].osm["tags"]["name"],
-                    }
-                )
-        return Route(way, stops, *args, **kwargs)
-
-    def drive_vehicle(
-        self,
-        vehicle,
-        buffer=0.0,
-        dwell_time=timedelta(seconds=0),
-        start_time=datetime.now(),
-    ):
-        """
-        A way to have a vehicle "drive" along a route to generate the time between stops
-
-        Args:
-            vehicle (dpd.driving.Vehicle): the vehicle to drive along the route
-            buffer (float): a multiplier to control for timetable padding
-            dwell_time (datetime.timedelta): the dwell time for each stop
-            start_time (datetime.datetime): the time to start the trip
-        """
-        trip = Trip()
-        stops = self[self.stop_name != ""].index.values.tolist()
-        stop = stops.pop(0)
-        trip.add_stop(
-            geometry=self["geometry"][stop],
-            name=self["stop_name"][stop],
-            distance=0,
-            arrival_time=start_time,
-        )
-        current_time = start_time + dwell_time
-        trip.add_stop(
-            geometry=self["geometry"][stop],
-            name=self["stop_name"][stop],
-            distance=0,
-            departure_time=current_time,
-        )
-        for next_stop in stops:
-            speed_limits = list(self[stop:next_stop].speed_limit)[:-1]
-            speed_limits.append(
-                0.00001
-            )  # if we have a speed_limit of 0, we get a division by zero error, but the vehicle should be going close to 0 at the stop.
-            lengths = list(self[stop:next_stop].distance_to_next_point)[:-1]
-            lengths.append(0.00001)
-            current_time += timedelta(
-                seconds=vehicle.drive_between_stops(speed_limits, lengths)["time"].sum()
-                - 1
-            )  # subtract 1 to cancel out adding the extra speed limit and length
-            stop = next_stop
-            trip.add_stop(
-                geometry=self["geometry"][stop],
-                name=self["stop_name"][stop],
-                distance=self["total_distance_to_this_point"][stop],
-                arrival_time=current_time,
-            )
-            current_time += dwell_time
-            trip.add_stop(
-                geometry=self["geometry"][stop],
-                name=self["stop_name"][stop],
-                distance=self["total_distance_to_this_point"][stop],
-                departure_time=current_time,
-            )
-        trip.crs = self.crs
-        return trip
+                for item in route:
+                    if item["geometry"] == osm.nodes[member["ref"]].geo:
+                        item["name"] = osm.nodes[member["ref"]].osm["tags"]["name"]
+        route = Route(route, crs = CRS.from_epsg(4326), *args, **kwargs)
