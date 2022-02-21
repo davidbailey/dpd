@@ -142,4 +142,4 @@ class Route(GeoDataFrame):
                 for item in route:
                     if item["geometry"] == osm.nodes[member["ref"]].geo:
                         item["name"] = osm.nodes[member["ref"]].osm["tags"]["name"]
-        route = Route(route, crs = CRS.from_epsg(4326), *args, **kwargs)
+        return Route(route, crs = CRS.from_epsg(4326), *args, **kwargs)
