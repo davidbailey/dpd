@@ -14,8 +14,8 @@ end_point = Point(radius, 0)
 class TestDrawArc(unittest.TestCase):
     def test_draw_arc(self):
         arc = draw_arc(
-            start_point,
-            end_point,
+            (start_point.x, start_point.y),
+            (end_point.x, end_point.y),
             radius=radius,
             right_handed=True,
             number_of_points=16,
