@@ -32,7 +32,7 @@ jobs:
         bandit -r .
     - name: Test with pytest
       run: |
-        pytest --cov=dpd
+        coverage run --source=dpd -m pytest tests/
     - name: Publish to coveralls.io
       run: |
         pip install --upgrade coveralls
