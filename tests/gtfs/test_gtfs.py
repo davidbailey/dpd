@@ -12,7 +12,7 @@ class TestGTFS(unittest.TestCase):
         )
         self.assertEqual(self.feed.agency["agency_id"][0], "SRTD")
         self.type_zero_stops = get_stops_by_route_type(self.feed, 0)
-        self.assertEqual(len(self.type_zero_stops), 102)
+        self.assertEqual(len(self.type_zero_stops), 104)
         plot_schedule(self.feed, "533", "1")
 
 
