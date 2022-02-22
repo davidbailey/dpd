@@ -35,7 +35,6 @@ jobs:
         coverage run --source=dpd -m pytest tests/
     - name: Publish to coveralls.io
       run: |
-        pip install --upgrade coveralls
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
