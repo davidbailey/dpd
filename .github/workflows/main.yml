@@ -30,7 +30,6 @@ jobs:
     - name: Lint with black, flake8, bandit
       run: |
         black --check .
-        flake8 --config .flake8
         bandit -r .
     - name: Test with pytest
       run: |
