@@ -35,7 +35,7 @@ jobs:
         pytest --cov=dpd
     - name: Covert to lcov
       run: |
-        coveragepy-lcov
+        coverage lcov
     - name: Publish to coveralls.io
       uses: coverallsapp/github-action@v1.1.2
       with:
