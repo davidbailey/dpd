@@ -36,6 +36,6 @@ jobs:
     - name: Publish to coveralls.io
       run: |
         pip install --upgrade coveralls
-        coveralls --finish --service=github
+        coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
