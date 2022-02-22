@@ -30,6 +30,7 @@ jobs:
       run: |
         black --check .
         bandit -r .
+        flake8
     - name: Test with pytest
       run: |
         coverage run --source=dpd -m pytest tests/
