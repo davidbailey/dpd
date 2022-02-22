@@ -21,7 +21,7 @@ class TestDrawArc(unittest.TestCase):
             number_of_points=16,
         )
         linestring = LineString(arc)
-        self.assertAlmostEqual(linestring.length, pi * 2 * radius / 4)
+        self.assertAlmostEqual(linestring.length, pi * 2 * radius / 4, 1)
 
 
 if __name__ == "__main__":
