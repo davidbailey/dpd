@@ -1,7 +1,16 @@
 version: 2
 formats: []
-dependencies:
-  - libgdal-dev
+
+build:
+  image: latest
+  apt_packages:
+    - python3-dev
+    - libproj-dev
+    - proj-data
+    - proj-bin
+    - libgeos-dev
+    - gdal-bin
+    - libgdal-dev
 python:
   version: 3
   install:
