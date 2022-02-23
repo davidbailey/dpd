@@ -1,6 +1,7 @@
 ipykernel
 nbsphinx
 
+cartopy==0.19.0.post1
 astropy
 black
 bs4
