@@ -109,7 +109,7 @@ class Route(GeoDataFrame):
         for i in range(len(self.stops.index) - 1):
             segments.append(
                 vehicle.drive_between_stops(
-                    speed_limits[self.stops.index[i] : self.stops.index[i + 1] - 1]
+                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]]
                     + [0],
                     distances[self.stops.index[i] : self.stops.index[i + 1] - 1] + [0],
                 )
