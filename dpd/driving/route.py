@@ -136,6 +136,18 @@ class Route(GeoDataFrame):
         trip.set_index("datetime", inplace=True)
         return trip
 
+    def add_stop(self, geometry, name):
+        """
+        Adds a stop at the given geometry named name.
+        """
+        self.loc[self.geometry == geometry, "name"] = name
+
+    def remove_stop(self, name):
+        """
+        Removes all stos named name.
+        """
+        self.loc[self.name == name, "name"] = None
+
     def from_gtfs(gtfs, *args, **kwargs):
         pass
 
