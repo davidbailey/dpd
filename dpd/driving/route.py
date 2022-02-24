@@ -199,7 +199,7 @@ class Route(GeoDataFrame):
         route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
         for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]]["stop_id"]:
             stop = feed.stops[feed.stops.stop_id == stop_id]
-            route.add_stop(Point(stop.stop_lon, stop.stop_lat), stop.stop_name)
+            route.add_stop(Point(stop.stop_lon, stop.stop_lat), stop.stop_name.iloc[0])
         return route
 
     def from_osm_relation(osm, relation, *args, **kwargs):
