@@ -34,7 +34,7 @@ class Route(GeoDataFrame):
     @property
     def stops(self):
         return self[self["name"].notnull()]
-    
+
     @property
     def way(self):
         return LineString(self["geometry"])
@@ -134,11 +134,18 @@ class Route(GeoDataFrame):
 
     def _trip_geometry(self, row):
         if row.distance:
-            return LineString([self.way.interpolate(row.total_distance), self.way.interpolate(row.total_distance - row.distance)])
+            return LineString(
+                [
+                    self.way.interpolate(row.total_distance),
+                    self.way.interpolate(row.total_distance - row.distance),
+                ]
+            )
         else:
             return self.way.interpolate(row.total_distance)
 
-    def trip(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False):
+    def trip(
+        self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False
+    ):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
         trip["timedelta"] = trip.total_time.map(lambda x: timedelta(seconds=x))
@@ -214,7 +221,7 @@ class Route(GeoDataFrame):
             if member["type"] == "node":
                 route.add_stop(
                     osm.nodes[member["ref"]].geo,
-                    osm.nodes[member["ref"]].osm["tags"]["name"]
+                    osm.nodes[member["ref"]].osm["tags"]["name"],
                 )
         return route
 
@@ -225,4 +232,6 @@ class Route(GeoDataFrame):
             self.stops[["name", "geometry"]].to_json(), tooltip=tooltip
         )
         geojson.add_to(folium_map)
-        folium.PolyLine(list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))).add_to(folium_map)
+        folium.PolyLine(
+            list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))
+        ).add_to(folium_map)
