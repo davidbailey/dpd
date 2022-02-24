@@ -197,6 +197,9 @@ class Route(GeoDataFrame):
             shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[0]
         line = feed.build_geometry_by_shape([shape_id])[shape_id]
         route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
+        for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]]["stop_id"]:
+            stop = feed.stops[feed.stops.stop_id == stop_id]
+            route.add_stop(Point(stop.stop_lon, stop.stop_lat), stop.stop_name)
         return route
 
     def from_osm_relation(osm, relation, *args, **kwargs):
