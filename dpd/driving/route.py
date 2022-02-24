@@ -138,14 +138,15 @@ class Route(GeoDataFrame):
         else:
             return self.way.interpolate(row.total_distance)
 
-    def trip(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1)):
+    def trip(self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
         trip["timedelta"] = trip.total_time.map(lambda x: timedelta(seconds=x))
         trip["datetime"] = trip.timedelta + start_time
         trip["total_distance"] = trip.distance.cumsum()
         trip.set_index("datetime", inplace=True)
-        trip["geometry"] = trip.apply(lambda row: self._trip_geometry(row), axis=1)
+        if geometry:
+            trip["geometry"] = trip.apply(lambda row: self._trip_geometry(row), axis=1)
         return GeoDataFrame(trip, crs=self.crs)
 
     def add_stop(self, geometry, name):
