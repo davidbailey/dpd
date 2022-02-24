@@ -148,6 +148,27 @@ class Route(GeoDataFrame):
         """
         self.loc[self.name == name, "name"] = None
 
+    def from_way(way, crs, *args, **kwargs):
+        route = []
+        for i in range(len(way.coords)):
+            route.append({"geometry": Point(way.coords[i][0], way.coords[i][1])})
+        return Route(route, crs=crs, *args, **kwargs)
+
+    def from_ways(ways, crs, *args, **kwargs):
+        ways_merged = linemerge(ways)
+        if (
+            type(ways_merged) == MultiLineString
+        ):  # there are multiple, disconnected ways: pick the longest one
+            longest_length = 0
+            for way in ways_merged:
+                if way.length > longest_length:
+                    longest_length = way.length
+                    longest_way = way
+            way = longest_way
+        else:
+            way = ways_merged
+        return Route.from_way(way, crs=crs, *args, **kwargs)
+
     def from_gtfs(gtfs, *args, **kwargs):
         pass
 
@@ -175,23 +196,11 @@ class Route(GeoDataFrame):
                 "platform",
             ]
         ]
-        ways_merged = linemerge(ways)
-        if (
-            type(ways_merged) == MultiLineString
-        ):  # the relation may contain multiple, disconnected ways: pick the longest one
-            longest_length = 0
-            for way in ways_merged:
-                if way.length > longest_length:
-                    longest_length = way.length
-                    longest_way = way
-            way = longest_way
-        else:
-            way = ways_merged
-        for i in range(len(way.coords)):
-            route.append({"geometry": Point(way.coords[i][0], way.coords[i][1])})
+        route = Route.from_ways(ways, crs=CRS.from_epsg(4326), *args, **kwargs
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
-                for item in route:
-                    if item["geometry"] == osm.nodes[member["ref"]].geo:
-                        item["name"] = osm.nodes[member["ref"]].osm["tags"]["name"]
-        return Route(route, crs=CRS.from_epsg(4326), *args, **kwargs)
+                route.add_stop(
+                    osm.nodes[member["ref"]].geo,
+                    osm.nodes[member["ref"]].osm["tags"]["name"]
+                )
+        return route
