@@ -163,7 +163,10 @@ class Route(GeoDataFrame):
         if geometry in list(self.geometry):
             self.loc[self.geometry == geometry, "name"] = name
         else:
-            self.loc[self.geometry == nearest_points(MultiPoint(self.geometry), geometry)[0], "name"] = name
+            self.loc[
+                self.geometry == nearest_points(MultiPoint(self.geometry), geometry)[0],
+                "name",
+            ] = name
 
     def remove_stop(self, name):
         """
@@ -194,13 +197,18 @@ class Route(GeoDataFrame):
 
     def from_gtfs(feed, route_id, service_id, shape_id=None, *args, **kwargs):
         trips = feed.trips[
-            (feed.trips["route_id"] == route_id) & (feed.trips["service_id"] == service_id)
+            (feed.trips["route_id"] == route_id)
+            & (feed.trips["service_id"] == service_id)
         ]["trip_id"]
         if not shape_id:
-            shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[0]
+            shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[
+                0
+            ]
         line = feed.build_geometry_by_shape([shape_id])[shape_id]
         route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
-        for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]]["stop_id"]:
+        for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]][
+            "stop_id"
+        ]:
             stop = feed.stops[feed.stops.stop_id == stop_id]
             route.add_stop(Point(stop.stop_lon, stop.stop_lat), stop.stop_name.iloc[0])
         return route
