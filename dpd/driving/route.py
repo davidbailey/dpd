@@ -4,7 +4,7 @@ from geopandas import GeoDataFrame
 from numpy import sqrt
 from pandas import concat, DataFrame
 from pyproj import CRS
-from shapely.geometry import MultiLineString, Point
+from shapely.geometry import LineString, MultiLineString, Point
 from shapely.ops import linemerge
 
 
@@ -33,6 +33,10 @@ class Route(GeoDataFrame):
     @property
     def stops(self):
         return self[self["name"].notnull()]
+    
+    @property
+    def way(self):
+        return LineString(self["geometry"])
 
     @property
     def distances(self):
