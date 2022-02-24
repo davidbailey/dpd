@@ -138,7 +138,8 @@ class Route(GeoDataFrame):
         trip["datetime"] = trip.timedelta + start_time
         trip["total_distance"] = trip.distance.cumsum()
         trip.set_index("datetime", inplace=True)
-        return trip
+        trip["geometry"] = trip.total_distance.map(self.way.interpolate)
+        return GeoDataFrame(trip)
 
     def add_stop(self, geometry, name):
         """
