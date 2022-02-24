@@ -5,8 +5,8 @@ from geopandas import GeoDataFrame
 from numpy import sqrt
 from pandas import concat, DataFrame
 from pyproj import CRS
-from shapely.geometry import LineString, MultiLineString, Point
-from shapely.ops import linemerge
+from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
+from shapely.ops import linemerge, nearest_points
 
 
 from dpd.geometry import circle_from_three_circumference_points
@@ -160,7 +160,10 @@ class Route(GeoDataFrame):
         """
         Adds a stop at the given geometry named name.
         """
-        self.loc[self.geometry == geometry, "name"] = name
+        if geometry in list(self.geometry):
+            self.loc[self.geometry == geometry, "name"] = name
+        else:
+            self.loc[self.geometry == nearest_points(MultiPoint(self.geometry), geometry)[0], "name"] = name
 
     def remove_stop(self, name):
         """
