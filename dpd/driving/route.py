@@ -222,7 +222,7 @@ class Route(GeoDataFrame):
         self.to_crs(CRS.from_epsg(4326))
         tooltip = folium.features.GeoJsonTooltip(fields=["name"])
         geojson = folium.GeoJson(
-            self[["name", "geometry"]].to_json(), tooltip=tooltip
+            self.stops[["name", "geometry"]].to_json(), tooltip=tooltip
         )
         geojson.add_to(folium_map)
         folium.PolyLine(list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))).add_to(folium_map)
