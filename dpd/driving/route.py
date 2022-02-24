@@ -189,8 +189,15 @@ class Route(GeoDataFrame):
             way = ways_merged
         return Route.from_way(way, crs=crs, *args, **kwargs)
 
-    def from_gtfs(gtfs, *args, **kwargs):
-        pass
+    def from_gtfs(feed, route_id, service_id, shape_id=None, *args, **kwargs):
+        trips = feed.trips[
+            (feed.trips["route_id"] == route_id) & (feed.trips["service_id"] == service_id)
+        ]["trip_id"]
+        if not shape_id:
+            shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[0]
+        line = feed.build_geometry_by_shape([shape_id])[shape_id]
+        route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
+        return route
 
     def from_osm_relation(osm, relation, *args, **kwargs):
         """
