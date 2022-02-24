@@ -196,7 +196,7 @@ class Route(GeoDataFrame):
                 "platform",
             ]
         ]
-        route = Route.from_ways(ways, crs=CRS.from_epsg(4326), *args, **kwargs
+        route = Route.from_ways(ways, crs=CRS.from_epsg(4326), *args, **kwargs)
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
                 route.add_stop(
