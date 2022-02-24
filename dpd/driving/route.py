@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime
 
+import folium
 from geopandas import GeoDataFrame
 from numpy import sqrt
 from pandas import concat, DataFrame
@@ -215,3 +216,12 @@ class Route(GeoDataFrame):
                     osm.nodes[member["ref"]].osm["tags"]["name"]
                 )
         return route
+
+    def plot_folium(self, folium_map):
+        self.to_crs(CRS.from_epsg(4326))
+        tooltip = folium.features.GeoJsonTooltip(fields=["name"])
+        geojson = folium.GeoJson(
+            route[["name", "geometry"]].to_json(), tooltip=tooltip
+        )
+        geojson.add_to(folium_map)
+        folium.PolyLine(list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))).add_to(folium_map)
