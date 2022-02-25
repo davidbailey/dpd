@@ -115,8 +115,8 @@ class Route(GeoDataFrame):
         segments = [
             DataFrame.from_dict(
                 {
-                    "distance": [0, 0],
-                    "time": [0, dwell_time],
+                    "distance": [0 * units.meter, 0 * units.meter],
+                    "time": [0 * units.second, dwell_time],
                     "name": [self.stops.name.iloc[0], self.stops.name.iloc[0]],
                 }
             ),
@@ -124,15 +124,15 @@ class Route(GeoDataFrame):
         for i in range(len(self.stops.index) - 1):
             segments.append(
                 vehicle.drive_between_stops(
-                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]] + [0],
-                    distances[self.stops.index[i] : self.stops.index[i + 1]] + [0],
+                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]] + [0 * units.meter / units.second],
+                    distances[self.stops.index[i] : self.stops.index[i + 1]] + [0 * units.meter],
                 )
             )
             segments.append(
                 DataFrame.from_dict(
                     {
-                        "distance": [0, 0],
-                        "time": [0, dwell_time],
+                        "distance": [0 * units.meter, 0 * units.meter],
+                        "time": [0 * units.second, dwell_time],
                         "name": [
                             self.stops.name[self.stops.index[i + 1]],
                             self.stops.name[self.stops.index[i + 1]],
@@ -152,7 +152,7 @@ class Route(GeoDataFrame):
             )
         else:
             return self.way.interpolate(
-                0 if row.total_distance == 0 else row.total_distance.value
+                row.total_distance.value
             )
 
     def trip(
