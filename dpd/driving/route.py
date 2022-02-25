@@ -124,8 +124,10 @@ class Route(GeoDataFrame):
         for i in range(len(self.stops.index) - 1):
             segments.append(
                 vehicle.drive_between_stops(
-                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]] + [0 * units.meter / units.second],
-                    distances[self.stops.index[i] : self.stops.index[i + 1]] + [0 * units.meter],
+                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]]
+                    + [0 * units.meter / units.second],
+                    distances[self.stops.index[i] : self.stops.index[i + 1]]
+                    + [0 * units.meter],
                 )
             )
             segments.append(
@@ -151,9 +153,7 @@ class Route(GeoDataFrame):
                 ]
             )
         else:
-            return self.way.interpolate(
-                row.total_distance.value
-            )
+            return self.way.interpolate(row.total_distance.value)
 
     def trip(
         self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False
