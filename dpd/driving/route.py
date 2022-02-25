@@ -1,5 +1,7 @@
 from datetime import timedelta, datetime
 
+from astropy import units
+from astropy.time import TimeDelta
 import folium
 from geopandas import GeoDataFrame
 from numpy import sqrt
@@ -27,9 +29,9 @@ class Route(GeoDataFrame):
         **kwargs
     ):
         super().__init__(data, *args, **kwargs)
-        self.gague = gague
-        self.max_cant = max_cant
-        self.max_cant_deficiency = max_cant_deficiency
+        self.gague = gague * units.meter
+        self.max_cant = max_cant * units.meter
+        self.max_cant_deficiency = max_cant_deficiency * units.meter
 
     @property
     def stops(self):
@@ -48,7 +50,9 @@ class Route(GeoDataFrame):
         self.to_crs("North America Albers Equal Area Conic", inplace=True)
         distances = []
         for i in range(len(self) - 1):
-            distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]))
+            distances.append(
+                self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]) * units.meter
+            )
         return distances
 
     @property
@@ -66,12 +70,18 @@ class Route(GeoDataFrame):
                     (self.geometry.iloc[i + 1].x, self.geometry.iloc[i + 1].y),
                     (self.geometry.iloc[i + 2].x, self.geometry.iloc[i + 2].y),
                 )[1]
+                * units.meter
             )
         return radius_of_curvature
 
     def speed_limit(self, radius_of_curvature):
+        """
+        from https://en.wikipedia.org/wiki/Minimum_railway_curve_radius
+        """
         return sqrt(
-            9.8
+            9.81
+            * units.meter
+            / (units.second * units.second)
             * (self.max_cant + self.max_cant_deficiency)
             * radius_of_curvature
             / self.gague
@@ -136,19 +146,21 @@ class Route(GeoDataFrame):
         if row.distance:
             return LineString(
                 [
-                    self.way.interpolate(row.total_distance),
-                    self.way.interpolate(row.total_distance - row.distance),
+                    self.way.interpolate(row.total_distance.value),
+                    self.way.interpolate((row.total_distance - row.distance).value),
                 ]
             )
         else:
-            return self.way.interpolate(row.total_distance)
+            return self.way.interpolate(
+                0 if row.total_distance == 0 else row.total_distance.value
+            )
 
     def trip(
         self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False
     ):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
-        trip["timedelta"] = trip.total_time.map(lambda x: timedelta(seconds=x))
+        trip["timedelta"] = trip.total_time.map(lambda x: TimeDelta(x).to_datetime())
         trip["datetime"] = trip.timedelta + start_time
         trip["total_distance"] = trip.distance.cumsum()
         trip.set_index("datetime", inplace=True)

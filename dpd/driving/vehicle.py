@@ -1,3 +1,4 @@
+from astropy import units
 import numpy as np
 import pandas as pd
 
@@ -8,9 +9,13 @@ class Vehicle:
     """
 
     def __init__(self, max_speed, max_acceleration, max_deceleration):
-        self.max_speed = max_speed
-        self.acceleration = max_acceleration
-        self.deceleration = max_deceleration
+        self.max_speed = max_speed * units.meter / units.second
+        self.acceleration = (
+            max_acceleration * units.meter / (units.second * units.second)
+        )
+        self.deceleration = (
+            max_deceleration * units.meter / (units.second * units.second)
+        )
 
     def accelerate_or_decelerate(
         self, distance, acceleration_or_deceleration, speed_limit
@@ -46,16 +51,16 @@ class Vehicle:
             time = 0
         else:
             time = distance / self.speed
-        self.segments.append(
-            {
-                "speed_before_segment": self.speed,
-                "speed_after_segment": self.speed,
-                "speed_limit": self.speed,
-                "distance": distance,
-                "time": time,
-                "acceleration": 0,
-            }
-        )
+            self.segments.append(
+                {
+                    "speed_before_segment": self.speed,
+                    "speed_after_segment": self.speed,
+                    "speed_limit": self.speed,
+                    "distance": distance,
+                    "time": time,
+                    "acceleration": 0,
+                }
+            )
 
     def accelerate_and_go(self, speed_limit, distance):
         """
@@ -137,7 +142,7 @@ class Vehicle:
         else:
             self.fix_overspeed(speed_limit, 0, fix_overspeed_distance)
         self.speed = speed_limit
-        if distance:
+        if distance != 0:
             self.go(distance)
 
     def drive_single_segment(self, speed_limit, distance):
