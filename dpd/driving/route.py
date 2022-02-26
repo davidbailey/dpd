@@ -1,5 +1,3 @@
-from datetime import timedelta, datetime
-
 from astropy import units
 from astropy.time import TimeDelta
 import folium
