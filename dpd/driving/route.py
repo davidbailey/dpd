@@ -22,16 +22,16 @@ class Route(GeoDataFrame):
     def __init__(
         self,
         data,
-        gague=1.435,
-        max_cant=0.1524,
-        max_cant_deficiency=0.075,
+        gague=1.435 * units.meter,
+        max_cant=0.1524 * units.meter,
+        max_cant_deficiency=0.075 * units.meter,
         *args,
         **kwargs
     ):
         super().__init__(data, *args, **kwargs)
-        self.gague = gague * units.meter
-        self.max_cant = max_cant * units.meter
-        self.max_cant_deficiency = max_cant_deficiency * units.meter
+        self.gague = gague
+        self.max_cant = max_cant
+        self.max_cant_deficiency = max_cant_deficiency
 
     @property
     def stops(self):
@@ -193,10 +193,12 @@ class Route(GeoDataFrame):
         return Route(route, crs=crs, *args, **kwargs)
 
     def from_ways(ways, crs, *args, **kwargs):
+        """
+        If there are multiple, disconnected ways, pick the longest one.
+        Note: this does a lenght calculation on an unknown crs. This may be inaccurate.
+        """
         ways_merged = linemerge(ways)
-        if (
-            type(ways_merged) == MultiLineString
-        ):  # there are multiple, disconnected ways: pick the longest one
+        if type(ways_merged) == MultiLineString:
             longest_length = 0
             for way in ways_merged:
                 if way.length > longest_length:

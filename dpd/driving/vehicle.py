@@ -1,4 +1,3 @@
-from astropy import units
 import numpy as np
 import pandas as pd
 
@@ -9,13 +8,9 @@ class Vehicle:
     """
 
     def __init__(self, max_speed, max_acceleration, max_deceleration):
-        self.max_speed = max_speed * units.meter / units.second
-        self.acceleration = (
-            max_acceleration * units.meter / (units.second * units.second)
-        )
-        self.deceleration = (
-            max_deceleration * units.meter / (units.second * units.second)
-        )
+        self.max_speed = max_speed
+        self.acceleration = max_acceleration
+        self.deceleration = max_deceleration
 
     def accelerate_or_decelerate(
         self, distance, acceleration_or_deceleration, speed_limit
