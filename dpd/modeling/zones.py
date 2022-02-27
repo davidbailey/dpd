@@ -1,10 +1,11 @@
+import folium
 import geopandas
 from matplotlib import pyplot as plt
 import networkx
+from pyproj import CRS
 from shapely.geometry import Point
 
 from dpd.uscensus import get_uscensus_data
-from dpd.utils import epsg4326_to_aea
 from .centroid_distance_dataframe import CentroidDistanceDataFrame
 from .cost_dataframe import CostDataFrame
 from .origin_destination_dataframe import OriginDestinationDataFrame
@@ -17,6 +18,8 @@ class Zones(geopandas.GeoDataFrame):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self["Production Density"] = self.Production.apply(int) / self.ALAND * 1000000
+        # self["Attraction Density"] = self.Attraction.apply(int) / self.ALAND * 1000000
 
     @staticmethod
     def from_uscensus(state, year):
@@ -36,30 +39,13 @@ class Zones(geopandas.GeoDataFrame):
         )
         return Zones(zones)
 
-    def calculate_aea_geometry(self):
-        """
-        Calculate an aea_geometry column.
-        """
-        self["aea_geometry"] = self.geometry.map(
-            lambda geometry: epsg4326_to_aea(geometry)
-        )
-
-    def calculate_centroids(self):
-        """
-        Calculate the centroid of each zones.
-        """
-        self["centroid"] = self.geometry.map(
-            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
-        )
-
     def calculate_centroid_distance_dataframe(self):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
-        if "centroid" not in self.columns:
-            self.calculate_centroids()
-        self["aea_centroid"] = self.centroid.to_crs(
-            "North America Albers Equal Area Conic"
+        self.to_crs(CRS.from_string("North America Albers Equal Area Conic"))
+        self["aea_centroid"] = self.geometry.map(
+            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
         )
         return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
 
@@ -125,3 +111,17 @@ class Zones(geopandas.GeoDataFrame):
                 solid_capstyle="round",
                 zorder=1,
             )
+
+    def plot_density(self, folium_map, production_or_attraction="Production"):
+        folium.Choropleth(
+            geo_data=self.to_json(),
+            data=self,
+            columns=[production_or_attraction, production_or_attraction + " Density"],
+            key_on="feature.properties." + production_or_attraction,
+            fill_color="OrRd",
+            nan_fill_color='white',
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            threshold_scale=[0, 2500, 5000, 7500, 10000, 12500, zones[production_or_attraction + " Density"].max()],
+            legend_name=production_or_attraction + " density (people/square kilometer)",
+        ).add_to(folium_map)
