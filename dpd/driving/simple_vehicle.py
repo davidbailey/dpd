@@ -1,6 +1,7 @@
 from astropy import units
 import pandas as pd
 
+
 class SimpleVehicle:
     """
     Describes a rail or road vehicle and includes methods to drive it along a line
