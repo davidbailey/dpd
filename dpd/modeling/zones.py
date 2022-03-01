@@ -129,7 +129,7 @@ class Zones(geopandas.GeoDataFrame):
                 7500,
                 10000,
                 12500,
-                zones[production_or_attraction + " Density"].max(),
+                self[production_or_attraction + " Density"].max(),
             ],
             legend_name=production_or_attraction + " density (people/square kilometer)",
         ).add_to(folium_map)
