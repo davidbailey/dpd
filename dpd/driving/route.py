@@ -11,7 +11,8 @@ from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
 
-from dpd.geometry import circle_from_three_circumference_points
+from dpd.geometry import circle_from_three_circumference_points, GeometricDict
+from .stop import Stop
 
 
 class Route(GeoDataFrame):
@@ -38,8 +39,27 @@ class Route(GeoDataFrame):
         return self[self["name"].notnull()]
 
     @property
+    def stops_dict(self):
+        stops_dict = GeometricDict(crs=self.crs)
+        for stop in self.stops.index:
+            stops_dict[self.loc[stop]["name"]] = Stop(self.loc[stop]["geometry"])
+        return stops_dict
+
+    @property
     def way(self):
         return LineString(self["geometry"])
+
+    def accessibility(self, zones, times=[300, 600, 900], modes=[walking]):
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        stops_dict = self.stops_dict
+        accessibility = []
+        for stop in stops_dict:
+            for time in times:
+                for mode in modes:
+                    accessibility.append(
+                        stops_dict[stop].accessibility(zones, time, mode)
+                    )
+        return accessibility
 
     @property
     def distances(self):
