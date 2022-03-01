@@ -280,13 +280,15 @@ class Route(GeoDataFrame):
                 )
         return route
 
-    def plot_folium(self, folium_map):
+    def plot_folium(self, folium_map, include_stops=True, include_accessibility=True, include_way=True):
         self.to_crs(CRS.from_epsg(4326))
-        tooltip = folium.features.GeoJsonTooltip(fields=["name"])
-        geojson = folium.GeoJson(
-            self.stops[["name", "geometry"]].to_json(), tooltip=tooltip
-        )
-        geojson.add_to(folium_map)
-        folium.PolyLine(
-            list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))
-        ).add_to(folium_map)
+        if include_stops:
+            tooltip = folium.features.GeoJsonTooltip(fields=["name"])
+            geojson = folium.GeoJson(
+                self.stops[["name", "geometry"]].to_json(), tooltip=tooltip
+            )
+            geojson.add_to(folium_map)
+        if include_way:
+            folium.PolyLine(
+                list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))
+            ).add_to(folium_map)
