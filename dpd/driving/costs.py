@@ -4,7 +4,7 @@ elevations = {
     "elevated": {"dollars_per_meter": 1500},
 }
 
-modes = ["rail", "road"]
+modes = ["air", "marine", "rail", "road"]
 
 
 def segment_cost(mode, elevation, length):
