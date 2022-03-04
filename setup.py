@@ -18,6 +18,7 @@ setup(
         "contextily",
         "flask",
         "folium",
+        "geojsoncontour",
         "geonetworkx",
         "geopandas",
         "gtfs_kit",
