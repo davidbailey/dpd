@@ -45,21 +45,38 @@ class Route(GeoDataFrame):
             stops_dict[self.loc[stop]["name"]] = Stop(self.loc[stop]["geometry"])
         return stops_dict
 
+    def accessibility(self, points, mode):
+        """
+        Computes the accessibility from each point in points to each stop in route.stops.
+        """
+        stops_dict = self.stops_dict
+        stops_dict.to_crs("North America Albers Equal Area Conic")
+        accessibility = []
+        for point in points:
+            for stop in stops_dict:
+                accessibility.append(
+                    {
+                        "x": point.coords[0][0],
+                        "y": point.coords[0][1],
+                        "stop": stop,
+                        "accessibility": stops_dict[stop].accessibility(point, mode),
+                    }
+                )
+        dataframe = DataFrame(accessibility)
+        return dataframe.set_index(["x", "y", "stop"])
+
+    def in_vehicle_travel_time(self, origin_stop, destination_stop):
+        """Maybe this belongs on a Trip"""
+        """Can also include frequency when creating Trips to add more time info"""
+        pass
+
+    def travel_time(self, origin, destination):
+        """Calculate accessibility to the stop, in_vehicle_travel_time, and accessibility to the destination"""
+        pass
+
     @property
     def way(self):
         return LineString(self["geometry"])
-
-    def accessibility(self, zones, times=[300, 600, 900], modes=[walking]):
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
-        stops_dict = self.stops_dict
-        accessibility = []
-        for stop in stops_dict:
-            for time in times:
-                for mode in modes:
-                    accessibility.append(
-                        stops_dict[stop].accessibility(zones, time, mode)
-                    )
-        return accessibility
 
     @property
     def distances(self):
@@ -280,8 +297,41 @@ class Route(GeoDataFrame):
                 )
         return route
 
-    def plot_folium(self, folium_map, include_stops=True, include_accessibility=True, include_way=True):
-        self.to_crs(CRS.from_epsg(4326))
+    def plot_accessibility_contourf(self, folium_map, times, mode):
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        stops_dict = self.stops_dict
+        for stop in stops_dict:
+            features = stops_dict[stop].accessibility_contourf_features(
+                times, mode, crs=self.crs
+            )
+            features.to_crs(CRS.from_epsg(4326), inplace=True)
+            folium.GeoJson(data=features).add_to(folium_map)
+
+    def plot_accessibility_radius(self, folium_map, times, mode):
+        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        stops_dict = self.stops_dict
+        for stop in stops_dict:
+            features = stops_dict[stop].accessibility_radius_features(
+                times, mode, crs=self.crs
+            )
+            features.to_crs(CRS.from_epsg(4326), inplace=True)
+            folium.GeoJson(data=features).add_to(folium_map)
+
+    def plot_folium(
+        self,
+        folium_map,
+        include_stops=True,
+        include_accessibility_contourf=False,
+        include_accessibility_radius=True,
+        include_way=True,
+        times=[5, 10, 15] * units.minute,
+        mode="walking",
+    ):
+        if include_accessibility_contourf:
+            self.plot_accessibility_contourf(folium_map, times=times, mode=mode)
+        if include_accessibility_radius:
+            self.plot_accessibility_radius(folium_map, times=times, mode=mode)
+        self.to_crs(CRS.from_epsg(4326), inplace=True)
         if include_stops:
             tooltip = folium.features.GeoJsonTooltip(fields=["name"])
             geojson = folium.GeoJson(
