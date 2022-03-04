@@ -9,6 +9,7 @@ coveralls
 flake8
 flask
 folium
+geojsoncontour
 geonetworkx
 geopandas
 gtfs_kit
