@@ -7,7 +7,7 @@ class Project:
     a transporation project
     """
 
-    def __init__():
+    def __init__(self):
         pass
 
     @property
@@ -19,7 +19,7 @@ class Project:
         pass
 
     @property
-    def cost_benefit_analysis(self):
+    def cost_benefit_analysis(self, start_year, duration):
         cost_benefit_analysis = CostBenefitAnalysis(start_year, duration)
         for cost in self.costs:
             cost_benefit_analysis.add_cost(cost)

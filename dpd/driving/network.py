@@ -6,7 +6,7 @@ class Network:
     a transporation network with multiple routes
     """
 
-    def __init__(routes):
+    def __init__(self, routes):
         self.routes = routes
 
     def from_gtfs(feed):
