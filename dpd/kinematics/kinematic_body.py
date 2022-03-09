@@ -1,15 +1,17 @@
 from numpy import sqrt
 
+
 class KinematicBody:
     """
     A class to model a kinematic body. Provides methods to move the body with constant velocity or constant acceleration.
     """
+
     def __init__(
-        self, 
-        initial_time = 0 * units.second,
-        initial_distance = 0 * units.meter,
-        initial_velocity = 0 * units.meter / units.second,
-        initial_acceleration = 0 * units.meter / units.second**2,
+        self,
+        initial_time=0 * units.second,
+        initial_distance=0 * units.meter,
+        initial_velocity=0 * units.meter / units.second,
+        initial_acceleration=0 * units.meter / units.second**2,
     ):
         self.time = initial_time
         self.distance = initial_distance
@@ -28,7 +30,9 @@ class KinematicBody:
         self.velocity += velocity
         self.acceleration += acceleration
 
-    def move_with_constant_velocity(self, velocity=None, time=None, distance=None, set_body=False):
+    def move_with_constant_velocity(
+        self, velocity=None, time=None, distance=None, set_body=False
+    ):
         """
         Moves an incremental time or distance with constant velocity (acceleration is zero).
         """
@@ -43,7 +47,9 @@ class KinematicBody:
             set_body(time, distance, velocity, acceleration)
         return time, distance, velocity, acceleration
 
-    def move_with_constant_acceleration(self, acceleration=None, time=None, distance=None, velocity=None, set_body=False):
+    def move_with_constant_acceleration(
+        self, acceleration=None, time=None, distance=None, velocity=None, set_body=False
+    ):
         """
         Moves an incremental time, distance, or velocity with constant acceleration.
         """

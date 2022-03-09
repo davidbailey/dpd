@@ -1,5 +1,6 @@
 from .route import Route
 
+
 class Network:
     """
     a transporation network with multiple routes
@@ -7,7 +8,7 @@ class Network:
 
     def __init__(routes):
         self.routes = routes
-        
+
     def from_gtfs(feed):
         pass
 
