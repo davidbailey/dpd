@@ -18,10 +18,9 @@ class TestCostBenefitAnalysis(unittest.TestCase):
         cba.add_benefit(
             name="benefit 2", value=20, start_year=start_year + 1, duration=2
         )
-        cba_table = self.cba.discount(start_year, discount_rate).T
+        cba_table = cba.discount(start_year, discount_rate).T
         self.assertEqual(
-            self.cba_table["Sum"]["Benefits Total"]
-            / self.cba_table["Sum"]["Costs Total"],
+            cba_table["Sum"]["Benefits Total"] / cba_table["Sum"]["Costs Total"],
             1.9417475728155342,
         )
         cba.cash_flow_diagram()

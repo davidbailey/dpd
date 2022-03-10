@@ -15,14 +15,14 @@ class Alternative:
     @property
     def costs(self):
         costs = []
-        for route in routes:
+        for route in self.routes:
             costs.append(route.cost)
         return costs
 
     @property
     def benefits(self):
         benefits = []
-        for route in routes:
+        for route in self.routes:
             benefits.append(route.benefits)
         return benefits
 
