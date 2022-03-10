@@ -1,7 +1,7 @@
 from math import sqrt
 
 
-def circle_from_three_circumference_points(p0, p1, p2):
+def circle_from_three_points(p0, p1, p2):
     """
     Calculates the center and radius of a circle from three points on the circumference of the circle.
     Based on https://www.geeksforgeeks.org/equation-of-circle-when-three-points-on-the-circle-are-given/
