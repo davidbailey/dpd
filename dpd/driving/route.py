@@ -274,6 +274,7 @@ class Route(GeoDataFrame):
         Returns:
             dpd.driving.Route: a route to drive
         """
+        osm.download_relation(relation)
         route = []
         ways = [
             osm.ways[member["ref"]].geo
