@@ -3,7 +3,6 @@ astropy
 bandit
 black
 bs4
-contextily
 coverage
 coveralls
 flake8
@@ -13,16 +12,13 @@ geojsoncontour
 geonetworkx
 geopandas
 gtfs_kit
-haversine
 ipfn
 matplotlib
 mesa
 movingpandas
-mplleaflet
 networkx
 numpy
 pandas
-polyline
 pyproj
 pyrosm
 pytest
