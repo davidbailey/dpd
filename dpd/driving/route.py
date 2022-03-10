@@ -11,7 +11,7 @@ from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
 
-from dpd.geometry import circle_from_three_circumference_points, GeometricDict
+from dpd.geometry import circle_from_three_points, GeometricDict
 from dpd.osm import OSM
 from .stop import Stop
 
@@ -103,7 +103,7 @@ class Route(GeoDataFrame):
         radius_of_curvature = []
         for i in range(len(self) - 2):
             radius_of_curvature.append(
-                circle_from_three_circumference_points(
+                circle_from_three_points(
                     (self.geometry.iloc[i].x, self.geometry.iloc[i].y),
                     (self.geometry.iloc[i + 1].x, self.geometry.iloc[i + 1].y),
                     (self.geometry.iloc[i + 2].x, self.geometry.iloc[i + 2].y),

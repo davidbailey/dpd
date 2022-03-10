@@ -9,14 +9,14 @@ alternatives = ["Tram", "Bus"]
 class TestMultipleCriteriaAnalysis(unittest.TestCase):
     def test_multiple_criteria_analysis(self):
         multiple_criteria_analysis = MultipleCriteriaAnalysis(attributes, alternatives)
-        multiple_criteria_analysis.multiple_criteria_analysis["Tram"]["Cost"] = 200
-        multiple_criteria_analysis.multiple_criteria_analysis["Bus"]["Cost"] = 100
-        multiple_criteria_analysis.multiple_criteria_analysis["Tram"]["Time"] = 50
-        multiple_criteria_analysis.multiple_criteria_analysis["Bus"]["Time"] = 100
-        multiple_criteria_analysis.multiple_criteria_analysis["Tram"]["Comfort"] = 800
-        multiple_criteria_analysis.multiple_criteria_analysis["Bus"]["Comfort"] = 500
+        multiple_criteria_analysis.mca["Tram"]["Cost"] = 200
+        multiple_criteria_analysis.mca["Bus"]["Cost"] = 100
+        multiple_criteria_analysis.mca["Tram"]["Time"] = 50
+        multiple_criteria_analysis.mca["Bus"]["Time"] = 100
+        multiple_criteria_analysis.mca["Tram"]["Comfort"] = 800
+        multiple_criteria_analysis.mca["Bus"]["Comfort"] = 500
         self.assertEqual(
-            multiple_criteria_analysis.multiple_criteria_analysis.to_csv(),
+            multiple_criteria_analysis.mca.to_csv(),
             ",Tram,Bus\nCost,200.0,100.0\nTime,50.0,100.0\nComfort,800.0,500.0\n",
         )
         legend_options, d, title = multiple_criteria_analysis.to_d3_radar_chart()
