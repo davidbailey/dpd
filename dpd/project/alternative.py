@@ -1,4 +1,4 @@
-from dpd.cba import CostBenefitAnalysis
+from dpd.analysis import CostBenefitAnalysis
 
 
 class Alternative:

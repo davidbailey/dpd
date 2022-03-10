@@ -1,4 +1,4 @@
-from dpd.mca import MultipleCriteriaAnalysis
+from dpd.analysis import MultipleCriteriaAnalysis
 
 
 class Project:
