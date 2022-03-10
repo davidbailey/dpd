@@ -23,7 +23,7 @@ class OSM:
 
     def execute_query(self, query, retry_attempts=4):
         r = requests.get(self.url, params={"data": query})
-        if not "application/json" in r.headers.get("Content-Type"):
+        if "application/json" not in r.headers.get("Content-Type"):
             if retry_attempts:
                 # sometimes we run into a rate limit so let's back off a bit
                 print("Response is not JSON. Retrying. Response: %s" % (r))
