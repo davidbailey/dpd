@@ -6,20 +6,21 @@
 
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
 
-* Cost-benefit analysis (CBA) - a class for performing a cost-beneift analysis. E.g. [Cost-benefit analysis](https://dpd.readthedocs.io/en/latest/notebooks/cba.html)
-* D3.js - functions for generating D3.js documents from python code. Supports radar charts and dendrogram. E.g. [Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
+* Analysis - a class for performing a cost-beneift analysis and a clad for performing a multiple-criteria analysis. E.g. [Analysis](https://dpd.readthedocs.io/en/latest/notebooks/analysis.html)
+* D3.js - functions for generating D3.js radar charts and dendrograms from python code.
 * Driving - classes to calculate driving times along routes, specifically timetables for public transportation routes. E.g. [Driving](https://dpd.readthedocs.io/en/latest/notebooks/driving.html)
-* Folium - functions for working with Folium maps. E.g. [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
-* General Transit Feed Specification (GTFS) - functions for extracting data from GTFS files and plotting schedules. E.gs. [plot_schedule](https://dpd.readthedocs.io/en/latest/notebooks/plot_schedule.html) and [Density and public transportation](https://dpd.readthedocs.io/en/latest/notebooks/density_and_public_transportation.html)
-* Geometry - functions for commputing geometric operations. E.g. [Driving](https://dpd.readthedocs.io/en/latest/notebooks/driving.html)
-* Mapping - classes for creating a road network map. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html)
-* Modeling - a set of classes for performing transportation modeling. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html), [Four-step Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/four_step_transportation_model.html), and [Gravity Model](https://dpd.readthedocs.io/en/latest/notebooks/gravity_model.html)
-* Multi-criteria analysis (MCA) - a class for performing multi-criteria analysis. E.g. [Multiple-criteria Analysis](https://dpd.readthedocs.io/en/latest/notebooks/mca.html)
+* Folium - an example [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
+* Geometry - functions for computing geometric operations and classes for storing geometric objects: [Geometry](https://dpd.readthedocs.io/en/latest/notebooks/geometry.html)
+* Kinematics - a class for modeling a kinematic body
+* Mapping - classes for creating a map. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html)
+* Modeling - classes for performing transportation modeling. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html), [Four-step Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/four_step_transportation_model.html), and [Gravity Model](https://dpd.readthedocs.io/en/latest/notebooks/gravity_model.html)
 * Open Source Routing Machine (OSRM) - functions to interact with an OSRM server
-* OpenStreetMap (OSM) - a class for downloading relations, ways, and nodes from OpenStreetMap and a class for creating a road network map.
+* OpenStreetMap (OSM) - a class for downloading relations, ways, and nodes from OpenStreetMap and a class for creating a map object.
+* Project - classes for creating a [Transportation Project](https://dpd.readthedocs.io/en/latest/notebooks/project.html)
 * Shapely - functions for working with shapely geometries
 * US Census -  functions for gathering data from the US Census. E.g. [Density and public transportation](https://dpd.readthedocs.io/en/latest/notebooks/density_and_public_transportation.html) and [Four-step Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/four_step_transportation_model.html)
 * Utils - utility functions used by other submodules
+* Werkzeug - a class to run a Werkzeug server in a thread.
 * Wikipedia - functions for gathering data from Wikipedia. E.g. [Wikipedia](https://dpd.readthedocs.io/en/latest/notebooks/wikipedia.html)
 
 Installation
