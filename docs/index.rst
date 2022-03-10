@@ -7,15 +7,13 @@ https://github.com/davidbailey/dpd
    :maxdepth: 2
 
    notebooks/agent-based_transportation_model.ipynb
-   notebooks/cba.ipynb
+   notebooks/analysis.ipynb
    notebooks/density_and_public_transportation.ipynb
    notebooks/driving.ipynb
    notebooks/folium_flask_app.ipynb
    notebooks/four_step_transportation_model.ipynb
    notebooks/geometry.ipynb
    notebooks/gravity_model.ipynb
-   notebooks/mca.ipynb
-   notebooks/plot_schedule.ipynb
    notebooks/wikipedia.ipynb
    api
 

@@ -3,4 +3,4 @@ max-line-length = 88
 extend-ignore = E203, E501
 per-file-ignores =
     __init__.py: F401
-    cba.py: E731
+    cost_benefit_analysis.py: E731
