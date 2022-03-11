@@ -21,7 +21,9 @@ class Network:
         network = Network()
         for route_id in feed.routes["route_id"]:
             logging.info("Adding route %s." % (route_id))
-            network.add_route(route_id, Route.from_gtfs(feed, route_id, *args, **kwargs))
+            network.add_route(
+                route_id, Route.from_gtfs(feed, route_id, *args, **kwargs)
+            )
         return network
 
     def from_osm_relations(relations, osm=OSM(), *args, **kwargs):
@@ -29,7 +31,9 @@ class Network:
         for relation in tqdm(relations):
             logging.info("Adding route %s." % (relation))
             osm.download_relation(relation)
-            network.add_route(relation, Route.from_osm_relation(relation, *args, **kwargs))
+            network.add_route(
+                relation, Route.from_osm_relation(relation, *args, **kwargs)
+            )
         return network
 
     def from_osm_query(query, osm=OSM(), *args, **kwargs):

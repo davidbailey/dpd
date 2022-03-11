@@ -27,7 +27,9 @@ class Zones(geopandas.GeoDataFrame):
         self["ProductionAttractionSum"] = self.Production + self.Attraction
         self["Production Density"] = self.Production / self.ALAND * 1000000
         self["Attraction Density"] = self.Attraction / self.ALAND * 1000000
-        self["ProductionAttractionSum Density"] = self.ProductionAttractionSum / self.ALAND * 1000000
+        self["ProductionAttractionSum Density"] = (
+            self.ProductionAttractionSum / self.ALAND * 1000000
+        )
 
     @staticmethod
     def from_uscensus(state, year):
@@ -81,9 +83,15 @@ class Zones(geopandas.GeoDataFrame):
             )
         return OriginDestinationDataFrame.from_ipfn(self, cost_dataframe)
 
-    def production_attraction_from_lodes(self, origin_destination_dataframe, column="S000"):
-        self["Production"] = origin_destination_dataframe.groupby("trct_h").sum()[column]
-        self["Attraction"] = origin_destination_dataframe.groupby("trct_w").sum()[column]
+    def production_attraction_from_lodes(
+        self, origin_destination_dataframe, column="S000"
+    ):
+        self["Production"] = origin_destination_dataframe.groupby("trct_h").sum()[
+            column
+        ]
+        self["Attraction"] = origin_destination_dataframe.groupby("trct_w").sum()[
+            column
+        ]
         return Zones(self)
 
     def build_graph(self, centroid_distance_dataframe=None):
@@ -175,7 +183,9 @@ class Zones(geopandas.GeoDataFrame):
                 )
         return DataFrame(accessibility)
 
-    def plot_density(self, folium_map, production_or_attraction="Production", *args, **kwargs):
+    def plot_density(
+        self, folium_map, production_or_attraction="Production", *args, **kwargs
+    ):
         self.to_crs(CRS.from_epsg(4326), inplace=True)
         folium.Choropleth(
             geo_data=self.to_json(),
