@@ -56,7 +56,7 @@ class Stop:
             self.geometry.coords[0][1] - (speed[mode] * time).to(units.meter).value,
             self.geometry.coords[0][1] + (speed[mode] * time).to(units.meter).value,
         )
-        z = accessibility(x, y, mode, how)
+        z = self.accessibility(x, y, mode, how)
         return x, y, z
 
     def accessibility_contourf(self, times, mode, how="constant_speed"):
