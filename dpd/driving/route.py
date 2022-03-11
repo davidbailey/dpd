@@ -247,11 +247,14 @@ class Route(GeoDataFrame):
             way = ways_merged
         return Route.from_way(way, crs=crs, *args, **kwargs)
 
-    def from_gtfs(feed, route_id, service_id, shape_id=None, *args, **kwargs):
-        trips = feed.trips[
-            (feed.trips["route_id"] == route_id)
-            & (feed.trips["service_id"] == service_id)
-        ]["trip_id"]
+    def from_gtfs(feed, route_id, service_id=None, shape_id=None, *args, **kwargs):
+        if service_id:
+            trips = feed.trips[
+                (feed.trips["route_id"] == route_id)
+                & (feed.trips["service_id"] == service_id)
+            ]["trip_id"]
+        else:
+            trips = feed.trips[feed.trips["route_id"] == route_id]["trip_id"]
         if not shape_id:
             shape_id = feed.trips[feed.trips["trip_id"] == trips.iloc[0]].shape_id.iloc[
                 0
@@ -269,8 +272,8 @@ class Route(GeoDataFrame):
         """
         Build a route from OpenStreetMaps data
         Args:
-            osm (dpd.OSM.osm): the osm that contains the route as a relation
             relation (int): the relation to build a route for
+            osm (dpd.OSM.osm): the osm that contains the route as a relation
         Returns:
             dpd.driving.Route: a route to drive
         """

@@ -74,7 +74,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
             # TODO this fails when there is no path (e.g. islands). But these people still get to work somehow.
             for i in range(len(path) - 1):
                 zones.graph[path[i]][path[i + 1]]["volume"] = (
-                    zones.graph[path[i]][path[i + 1]]["volume"] + row["S000"]
+                    zones.graph[path[i]][path[i + 1]]["volume"] + row[column]
                 )
         return zones.graph
 

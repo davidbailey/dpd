@@ -22,10 +22,12 @@ class Zones(geopandas.GeoDataFrame):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self["Production"] = self.Production.apply(int)
+        self.Production = self.Production.fillna(0).apply(int)
+        self.Attraction = self.Attraction.fillna(0).apply(int)
+        self["ProductionAttractionSum"] = self.Production + self.Attraction
         self["Production Density"] = self.Production / self.ALAND * 1000000
-
-        # self["Attraction Density"] = self.Attraction.apply(int) / self.ALAND * 1000000
+        self["Attraction Density"] = self.Attraction / self.ALAND * 1000000
+        self["ProductionAttractionSum Density"] = self.ProductionAttractionSum / self.ALAND * 1000000
 
     @staticmethod
     def from_uscensus(state, year):
@@ -43,6 +45,8 @@ class Zones(geopandas.GeoDataFrame):
             },
             inplace=True,
         )
+        zones["Production"] = zones.Production.apply(int)
+        zones["Attraction"] = 0
         return Zones(zones)
 
     def calculate_centroid_distance_dataframe(self):
@@ -76,6 +80,11 @@ class Zones(geopandas.GeoDataFrame):
                 beta=beta, centroid_distance_dataframe=centroid_distance_dataframe
             )
         return OriginDestinationDataFrame.from_ipfn(self, cost_dataframe)
+
+    def production_attraction_from_lodes(self, origin_destination_dataframe, column="S000"):
+        self["Production"] = origin_destination_dataframe.groupby("trct_h").sum()[column]
+        self["Attraction"] = origin_destination_dataframe.groupby("trct_w").sum()[column]
+        return Zones(self)
 
     def build_graph(self, centroid_distance_dataframe=None):
         if centroid_distance_dataframe is None:
@@ -166,7 +175,7 @@ class Zones(geopandas.GeoDataFrame):
                 )
         return DataFrame(accessibility)
 
-    def plot_density(self, folium_map, production_or_attraction="Production"):
+    def plot_density(self, folium_map, production_or_attraction="Production", *args, **kwargs):
         self.to_crs(CRS.from_epsg(4326), inplace=True)
         folium.Choropleth(
             geo_data=self.to_json(),
@@ -187,4 +196,6 @@ class Zones(geopandas.GeoDataFrame):
                 self[production_or_attraction + " Density"].max(),
             ],
             legend_name=production_or_attraction + " density (people/square kilometer)",
+            *args,
+            **kwargs
         ).add_to(folium_map)

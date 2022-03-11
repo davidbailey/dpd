@@ -2,6 +2,7 @@
 A class to query the Overpass API
 """
 from collections import namedtuple
+import logging
 from time import sleep
 
 import requests
@@ -26,7 +27,7 @@ class OSM:
         if "application/json" not in r.headers.get("Content-Type"):
             if retry_attempts:
                 # sometimes we run into a rate limit so let's back off a bit
-                print("Response is not JSON. Retrying. Response: %s" % (r))
+                logging.info("Response is not JSON. Retrying. Response: %s" % (r))
                 sleep(1)
                 return self.execute_query(query, retry_attempts - 1)
             else:

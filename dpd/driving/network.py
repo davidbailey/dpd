@@ -2,8 +2,8 @@ import logging
 
 from tqdm import tqdm
 
-from dpd.osm import OSM
 from .route import Route
+from dpd.osm import OSM
 
 
 class Network:
@@ -17,18 +17,22 @@ class Network:
     def add_route(self, index, route):
         self.routes[index] = route
 
-    def from_gtfs(feed):
-        pass
+    def from_gtfs(feed, *args, **kwargs):
+        network = Network()
+        for route_id in feed.routes["route_id"]:
+            logging.info("Adding route %s." % (route_id))
+            network.add_route(route_id, Route.from_gtfs(feed, route_id, *args, **kwargs))
+        return network
 
-    def from_osm_relations(relations, osm=OSM()):
+    def from_osm_relations(relations, osm=OSM(), *args, **kwargs):
         network = Network()
         for relation in tqdm(relations):
             logging.info("Adding route %s." % (relation))
             osm.download_relation(relation)
-            network.add_route(relation, Route.from_osm_relation(relation, osm))
+            network.add_route(relation, Route.from_osm_relation(relation, *args, **kwargs))
         return network
 
-    def from_osm_query(query, osm=OSM()):
+    def from_osm_query(query, osm=OSM(), *args, **kwargs):
         """
         Build a network from an OpenStreetMap Overpass API Query
 
@@ -52,7 +56,7 @@ class Network:
                         % (element["tags"]["name"], element["id"])
                     )
                     relations.append(element["id"])
-        return Network.from_osm_relations(relations, osm)
+        return Network.from_osm_relations(relations, *args, **kwargs)
 
     def plot_folium(self, *args, **kwargs):
         for route in tqdm(self.routes):
