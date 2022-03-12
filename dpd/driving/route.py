@@ -36,6 +36,12 @@ class Route(GeoDataFrame):
         self.max_cant_deficiency = max_cant_deficiency
 
     @property
+    def reversed(self):
+        route_reversed = Route(self.iloc[::-1])
+        route_reversed.index = range(len(route_reversed))
+        return route_reversed
+
+    @property
     def stops(self):
         return self[self["name"].notnull()]
 
@@ -193,15 +199,12 @@ class Route(GeoDataFrame):
         else:
             return self.way.interpolate(row.total_distance.value)
 
-    def trip(
-        self, vehicle, dwell_time, start_time=datetime(1970, 1, 1), geometry=False
-    ):
+    def trip(self, vehicle, dwell_time, geometry=False):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
         trip["timedelta"] = trip.total_time.map(lambda x: TimeDelta(x).to_datetime())
-        trip["datetime"] = trip.timedelta + start_time
         trip["total_distance"] = trip.distance.cumsum()
-        trip.set_index("datetime", inplace=True)
+        trip.set_index("timedelta", inplace=True)
         if geometry:
             trip["geometry"] = trip.apply(lambda row: self._trip_geometry(row), axis=1)
         return GeoDataFrame(trip, crs=self.crs)
