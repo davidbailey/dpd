@@ -1,5 +1,5 @@
-from movingpandas import Trajectory, TrajectoryCollection
-from pandas import timedelta_range, DataFrame, MultiIndex
+from movingpandas import TrajectoryCollection
+from pandas import timedelta_range, DataFrame
 
 from .trip import Trip
 
