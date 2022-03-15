@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from astropy import units
 from astropy.time import TimeDelta
 import folium
@@ -14,6 +12,7 @@ from shapely.ops import linemerge, nearest_points
 from dpd.geometry import circle_from_three_points, GeometricDict
 from dpd.osm import OSM
 from .stop import Stop
+from .trip import Trip
 
 
 class Route(GeoDataFrame):
@@ -71,11 +70,6 @@ class Route(GeoDataFrame):
                 )
         dataframe = DataFrame(accessibility)
         return dataframe.set_index(["x", "y", "stop"])
-
-    def in_vehicle_travel_time(self, origin_stop, destination_stop):
-        """Maybe this belongs on a Trip"""
-        """Can also include frequency when creating Trips to add more time info"""
-        pass
 
     def travel_time(self, origin, destination):
         """Calculate accessibility to the stop, in_vehicle_travel_time, and accessibility to the destination"""
@@ -152,7 +146,18 @@ class Route(GeoDataFrame):
             speed_limits.append(speed_limits_mapped[-1])
             return speed_limits
 
-    def drive(self, vehicle, dwell_time):
+    def _drive_geometry(self, row):
+        if row.distance:
+            return LineString(
+                [
+                    self.way.interpolate(row.total_distance.value),
+                    self.way.interpolate((row.total_distance - row.distance).value),
+                ]
+            )
+        else:
+            return self.way.interpolate(row.total_distance.value)
+
+    def drive(self, vehicle, dwell_time, geometry=False):
         self.to_crs("North America Albers Equal Area Conic", inplace=True)
         distances = self.distances
         speed_limits = self.speed_limits
@@ -186,28 +191,25 @@ class Route(GeoDataFrame):
                     }
                 )
             )
-        return concat(segments, ignore_index=True)
+        drive = concat(segments, ignore_index=True)
+        if geometry:
+            drive["geometry"] = drive.apply(self._drive_geometry, axis=1)
+        return drive
 
-    def _trip_geometry(self, row):
-        if row.distance:
-            return LineString(
-                [
-                    self.way.interpolate(row.total_distance.value),
-                    self.way.interpolate((row.total_distance - row.distance).value),
-                ]
-            )
-        else:
-            return self.way.interpolate(row.total_distance.value)
-
-    def trip(self, vehicle, dwell_time, geometry=False):
+    def trip(self, vehicle, dwell_time):
         trip = self.drive(vehicle, dwell_time)
         trip["total_time"] = trip.time.cumsum()
         trip["timedelta"] = trip.total_time.map(lambda x: TimeDelta(x).to_datetime())
         trip["total_distance"] = trip.distance.cumsum()
+        trip["geometry"] = trip.apply(
+            lambda row: self.way.interpolate(row.total_distance.value), axis=1
+        )
         trip.set_index("timedelta", inplace=True)
-        if geometry:
-            trip["geometry"] = trip.apply(lambda row: self._trip_geometry(row), axis=1)
-        return GeoDataFrame(trip, crs=self.crs)
+        return Trip(
+            GeoDataFrame(trip, crs=self.crs)[
+                ["total_time", "total_distance", "name", "geometry"]
+            ]
+        )
 
     def add_stop(self, geometry, name):
         """
@@ -227,12 +229,14 @@ class Route(GeoDataFrame):
         """
         self.loc[self.name == name, "name"] = None
 
+    @staticmethod
     def from_way(way, crs, *args, **kwargs):
         route = []
         for i in range(len(way.coords)):
             route.append({"geometry": Point(way.coords[i][0], way.coords[i][1])})
         return Route(route, crs=crs, *args, **kwargs)
 
+    @staticmethod
     def from_ways(ways, crs, *args, **kwargs):
         """
         If there are multiple, disconnected ways, pick the longest one.
@@ -250,6 +254,7 @@ class Route(GeoDataFrame):
             way = ways_merged
         return Route.from_way(way, crs=crs, *args, **kwargs)
 
+    @staticmethod
     def from_gtfs(feed, route_id, service_id=None, shape_id=None, *args, **kwargs):
         if service_id:
             trips = feed.trips[
@@ -271,6 +276,7 @@ class Route(GeoDataFrame):
             route.add_stop(Point(stop.stop_lon, stop.stop_lat), stop.stop_name.iloc[0])
         return route
 
+    @staticmethod
     def from_osm_relation(relation, osm=OSM(), *args, **kwargs):
         """
         Build a route from OpenStreetMaps data

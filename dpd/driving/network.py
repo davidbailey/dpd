@@ -11,8 +11,11 @@ class Network:
     a transporation network with one or more routes
     """
 
-    def __init__(self, routes={}):
-        self.routes = routes
+    def __init__(self, routes=None):
+        if routes:
+            self.routes = routes
+        else:
+            self.routes = {}
 
     def add_route(self, index, route):
         self.routes[index] = route
@@ -26,6 +29,7 @@ class Network:
             )
         return network
 
+    @staticmethod
     def from_osm_relations(relations, osm=OSM(), *args, **kwargs):
         network = Network()
         for relation in tqdm(relations):
@@ -36,6 +40,7 @@ class Network:
             )
         return network
 
+    @staticmethod
     def from_osm_query(query, osm=OSM(), *args, **kwargs):
         """
         Build a network from an OpenStreetMap Overpass API Query
