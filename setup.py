@@ -17,6 +17,7 @@ setup(
         "bs4",
         "flask",
         "folium",
+        "forex_python",
         "geojsoncontour",
         "geonetworkx",
         "geopandas",

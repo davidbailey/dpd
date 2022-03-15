@@ -10,6 +10,7 @@ coveralls
 flake8
 flask
 folium
+forex_python
 geojsoncontour
 geonetworkx
 geopandas
