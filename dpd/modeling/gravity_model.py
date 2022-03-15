@@ -10,9 +10,9 @@ class GravityModel:
         self.function = function
 
     def compute(self, mass_a=1, mass_b=1, distance=1):
-        if function == "inverse":
+        if self.function == "inverse":
             return self.G * (mass_a**self.a * mass_b**self.b) / distance**self.d
-        elif function == "exponential":
+        elif self.function == "exponential":
             return (
                 self.G * (mass_a**self.a * mass_b**self.b) * exp(-self.d * distance)
             )
