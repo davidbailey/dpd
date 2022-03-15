@@ -1,10 +1,6 @@
-import math
-
 import pandas
 
-
-def gravity_model_function(distance, beta):
-    return math.exp(-beta * distance)
+from .gravity_model import GravityModel
 
 
 class CostDataFrame(pandas.DataFrame):
@@ -22,13 +18,14 @@ class CostDataFrame(pandas.DataFrame):
         """
         A method to create a gravity model cost matrix from a CentroidDistanceDataFrame
         """
+        gravity_model = GravityModel(d=beta, function="exponential")
         origin_list = []
         for origin in centroid_distance_dataframe.index:
             destination_list = []
             for destination in centroid_distance_dataframe.columns:
                 destination_list.append(
-                    gravity_model_function(
-                        centroid_distance_dataframe.loc[origin][destination], beta
+                    gravity_model.compute(
+                        distance=centroid_distance_dataframe.loc[origin][destination]
                     )
                 )
             origin_list.append(destination_list)
