@@ -27,6 +27,7 @@ Installation
 --------
 
 ```bash
+sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
 pip install git+https://github.com/davidbailey/dpd.git
 ```
 
