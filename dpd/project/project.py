@@ -9,6 +9,9 @@ class Project:
     def __init__(self, alternatives=[]):
         self.alternatives = alternatives
 
+    def add_alternative(self, alternative):
+        self.alternatives.append(alternative)
+
     @property
     def multiple_criteria_analysis(self):
         multiple_criteria_analysis = MultipleCriteriaAnalysis()

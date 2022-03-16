@@ -1,8 +1,13 @@
+from datetime import timedelta
+
 from astropy import units
 from astropy.visualization import quantity_support
 from geopandas import GeoDataFrame
 from movingpandas import Trajectory
 from pandas import MultiIndex
+from shapely.geometry import Point
+
+from dpd.utils import timestring_to_timeobject
 
 
 class Trip(GeoDataFrame):
@@ -31,9 +36,10 @@ class Trip(GeoDataFrame):
         """
         Useful for plotting two trips that go in different directions on the same plot.
         """
-        total_distance = self.total_distance.tolist()
-        total_distance.reverse()
-        self["total_distance"] = total_distance
+        total_distance = self.total_distance.iloc[-1]
+        self["total_distance"] = self["total_distance"].map(
+            lambda x: total_distance - x
+        )
         return self
 
     def plot_schedule(self, ax, include_stops=True):
@@ -44,12 +50,41 @@ class Trip(GeoDataFrame):
             )
             if include_stops:
                 for index, row in self.stops.iterrows():
-                    ax.axhline(row["total_distance"], linestyle="dashed")
-                    ax.text(ax.get_xlim()[1], row["total_distance"], row["name"])
+                    ax.axhline(
+                        row["total_distance"].to(units.meter).value, linestyle="dashed"
+                    )
+                    ax.text(
+                        ax.get_xlim()[1],
+                        row["total_distance"].to(units.meter).value,
+                        row["name"],
+                    )
 
     def to_trajectory(self, index):
         return Trajectory(self, index)
 
     @staticmethod
-    def from_gtfs(feed):
-        pass
+    def from_gtfs(feed, trip_id):
+        if feed.dist_units == "mi":
+            units.imperial.enable()
+        trip = feed.stop_times[feed.stop_times["trip_id"] == trip_id]
+        new_trip = []
+        t = timestring_to_timeobject(trip.iloc[0].arrival_time)
+        start_time = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        for index, row in trip.iterrows():
+            stop = feed.stops[feed.stops["stop_id"] == row.stop_id].iloc[0]
+            t = timestring_to_timeobject(row.arrival_time)
+            arrival_time = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+            t = timestring_to_timeobject(row.departure_time)
+            departure_time = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+            for time in [arrival_time, departure_time]:
+                new_trip.append(
+                    {
+                        "geometry": Point(stop.stop_lon, stop.stop_lat),
+                        "name": stop.stop_name,
+                        "timedelta": time,
+                        "total_distance": row.shape_dist_traveled
+                        * units.Unit(feed.dist_units),
+                        "total_time": (time - start_time).seconds * units.second,
+                    }
+                )
+        return Trip(GeoDataFrame(new_trip).set_index("timedelta"))

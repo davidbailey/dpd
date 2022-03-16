@@ -30,8 +30,10 @@ class Schedule:
     def schedule(self):
         schedule = []
         for trip in self.trips:
-            schedule.append(self.trips[trip].stops.timedelta)
-        return DataFrame(schedule, index=self.trips.keys()).transpose()
+            trip_to_add = self.trips[trip].stops.timedelta
+            trip_to_add.name = trip
+            schedule.append(trip_to_add)
+        return DataFrame(schedule).transpose()
 
     def reverse_distance(self):
         for trip in self.trips:
@@ -47,8 +49,15 @@ class Schedule:
             trajectory_collection.append(self.trips[trip].to_trajectory(trip))
         return TrajectoryCollection(trajectory_collection)
 
-    def from_gtfs(feed):
-        pass
+    def from_gtfs(feed, route_id, direction_id):
+        schedule = Schedule()
+        trips = feed.trips[
+            (feed.trips.route_id == route_id)
+            & (feed.trips.direction_id == direction_id)
+        ]
+        for index, trip in trips.iterrows():
+            schedule.add_trip(trip.trip_id, Trip.from_gtfs(feed, trip.trip_id))
+        return schedule
 
     @staticmethod
     def from_trip(trip, start="6 hour", end="24 hour", freq="20Min"):
