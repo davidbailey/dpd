@@ -49,6 +49,7 @@ class Schedule:
             trajectory_collection.append(self.trips[trip].to_trajectory(trip))
         return TrajectoryCollection(trajectory_collection)
 
+    @staticmethod
     def from_gtfs(feed, route_id, direction_id):
         schedule = Schedule()
         trips = feed.trips[
