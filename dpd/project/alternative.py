@@ -6,8 +6,12 @@ class Alternative:
     an alternative
     """
 
-    def __init__(self, routes=[]):
-        self.routes = routes
+    def __init__(self, name, routes=None):
+        self.name = name
+        if routes:
+            self.routes = routes
+        else:
+            self.routes = []
 
     def add_route(self, route):
         self.routes.append(route)

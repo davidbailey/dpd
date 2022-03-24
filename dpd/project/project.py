@@ -6,11 +6,14 @@ class Project:
     a transporation project
     """
 
-    def __init__(self, alternatives=[]):
-        self.alternatives = alternatives
+    def __init__(self, alternatives=None):
+        if alternatives:
+            self.alternatives = alternatives
+        else:
+            self.alternatives = {}
 
     def add_alternative(self, alternative):
-        self.alternatives.append(alternative)
+        self.alternatives[alternative.name] = alternative
 
     @property
     def multiple_criteria_analysis(self):
