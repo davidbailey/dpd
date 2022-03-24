@@ -16,6 +16,10 @@ class Alternative:
     def add_route(self, route):
         self.routes.append(route)
 
+    def travel_time(self, origin, destination):
+        """Calculate accessibility to the stop, in_vehicle_travel_time, and accessibility to the destination"""
+        pass
+
     @property
     def costs(self):
         costs = []
