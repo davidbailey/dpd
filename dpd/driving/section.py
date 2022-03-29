@@ -1,7 +1,7 @@
 from numpy import sqrt
 from shapely.geometry import LineString
 
-from dpd.project.costs import segment_cost, modes, elevations
+from dpd.analysis.costs import segment_cost, modes, elevations
 from dpd.geometry import draw_arc
 
 
