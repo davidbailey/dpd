@@ -7,7 +7,6 @@
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
 
 * Analysis - a class for performing a cost-beneift analysis and a class for performing a multiple-criteria analysis. E.g. [Analysis](https://dpd.readthedocs.io/en/latest/notebooks/analysis.html)
-* D3.js - functions for generating D3.js radar charts and dendrograms from python code.
 * Driving - classes to calculate driving times along routes, specifically timetables for public transportation routes. E.g. [Driving](https://dpd.readthedocs.io/en/latest/notebooks/driving.html)
 * Folium - an example [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
 * Geometry - functions for computing geometric operations and classes for storing geometric objects: [Geometry](https://dpd.readthedocs.io/en/latest/notebooks/geometry.html)
