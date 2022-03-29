@@ -124,6 +124,7 @@ class Alternative(DataFrame):
             ax=ax, kind="bar", color="green"
         )
 
+
 """
     def discount(self, discount_year, discount_rate):
         apply_discount1 = lambda discount_year, row: row.apply(
