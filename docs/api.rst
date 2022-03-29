@@ -7,12 +7,6 @@ api
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: dpd.d3
-    :members:
-    :imported-members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: dpd.driving
     :members:
     :imported-members:
