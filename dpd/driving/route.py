@@ -20,6 +20,8 @@ class Route(GeoDataFrame):
     the route a vehicle takes
     """
 
+    _metadata = ["gague", "max_cant", "max_cant_deficiency"]
+
     def __init__(
         self,
         data,
