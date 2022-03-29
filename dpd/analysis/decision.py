@@ -1,4 +1,4 @@
-from pandas import DataFrame, Series, to_numeric
+from pandas import DataFrame, Series
 
 
 class Decision(DataFrame):

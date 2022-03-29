@@ -124,6 +124,7 @@ class Alternative(DataFrame):
             ax=ax, kind="bar", color="green"
         )
 
+"""
     def discount(self, discount_year, discount_rate):
         apply_discount1 = lambda discount_year, row: row.apply(
             partial(apply_discount2, discount_year, row.name)
@@ -135,3 +136,4 @@ class Alternative(DataFrame):
         dataframe = dataframe.apply(partial(apply_discount1, discount_year), axis=1)
         dataframe.loc["Sum"] = dataframe.sum()
         return dataframe
+"""
