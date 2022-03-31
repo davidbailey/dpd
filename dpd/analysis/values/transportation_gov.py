@@ -1,5 +1,5 @@
 from pandas import Series
-from .currency import Currency
+from dpd.analysis.currency import Currency
 
 usd = Currency("USD", 2020, 0.07).discount()
 
