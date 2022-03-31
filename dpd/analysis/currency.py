@@ -13,15 +13,16 @@ class Currency:
             discount_rate (float): e.g. 0.07
             base_currency (astropy.units.quantity.Quantity): e.g. dpd.analysis.Currency.discount()
         """
+        unit = "%s (%s)" % (currency, base_year)
         if base_currency:
             exchange_rate = CurrencyRates().get_rate(
                 currency,
-                base_currency.unit.name,
+                base_currency.unit.name.split(" ")[0],
                 datetime(year=base_year, month=1, day=1),
             )
-            self.currency = units.def_unit([currency], exchange_rate * base_currency)
+            self.currency = units.def_unit(unit, exchange_rate * base_currency)
         else:
-            self.currency = units.def_unit([currency])
+            self.currency = units.def_unit(unit)
         self.base_year = base_year
         self.discount_rate = discount_rate
         self.base_currency = base_currency
