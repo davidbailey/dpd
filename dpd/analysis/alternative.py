@@ -123,18 +123,3 @@ class Alternative(DataFrame):
         period_range_pivot["Benefit"].applymap(self._plot_na).plot(
             ax=ax, kind="bar", color="green"
         )
-
-
-"""
-    def discount(self, discount_year, discount_rate):
-        apply_discount1 = lambda discount_year, row: row.apply(
-            partial(apply_discount2, discount_year, row.name)
-        )
-        apply_discount2 = lambda discount_year, current_year, value: value / (
-            1 + discount_rate
-        ) ** (current_year - discount_year)
-        dataframe = self.to_dataframe()
-        dataframe = dataframe.apply(partial(apply_discount1, discount_year), axis=1)
-        dataframe.loc["Sum"] = dataframe.sum()
-        return dataframe
-"""
