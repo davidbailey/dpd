@@ -3,6 +3,7 @@ from datetime import datetime
 from astropy import units
 from forex_python.converter import CurrencyRates
 
+
 class Currency:
     def __init__(self, currency, base_year, discount_rate, base_currency=None):
         """
@@ -13,7 +14,11 @@ class Currency:
             base_currency (astropy.units.quantity.Quantity): e.g. dpd.analysis.Currency.discount()
         """
         if base_currency:
-            exchange_rate = CurrencyRates().get_rate(currency, base_currency.unit.name, datetime(year=base_year, month=1, day=1))
+            exchange_rate = CurrencyRates().get_rate(
+                currency,
+                base_currency.unit.name,
+                datetime(year=base_year, month=1, day=1),
+            )
             self.currency = units.def_unit([currency], exchange_rate * base_currency)
         else:
             self.currency = units.def_unit([currency])
