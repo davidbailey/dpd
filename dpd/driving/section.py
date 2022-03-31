@@ -1,8 +1,10 @@
 from numpy import sqrt
 from shapely.geometry import LineString
 
-from dpd.analysis.costs import segment_cost, modes, elevations
 from dpd.geometry import draw_arc
+
+elevations = ["surface", "underground", "elevated"]
+modes = ["air", "marine", "rail", "road"]
 
 
 class Section:
@@ -58,7 +60,3 @@ class Section:
             )
         else:
             return None
-
-    @property
-    def cost(self):
-        return segment_cost(self.mode, self.elevation, self.geometry.length)
