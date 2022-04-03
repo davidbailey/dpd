@@ -1,4 +1,5 @@
-from dpd.analysis import Currency
+from astropy import units 
 
-usd = Currency("USD", 2020, 0.07).discount()
+usd = units.def_unit("USD (2020)")
+
 
