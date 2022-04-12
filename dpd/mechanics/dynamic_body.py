@@ -1,21 +1,23 @@
 from astropy import units
 from pandas import DataFrame
 
+
 class DynamicBody:
     """
     This model represents a constant-power dynamic body moving in one dimension with a constant deceleration.
     power = mass * acceleration * velocity
     """
+
     def __init__(
         self,
-        power, 
-        mass, 
-        max_speed, 
+        power,
+        mass,
+        max_speed,
         max_acceleration,
-        max_deceleration, 
-        initial_time = None,
-        initial_distance = None, 
-        initial_speed = None 
+        max_deceleration,
+        initial_time=None,
+        initial_distance=None,
+        initial_speed=None,
     ):
         self.power = power
         self.mass = mass
@@ -34,7 +36,7 @@ class DynamicBody:
             self.current_speed = initial_speed
         else:
             self.current_speed = 0 * units.meter / units.second
-    
+
     @property
     def acceleration(self):
         """
@@ -44,7 +46,9 @@ class DynamicBody:
         return min(self.power / (self.mass * self.current_speed), self.max_acceleration)
 
     def stopping_distance(self, final_speed):
-        return (final_speed**2 - self.current_speed**2) / (2 * self.max_deceleration)
+        return (final_speed**2 - self.current_speed**2) / (
+            2 * self.max_deceleration
+        )
 
     def step_speed(self, speed_limit, time_delta):
         speed = self.current_speed + self.acceleration * time_delta
@@ -54,7 +58,9 @@ class DynamicBody:
         if write:
             self.current_time += time_delta
             self.current_speed = self.step_speed(speed_limit, time_delta)
-            self.current_distance += self.step_speed(speed_limit, time_delta) * time_delta
+            self.current_distance += (
+                self.step_speed(speed_limit, time_delta) * time_delta
+            )
         return self.step_speed(speed_limit, time_delta) * time_delta
 
     def decelerate(self, distance, speed):
@@ -73,16 +79,26 @@ class DynamicBody:
             while distance < current_segment[0]:
                 stopping_distance_available = current_segment[0].copy() - distance
                 for segment in segments:
-                    if self.stopping_distance(segment[1].copy()) > stopping_distance_available - self.step_distance(current_segment[1].copy(), time_delta, False):
-                        distance += self.decelerate(current_segment[0].copy() - distance, segment[1].copy())
+                    if self.stopping_distance(
+                        segment[1].copy()
+                    ) > stopping_distance_available - self.step_distance(
+                        current_segment[1].copy(), time_delta, False
+                    ):
+                        distance += self.decelerate(
+                            current_segment[0].copy() - distance, segment[1].copy()
+                        )
                         break
                     stopping_distance_available += segment[0].copy()
                 if distance == current_segment[0]:
                     break
-                distance += self.step_distance(current_segment[1].copy(), time_delta, True)
-            output.append({
-                "time": self.current_time.copy(),
-                "distance": self.current_distance.copy(),
-                "speed": self.current_speed.copy(),
-            })
+                distance += self.step_distance(
+                    current_segment[1].copy(), time_delta, True
+                )
+            output.append(
+                {
+                    "time": self.current_time.copy(),
+                    "distance": self.current_distance.copy(),
+                    "speed": self.current_speed.copy(),
+                }
+            )
         return DataFrame(output)
