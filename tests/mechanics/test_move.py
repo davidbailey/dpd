@@ -2,7 +2,7 @@ import unittest
 
 from astropy import units
 
-from dpd.kinematics import move
+from dpd.mechanics import move
 
 ACCELERATION = 2.5 * units.meter / (units.second * units.second)
 INITIAL_VELOCITY = 0 * units.imperial.mile / units.hour

@@ -4,7 +4,7 @@ from astropy import units
 from mesa import Agent
 from uuid import uuid4
 
-from dpd.kinematics import move
+from dpd.mechanics import move
 
 
 class Pedestrian(Agent):

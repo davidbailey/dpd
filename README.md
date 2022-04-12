@@ -19,7 +19,7 @@ There are also several supporting submodules that can be used by the above modul
 
 * Folium - an example [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
 * Geometry - functions for computing geometric operations and classes for storing geometric objects: [Geometry](https://dpd.readthedocs.io/en/latest/notebooks/geometry.html)
-* Kinematics - a class for modeling a kinematic body - this is used by both Driving and Modeling
+* Mechanics - a class for modeling a kinematic body - this is used by both Driving and Modeling
 * Geopandas - functions for working with geopandas GeoDataFrames
 * Mapping - classes for creating a map. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html)
 * Open Source Routing Machine (OSRM) - functions to interact with an OSRM server

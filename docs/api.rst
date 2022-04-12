@@ -31,7 +31,7 @@ api
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: dpd.kinematics
+.. automodule:: dpd.mechanics
     :members:
     :imported-members:
     :undoc-members:
