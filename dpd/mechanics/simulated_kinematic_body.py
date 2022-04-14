@@ -18,20 +18,20 @@ class SimulatedKinematicBody:
 
         self.current_time = initial_time
         self.current_distance = initial_distance
-        self.current_velocity = initial_
+        self.current_velocity = initial_velocity
         self.delta_time = delta_time
 
     def step_velocity(self, write):
         return self.current_velocity
 
     def step_time(self, write):
-        next_time = self.current_time + delta_time
+        next_time = self.current_time + self.delta_time
         if write:
             self.current_time = next_time
         return next_time
 
     def step_distance(self, write):
-        next_distance = self.current_distance + self.step_velocity(write) * delta_time
+        next_distance = self.current_distance + self.step_velocity(write) * self.delta_time
         if write:
             self.current_distance = next_distance
         return next_distance
