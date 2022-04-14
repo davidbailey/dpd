@@ -24,7 +24,7 @@ class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
 
     def step_velocity(self, write):
         next_velocity = (
-            self.current_velocity + self.step_acceleration(write) * delta_time
+            self.current_velocity + self.step_acceleration(write) * self.delta_time
         )
         if self.velocity_limit:
             next_velocity = min(next_velocity, self.velocity_limit)
