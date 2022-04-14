@@ -1,4 +1,4 @@
-import math
+from numpy import sin, cos, tan
 
 
 class Bicycle:
@@ -17,16 +17,16 @@ class Bicycle:
         self.vehicle_length = vehicle_length
 
     def step(self, delta_time=1, steering_angle=0):
-        self.x = self.x + self.velocity * math.cos(self.theta) * delta_time
-        self.y = self.y + self.velocity * math.sin(self.theta) * delta_time
+        self.x = self.x + self.velocity * cos(self.theta) * delta_time
+        self.y = self.y + self.velocity * sin(self.theta) * delta_time
         self.theta = (
             self.theta
             + self.velocity
-            * math.tan(steering_angle)
+            * tan(steering_angle)
             / self.vehicle_length
             * delta_time
         )
         self.velocity = self.velocity + self.acceleration * delta_time
 
     def get_radius_from_vehicle_length_and_steering_angle(self, steering_angle):
-        return self.vehicle_length / math.tan(steering_angle)
+        return self.vehicle_length / tan(steering_angle)
