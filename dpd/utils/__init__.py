@@ -1,3 +1,2 @@
 from .download_file import download_file
-from .epsg4326_to_aea import epsg4326_to_aea
 from .timestring_to_timeobject import timestring_to_timeobject
