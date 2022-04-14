@@ -11,7 +11,7 @@ class TestSimulatedDynamicBody(unittest.TestCase):
           power=1 * units.watt,
           mass = 1 * units.kilogram
         )
-        next_time, next_distance = kinematic_body.step()
+        next_time, next_distance = body.step()
         self.assertEqual(next_time, 1 * units.second)
         self.assertEqual(next_distance, 1 * units.meter)
 
