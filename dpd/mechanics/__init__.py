@@ -1,3 +1,4 @@
+from .bicycle import Bicycle
 from .move import move
 from .simulated_dynamic_body import SimulatedDynamicBody
 from .simulated_kinematic_body import SimulatedKinematicBody
