@@ -31,7 +31,9 @@ class SimulatedKinematicBody:
         return next_time
 
     def step_distance(self, write):
-        next_distance = self.current_distance + self.step_velocity(write) * self.delta_time
+        next_distance = (
+            self.current_distance + self.step_velocity(write) * self.delta_time
+        )
         if write:
             self.current_distance = next_distance
         return next_distance
