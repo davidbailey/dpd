@@ -11,6 +11,7 @@ class SimulatedDynamicBody(SimulatedKinematicBodyWithAcceleration):
     def __init__(self, power, mass, acceleration_limit=None, *args, **kwargs):
         self.power = power
         self.mass = mass
+        self.acceleration_limit = acceleration_limit
         super().__init__(*args, **kwargs)
 
     def step_acceleration(self, write):
