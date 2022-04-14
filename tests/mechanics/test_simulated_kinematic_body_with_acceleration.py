@@ -2,16 +2,16 @@ import unittest
 
 from astropy import units
 
-from dpd.mechanics import KinematicBodyWithAcceleration
+from dpd.mechanics import SimulatedKinematicBodyWithAcceleration
 
 
-class TestKinematicBodyWithAcceleration(unittest.TestCase):
-    def test_kinematic_body_with_acceleration(self):
-        kinematic_body = TestKinematicBodyWithAcceleration(
+class TestSimulatedKinematicBodyWithAcceleration(unittest.TestCase):
+    def test_simulated_kinematic_body_with_acceleration(self):
+        body = TestSimulatedKinematicBodyWithAcceleration(
           initial_acceleration=1 * units.meter / units.second**2,
           velocity_limit = 1 * units.meter / units.second
         )
-        next_time, next_distance = kinematic_body.step()
+        next_time, next_distance = body.step()
         self.assertEqual(next_time, 1 * units.second)
         self.assertEqual(next_distance, 1 * units.meter)
 
