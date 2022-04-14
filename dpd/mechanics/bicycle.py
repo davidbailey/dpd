@@ -21,10 +21,7 @@ class Bicycle:
         self.y = self.y + self.velocity * sin(self.theta) * delta_time
         self.theta = (
             self.theta
-            + self.velocity
-            * tan(steering_angle)
-            / self.vehicle_length
-            * delta_time
+            + self.velocity * tan(steering_angle) / self.vehicle_length * delta_time
         )
         self.velocity = self.velocity + self.acceleration * delta_time
 
