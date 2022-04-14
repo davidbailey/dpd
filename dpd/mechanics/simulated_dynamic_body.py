@@ -14,7 +14,7 @@ class SimulatedDynamicBody(SimulatedKinematicBodyWithAcceleration):
         super().__init__(*args, **kwargs)
 
     def step_acceleration(self, write):
-        next_acceleration = self.power / (self.mass * self.current_speed)
+        next_acceleration = self.power / (self.mass * self.current_velocity)
         if self.acceleration_limit:
             next_acceleration = min(next_acceleration, self.acceleration_limit)
         if write:
