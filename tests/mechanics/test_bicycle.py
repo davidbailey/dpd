@@ -21,7 +21,7 @@ class TestBicycle(unittest.TestCase):
 
         self.assertEqual(
             radius.to(units.imperial.foot).value,
-            (42.13036619889238 * units.imperial.foot).to(units.imperial.foot).value
+            (42.13036619889238 * units.imperial.foot).to(units.imperial.foot).value,
         )
 
 
