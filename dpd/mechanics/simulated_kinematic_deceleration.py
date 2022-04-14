@@ -10,10 +10,10 @@ class SimulatedKinematicDeceleration:
         self.max_deceleration = max_deceleration
 
     def stopping_distance(self, final_velocity):
-        return (final_velocity ** 2 - self.current_velocity ** 2) / (
+        return (final_velocity**2 - self.current_velocity**2) / (
             2 * self.max_deceleration
         )
-    
+
     def decelerate(self, distance, final_velocity):
         self.current_time += 2 * distance / (final_velocity + self.current_velocity)
         self.current_distance += distance

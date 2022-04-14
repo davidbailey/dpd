@@ -1,20 +1,16 @@
 from astropy import units
 
-from .simulated_kinematic_body_with_acceleration import SimulatedKinematicBodyWithAcceleration
+from .simulated_kinematic_body_with_acceleration import (
+    SimulatedKinematicBodyWithAcceleration,
+)
+
 
 class SimulatedDynamicBody(SimulatedKinematicBodyWithAcceleration):
     """
     A class to simulate a dynamic body. Provides methods to move the body with constant power.
     """
 
-    def __init__(
-        self,
-        power,
-        mass,
-        acceleration_limit = None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, power, mass, acceleration_limit=None, *args, **kwargs):
         self.power = power
         self.mass = mass
         super().__init__(*args, **kwargs)

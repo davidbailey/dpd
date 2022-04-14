@@ -2,6 +2,7 @@ from astropy import units
 
 from .simulated_kinematic_body import SimulatedKinematicBody
 
+
 class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
     """
     A class to simulate a kinematic body. Provides methods to move the body with constant acceleration.
@@ -9,8 +10,8 @@ class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
 
     def __init__(
         self,
-        initial_acceleration = 0 * units.meter / units.second ** 2,
-        velocity_limit = None,
+        initial_acceleration=0 * units.meter / units.second**2,
+        velocity_limit=None,
         *args,
         **kwargs
     ):
@@ -22,7 +23,9 @@ class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
         return self.current_acceleration
 
     def step_velocity(self, write):
-        next_velocity = self.current_velocity + self.step_acceleration(write) * delta_time
+        next_velocity = (
+            self.current_velocity + self.step_acceleration(write) * delta_time
+        )
         if self.velocity_limit:
             next_velocity = min(next_velocity, self.velocity_limit)
         if write:
