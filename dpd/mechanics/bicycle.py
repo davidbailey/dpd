@@ -30,12 +30,3 @@ class Bicycle:
 
     def get_radius_from_vehicle_length_and_steering_angle(self, steering_angle):
         return self.vehicle_length / math.tan(steering_angle)
-
-
-truck = Bicycle(
-    x=0, y=0, theta=0, velocity=1, acceleration=0, vehicle_length=29.5
-)  # feet
-truck.get_radius_from_vehicle_length_and_steering_angle(
-    steering_angle=0.61
-)  # radians ~ 35 degrees
-# 42.20804673074035 feet
