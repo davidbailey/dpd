@@ -19,7 +19,7 @@ class TestBicycle(unittest.TestCase):
             steering_angle=35 * units.degree
         )
 
-        self.assertEqual(radius, 42.20804673074035 * units.imperial.foot)
+        self.assertEqual(radius, 42.1303662 * units.imperial.foot)
 
 
 if __name__ == "__main__":
