@@ -1,5 +1,3 @@
-from astropy import units
-
 from .simulated_kinematic_body_with_acceleration import (
     SimulatedKinematicBodyWithAcceleration,
 )
