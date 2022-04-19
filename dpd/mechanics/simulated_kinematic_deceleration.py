@@ -8,6 +8,7 @@ class SimulatedKinematicDeceleration:
         max_deceleration,
     ):
         self.max_deceleration = max_deceleration
+        super().__init__(*args, **kwargs)
 
     def stopping_distance(self, final_velocity):
         return (final_velocity**2 - self.current_velocity**2) / (
