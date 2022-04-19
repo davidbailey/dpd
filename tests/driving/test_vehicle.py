@@ -17,14 +17,14 @@ class TestVehicle(unittest.TestCase):
             ],
             columns=["speed_limit", "distance"],
         )
-        vehicle = DynamicBody(
+        vehicle = Vehicle(
             power=75000 * 0.1 * units.watt,
             mass=2000 * units.kilogram,
             max_speed=150 * units.kilometer / units.hour,
             acceleration_limit=2 * units.meter / (units.second * units.second),
             max_deceleration=-1 * units.meter / (units.second * units.second),
         )
-        drive = vehicle.drive_between_stops(
+        vehicle.drive_between_stops(
             segments.speed_limit.to_list(), segments.distance.to_list()
         )
 
