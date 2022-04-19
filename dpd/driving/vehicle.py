@@ -1,164 +1,44 @@
-import numpy as np
-import pandas as pd
+from dpd.mechanics import SimulatedDynamicBody, SimulatedBodyDeceleration
+from pandas import DataFrame
 
 
-class Vehicle:
+class Vehicle(SimulatedDynamicBody, SimulatedBodyDeceleration):
     """
     Describes a rail or road vehicle and includes methods to drive it along a line
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def __init__(self, max_speed, max_acceleration, max_deceleration):
-        self.max_speed = max_speed
-        self.acceleration = max_acceleration
-        self.deceleration = max_deceleration
-
-    def accelerate_or_decelerate(
-        self, distance, acceleration_or_deceleration, speed_limit
-    ):
-        """
-        Add a segment with constant acceleration (or deceleration
-        """
-        speed_before_segment = self.speed
-        if 0 > speed_before_segment**2 + 2 * acceleration_or_deceleration * distance:
-            # this can be very close to zero, but negative which results in nan below
-            self.speed = 0
-        else:
-            self.speed = np.sqrt(
-                speed_before_segment**2 + 2 * acceleration_or_deceleration * distance
-            )
-        time = (self.speed - speed_before_segment) / acceleration_or_deceleration
-        self.segments.append(
-            {
-                "speed_before_segment": speed_before_segment,
-                "speed_after_segment": self.speed,
-                "speed_limit": speed_limit,
-                "distance": distance,
-                "time": time,
-                "acceleration": acceleration_or_deceleration,
-            }
-        )
-
-    def go(self, distance):
-        """
-        Add a segment with constant speed
-        """
-        if distance == 0:
-            time = 0
-        else:
-            time = distance / self.speed
-            self.segments.append(
+    def drive_between_stops(self, speed_limits, distances): # figure out what to do with speed_limits
+        output = []
+        segments = list(zip(distances, speed_limits))
+        segments.append((0 * units.meter, 0 * units.meter / units.second))
+        for _ in range(len(segments) - 1):
+            current_segment = segments.pop(0)
+            distance = 0 * units.meter
+            while distance < current_segment[0]:
+                stopping_distance_available = current_segment[0].copy() - distance
+                for segment in segments:
+                    if self.stopping_distance(
+                        segment[1].copy()
+                    ) > stopping_distance_available - self.step_distance(
+                        current_segment[1].copy(), self.delta_time, False
+                    ):
+                        distance += self.decelerate(
+                            current_segment[0].copy() - distance, segment[1].copy()
+                        )
+                        break
+                    stopping_distance_available += segment[0].copy()
+                if distance == current_segment[0]:
+                    break
+                distance += self.step_distance(
+                    current_segment[1].copy(), self.delta_time, True
+                )
+            output.append(
                 {
-                    "speed_before_segment": self.speed,
-                    "speed_after_segment": self.speed,
-                    "speed_limit": self.speed,
-                    "distance": distance,
-                    "time": time,
-                    "acceleration": 0,
+                    "time": self.current_time.copy(),
+                    "distance": self.current_distance.copy(),
+                    "speed": self.current_speed.copy(),
                 }
             )
-
-    def accelerate_and_go(self, speed_limit, distance):
-        """
-        The case where the vehicle starts a segment slower than the segment's speed limit.
-        Two outcomes:
-        1. the vehicle accelerates to the segment's speed limit and drives at the speed limit
-        2. the vehicle accelerates, but does not reach the speed limit.
-        """
-        accelerate_distance = (speed_limit**2 - self.speed**2) / (
-            2 * self.acceleration
-        )
-        if accelerate_distance <= distance:
-            self.accelerate_or_decelerate(
-                accelerate_distance, self.acceleration, speed_limit
-            )
-            self.speed = speed_limit
-            self.go(distance - accelerate_distance)
-        else:
-            self.accelerate_or_decelerate(distance, self.acceleration, speed_limit)
-
-    def accelerate_go_and_decelerate(
-        self, speed, distance, intermediate_speed_limit, final_speed_limit
-    ):
-        """
-        There are two cases:
-        1. The vehicle never reaches the speed limit of the segment: it accelerates and then decelerates.
-        2. The vehicle reaches the speed limit of segment: it accelerates, goes at the speed limit, then decelerates.
-        This equation comes from setting the final speed of the acceleration section equal to the initial speed of the deceleration section.
-        And setting distance = acceleration distance + deceleration distance. And then solving for deceleration distance.
-        """
-        deceleration_distance = (
-            final_speed_limit**2 - speed**2 - 2 * self.acceleration * distance
-        ) / (2 * (self.deceleration - self.acceleration))
-        self.speed = speed
-        if (
-            np.sqrt(
-                speed**2 + 2 * self.acceleration * (distance - deceleration_distance)
-            )
-            <= intermediate_speed_limit
-        ):
-            self.accelerate_or_decelerate(
-                distance - deceleration_distance,
-                self.acceleration,
-                intermediate_speed_limit,
-            )
-            self.accelerate_or_decelerate(
-                deceleration_distance, self.deceleration, intermediate_speed_limit
-            )
-        else:
-            deceleration_distance = (
-                final_speed_limit**2 - intermediate_speed_limit**2
-            ) / (2 * self.deceleration)
-            self.accelerate_and_go(
-                intermediate_speed_limit, distance - deceleration_distance
-            )
-            self.accelerate_or_decelerate(
-                deceleration_distance, self.deceleration, intermediate_speed_limit
-            )
-
-    def fix_overspeed(self, speed_limit, distance, fix_overspeed_distance=0):
-        """
-        Fix the case the vehicle gets to a segment and is going too fast.
-        Remove the last segment and use that distance to decelerate. Two cases:
-        1. There is enough distance to slow down.
-        2. There is not enough distance to slow down: repeat the process.
-        In either case, the vehicle will travel the next segment at that segment's speed limit.
-        """
-        last_segment = self.segments.pop()
-        fix_overspeed_distance = fix_overspeed_distance + last_segment["distance"]
-        if speed_limit**2 > last_segment[
-            "speed_before_segment"
-        ] ** 2 + 2 * self.deceleration * (fix_overspeed_distance):
-            self.accelerate_go_and_decelerate(
-                last_segment["speed_before_segment"],
-                fix_overspeed_distance,
-                last_segment["speed_limit"],
-                speed_limit,
-            )
-        else:
-            self.fix_overspeed(speed_limit, 0, fix_overspeed_distance)
-        self.speed = speed_limit
-        if distance != 0:
-            self.go(distance)
-
-    def drive_single_segment(self, speed_limit, distance):
-        """
-        Drives a single segment. Three outcomes: 1. Acceleration 2. Constant speed 3. Speed is greater than the Speed Limit and will be fixed.
-        """
-        speed_limit = min(speed_limit, self.max_speed)
-        if self.speed < speed_limit:
-            self.accelerate_and_go(speed_limit, distance)
-        elif self.speed == speed_limit:
-            self.go(distance)
-        if self.speed > speed_limit:
-            self.fix_overspeed(speed_limit, distance)
-
-    def drive_between_stops(self, speed_limits, lengths):
-        """
-        Kicks off a drive.
-        """
-        self.speed = 0
-        self.segments = []
-        for i in range(len(speed_limits)):
-            self.drive_single_segment(speed_limits[i], lengths[i])
-        self.result = pd.DataFrame(self.segments)
-        return self.result
+            return DataFrame(output)
