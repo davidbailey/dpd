@@ -1,5 +1,7 @@
-from dpd.mechanics import SimulatedDynamicBody, SimulatedBodyDeceleration
+from astropy import units
 from pandas import DataFrame
+
+from dpd.mechanics import SimulatedDynamicBody, SimulatedBodyDeceleration
 
 
 class Vehicle(SimulatedDynamicBody, SimulatedBodyDeceleration):
