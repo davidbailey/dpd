@@ -20,7 +20,7 @@ class SimulatedKinematicBody:
         self.current_distance = initial_distance
         self.current_velocity = initial_velocity
         self.delta_time = delta_time
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
     def step_velocity(self, write):
         return self.current_velocity
