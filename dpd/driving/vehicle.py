@@ -27,7 +27,7 @@ class Vehicle(SimulatedDynamicBody, SimulatedKinematicDeceleration):
                     if self.stopping_distance(
                         segment[1].copy()
                     ) > stopping_distance_available - self.step_distance(
-                        current_segment[1].copy(), self.delta_time, False
+                        current_segment[1].copy(), False
                     ):
                         distance += self.decelerate(
                             current_segment[0].copy() - distance, segment[1].copy()
@@ -37,7 +37,7 @@ class Vehicle(SimulatedDynamicBody, SimulatedKinematicDeceleration):
                 if distance == current_segment[0]:
                     break
                 distance += self.step_distance(
-                    current_segment[1].copy(), self.delta_time, True
+                    current_segment[1].copy(), True
                 )
             output.append(
                 {
