@@ -3,12 +3,7 @@ class SimulatedKinematicDeceleration:
     Provides methods to decelerate the body with constant deceleration.
     """
 
-    def __init__(
-        self,
-        max_deceleration,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, max_deceleration, *args, **kwargs):
         self.max_deceleration = max_deceleration
         super().__init__()
 
