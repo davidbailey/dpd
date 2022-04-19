@@ -6,10 +6,13 @@ class Vehicle(SimulatedDynamicBody, SimulatedBodyDeceleration):
     """
     Describes a rail or road vehicle and includes methods to drive it along a line
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def drive_between_stops(self, speed_limits, distances): # figure out what to do with speed_limits
+    def drive_between_stops(
+        self, speed_limits, distances
+    ):  # figure out what to do with speed_limits
         output = []
         segments = list(zip(distances, speed_limits))
         segments.append((0 * units.meter, 0 * units.meter / units.second))
