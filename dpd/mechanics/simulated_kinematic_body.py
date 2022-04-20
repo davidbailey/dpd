@@ -8,18 +8,14 @@ class SimulatedKinematicBody:
 
     def __init__(
         self,
-        initial_time=0 * units.second,
-        initial_distance=0 * units.meter,
-        initial_velocity=0 * units.meter / units.second,
-        delta_time=1 * units.second,
         *args,
         **kwargs
     ):
 
-        self.current_time = initial_time
-        self.current_distance = initial_distance
-        self.current_velocity = initial_velocity
-        self.delta_time = delta_time
+        self.current_time = 0 * units.second
+        self.current_distance = 0 * units.meter
+        self.current_velocity = 0 * units.meter / units.second
+        self.delta_time = 1 * units.second
         super().__init__(*args, **kwargs)
 
     def step_velocity(self, write):
