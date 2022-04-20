@@ -6,11 +6,7 @@ class SimulatedKinematicBody:
     A class to simulate a kinematic body. Provides methods to move the body with constant velocity.
     """
 
-    def __init__(
-        self,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
 
         self.current_time = 0 * units.second
         self.current_distance = 0 * units.meter

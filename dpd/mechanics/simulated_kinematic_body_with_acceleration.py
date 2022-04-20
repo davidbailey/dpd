@@ -8,12 +8,7 @@ class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
     A class to simulate a kinematic body. Provides methods to move the body with constant acceleration.
     """
 
-    def __init__(
-        self,
-        velocity_limit=None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, velocity_limit=None, *args, **kwargs):
         self.current_acceleration = 0 * units.meter / units.second**2
         self.velocity_limit = velocity_limit
         super().__init__(*args, **kwargs)
