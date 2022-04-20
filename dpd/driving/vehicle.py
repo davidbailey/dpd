@@ -34,7 +34,7 @@ class Vehicle(SimulatedDynamicBody, SimulatedKinematicDeceleration):
                     stopping_distance_available += segment[0].copy()
                 if distance == current_segment[0]:
                     break
-                distance += self.step_distance(write=True)
+                # distance += self.step_distance(write=True)
             output.append(
                 {
                     "time": self.current_time.copy(),
