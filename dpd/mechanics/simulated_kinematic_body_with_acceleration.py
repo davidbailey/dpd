@@ -10,12 +10,11 @@ class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
 
     def __init__(
         self,
-        initial_acceleration=0 * units.meter / units.second**2,
         velocity_limit=None,
         *args,
         **kwargs
     ):
-        self.current_acceleration = initial_acceleration
+        self.current_acceleration = 0 * units.meter / units.second**2
         self.velocity_limit = velocity_limit
         super().__init__(*args, **kwargs)
 
