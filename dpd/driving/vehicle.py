@@ -39,7 +39,7 @@ class Vehicle(SimulatedDynamicBody, SimulatedKinematicDeceleration):
                 {
                     "time": self.current_time.copy(),
                     "distance": self.current_distance.copy(),
-                    "speed": self.current_speed.copy(),
+                    "velocity": self.current_velocity.copy(),
                 }
             )
             return DataFrame(output)
