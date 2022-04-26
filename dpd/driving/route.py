@@ -67,7 +67,9 @@ class Route(GeoDataFrame):
                         "x": point.coords[0][0],
                         "y": point.coords[0][1],
                         "stop": stop,
-                        "accessibility": stops_dict[stop].accessibility(point.coords[0][0], point.coords[0][1], mode),
+                        "accessibility": stops_dict[stop].accessibility(
+                            point.coords[0][0], point.coords[0][1], mode
+                        ),
                     }
                 )
         dataframe = DataFrame(accessibility)
