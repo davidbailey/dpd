@@ -1,1 +1,0 @@
-from .transportation_alternative import TransportationAlternative
