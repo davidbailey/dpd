@@ -4,5 +4,6 @@ from .schedule import Schedule
 from .stop import Stop
 from .trip import Trip
 from .section import Section
+from .transportation_alternative import TransportationAlternative
 from .vehicle import Vehicle
 from .vehicles import Vehicles
