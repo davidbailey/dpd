@@ -14,6 +14,7 @@ https://github.com/davidbailey/dpd
    notebooks/four_step_transportation_model.ipynb
    notebooks/geometry.ipynb
    notebooks/gravity_model.ipynb
+   notebooks/transportation_alternative.ipynb
    notebooks/wikipedia.ipynb
    api
 
