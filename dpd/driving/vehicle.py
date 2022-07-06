@@ -1,10 +1,10 @@
 from astropy import units
 from pandas import DataFrame
 
-from dpd.mechanics import SimulatedDynamicBody, SimulatedKinematicDeceleration
+from dpd.mechanics import SimulatedDynamicBody
 
 
-class Vehicle(SimulatedDynamicBody, SimulatedKinematicDeceleration):
+class Vehicle(SimulatedDynamicBody):
     """
     Describes a rail or road vehicle and includes methods to drive it along a line
     """
