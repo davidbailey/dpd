@@ -1,17 +1,17 @@
 from astropy import units
 
-from .simulated_kinematic_body import SimulatedKinematicBody
+from .kinematic_body import KinematicBody
 
 
-class SimulatedKinematicBodyWithAcceleration(SimulatedKinematicBody):
+class KinematicBodyWithAcceleration(KinematicBody):
     """
     A class to simulate a kinematic body. Provides methods to move the body with constant acceleration and decelerate the body with constant deceleration.
     """
 
-    def __init__(self, velocity_limit=None, max_deceleration, *args, **kwargs):
-        self.current_acceleration = 0 * units.meter / units.second**2
-        self.velocity_limit = velocity_limit
+    def __init__(self, initial_acceleration, max_deceleration, velocity_limit=None *args, **kwargs):
+        self.acceleration = initial_acceleration
         self.max_deceleration = max_deceleration
+        self.velocity_limit = velocity_limit
         super().__init__(*args, **kwargs)
 
     def step_acceleration(self, write):
