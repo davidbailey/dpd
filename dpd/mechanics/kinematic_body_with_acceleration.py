@@ -27,6 +27,7 @@ class KinematicBodyWithAcceleration(KinematicBody):
             self.velocity = numpy.minimum(self.velocity, stopping_distance_velocity_max_position)
             stopping_distance_velocity_min_position = numpy.sqrt(self.final_velocity**2 + 2 * self.max_deceleration * (self.min_position - self.position))
             self.velocity = numpy.minimum(self.velocity, stopping_distance_velocity_min_position)
+            self.acceleration = self.max_deceleration
             
     def step(self):
         self.step_velocity()
