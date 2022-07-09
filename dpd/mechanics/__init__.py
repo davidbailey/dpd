@@ -1,8 +1,6 @@
 from .bicycle import Bicycle
+from .body import Body
 from .move import move
-from .simulated_dynamic_body import SimulatedDynamicBody
-from .simulated_kinematic_body import SimulatedKinematicBody
-from .simulated_kinematic_body_with_acceleration import (
-    SimulatedKinematicBodyWithAcceleration,
-)
-from .simulated_kinematic_deceleration import SimulatedKinematicDeceleration
+from .dynamic_body import DynamicBody
+from .kinematic_body import KinematicBody
+from .kinematic_body_with_acceleration import KinematicBodyWithAcceleration
