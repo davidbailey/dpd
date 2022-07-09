@@ -1,12 +1,12 @@
 from astropy import units
-from mesa import Agent
-from uuid import uuid4
 
-class OneDimensionalBody(Agent):
+from .body import Body
+
+class OneDimensionalBody(Body):
     """
     """
 
-    def __init__(self, model, unique_id=None, initial_position=None):
-        self.unique_id = unique_id if unique_id else uuid4()
-        super().__init__(self.unique_id, model)
-        self.position = initial_position if initial_position else 0 * units.meter
+    def __init__(self, initial_position=None, *args, **kwargs):
+        initial_position = initial_position if initial_position else 0 * units.meter
+        super().__init__(initial_position=initial_position, *args, **kwargs)
+        
