@@ -8,7 +8,7 @@ class KinematicBodyWithAcceleration(KinematicBody):
     A class to simulate a kinematic body. Provides methods to move the body with constant acceleration and decelerate the body with constant deceleration.
     """
 
-    def __init__(self, initial_acceleration, max_velocity=None, min_velocity=None, max_deceleration=None, final_velocity=None *args, **kwargs):
+    def __init__(self, initial_acceleration, max_velocity=None, min_velocity=None, max_deceleration=None, final_velocity=None, *args, **kwargs):
         self.acceleration = initial_acceleration
         self.max_velocity = max_velocity
         self.min_velocity = min_velocity

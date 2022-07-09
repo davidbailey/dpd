@@ -4,7 +4,7 @@ from pandas import DataFrame
 from dpd.mechanics import SimulatedDynamicBody
 
 
-class Vehicle(SimulatedDynamicBody):
+class DynamicVehicle(DynamicBody):
     """
     Describes a rail or road vehicle and includes methods to drive it along a line
     """
