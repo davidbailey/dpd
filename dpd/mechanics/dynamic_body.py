@@ -13,6 +13,8 @@ class DynamicBody(KinematicBodyWithAcceleration):
         super().__init__(*args, **kwargs)
 
     def step_acceleration(self):
+        if not self.velocity:
+            return
         self.acceleration = self.power / (self.mass * self.velocity)
         if self.max_acceleration:
             self.acceleration = numpy.maximum(self.acceleration, self.max_acceleration)
