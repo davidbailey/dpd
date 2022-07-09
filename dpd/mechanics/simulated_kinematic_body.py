@@ -1,16 +1,16 @@
-from astropy import units
+from .body import Body
 
-from .one_dimensional_body import OneDimensionalBody
-
-class SimulatedKinematicBody(OneDimensionalBody:
+class KinematicBody(Body):
     """
     A class to simulate a kinematic body. Provides methods to move the body with constant velocity.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, velocity, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.velocity = 0 * units.meter / units.second
+        self.velocity = velocity
 
     def step_position(self):
         self.position = self.position + self.velocity
-        return self.position
+
+    def step(self):
+        self.step_position()
