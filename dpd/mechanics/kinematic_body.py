@@ -22,3 +22,4 @@ class KinematicBody(Body):
 
     def step(self):
         self.step_position()
+        super().step()
