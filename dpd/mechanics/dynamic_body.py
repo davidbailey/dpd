@@ -21,6 +21,5 @@ class DynamicBody(KinematicBodyWithAcceleration):
 
     def step(self):
         self.step_acceleration()
-        self.step_velocity()
-        self.step_position()
+        super.step()
         
