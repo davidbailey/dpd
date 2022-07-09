@@ -23,5 +23,5 @@ class KinematicBodyWithAcceleration(KinematicBody):
 
     def step(self):
         self.step_velocity()
-        self.step_position()
+        super().step()
         
