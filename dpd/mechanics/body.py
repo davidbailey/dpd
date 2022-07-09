@@ -9,3 +9,5 @@ class Body(Agent):
         super().__init__(*args, **kwargs)
         self.position = initial_position
         
+    def step(self):
+        pass
