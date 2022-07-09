@@ -1,3 +1,5 @@
+import numpy
+
 from .body import Body
 
 class KinematicBody(Body):
@@ -13,10 +15,10 @@ class KinematicBody(Body):
 
     def step_position(self):
         self.position = self.position + self.velocity
-        if self.max_position and self.position > self.max_position
-            self.position = self.max_position
-        if self.min_position and self.position < self.min_position
-            self.position = self.min_position
+        if self.max_position:
+            self.position = numpy.maximum(self.position, self.max_position)
+        if self.min_position:
+            self.position = numpy.minimum(self.position, self.min_position)
 
     def step(self):
         self.step_position()
