@@ -17,8 +17,12 @@ class KinematicBody(Body):
         self.position = self.position + self.velocity * self.model.time_unit
         if self.max_position is not None:
             self.position = numpy.minimum(self.position, self.max_position)
+            if self.position == self.max_position:
+                self.velocity = 0 * self.velocity
         if self.min_position is not None:
             self.position = numpy.maximum(self.position, self.min_position)
+            if self.position == self.min_position:
+                self.velocity = 0 * self.velocity
 
     def step(self):
         self.step_position()
