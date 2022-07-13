@@ -11,5 +11,6 @@ class TransportationModel(Model):
     def step(self):
         self.schedule.step()
 
-    def simulate(self):
-        pass
+    def run(self):
+        while self.schedule.agents:
+            self.step()
