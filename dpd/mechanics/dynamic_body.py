@@ -1,3 +1,6 @@
+import astropy
+import numpy
+
 from .kinematic_body_with_acceleration import KinematicBodyWithAcceleration
 
 class DynamicBody(KinematicBodyWithAcceleration):
@@ -13,13 +16,16 @@ class DynamicBody(KinematicBodyWithAcceleration):
         super().__init__(*args, **kwargs)
 
     def step_acceleration(self):
-        if not self.velocity:
+        if isinstance(self.velocity, astropy.units.quantity.Quantity):
+            if not self.velocity.value.any():
+                return
+        elif not numpy.any(self.velocity):
             return
         self.acceleration = self.power / (self.mass * self.velocity)
-        if self.max_acceleration:
-            self.acceleration = numpy.maximum(self.acceleration, self.max_acceleration)
-        if self.min_acceleration:
-            self.acceleration = numpy.minimum(self.acceleration, self.min_acceleration)
+        if self.max_acceleration is not None:
+            self.acceleration = numpy.minimum(self.acceleration, self.max_acceleration)
+        if self.min_acceleration is not None:
+            self.acceleration = numpy.maximum(self.acceleration, self.min_acceleration)
 
     def step(self):
         self.step_acceleration()

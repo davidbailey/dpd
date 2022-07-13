@@ -17,17 +17,25 @@ class KinematicBodyWithAcceleration(KinematicBody):
         super().__init__(*args, **kwargs)
 
     def step_velocity(self):
-        self.velocity = self.velocity + self.acceleration
-        if self.max_velocity:
-            self.velocity = numpy.maximum(self.velocity, self.max_velocity)
-        if self.min_velocity:
-            self.velocity = numpy.minimum(self.velocity, self.min_velocity)
-        if self.max_deceleration and self.final_velocity:
+        self.velocity = self.velocity + self.acceleration * self.model.time_unit
+        if self.max_velocity is not None:
+            self.velocity = numpy.minimum(self.velocity, self.max_velocity)
+            if self.velocity == self.max_velocity:
+                self.acceleration = 0 * self.acceleration
+        if self.min_velocity is not None:
+            self.velocity = numpy.maximum(self.velocity, self.min_velocity)
+            if self.velocity == self.min_velocity:
+                self.acceleration = 0 * self.acceleration
+        if self.max_deceleration is not None and self.final_velocity is not None and self.max_position is not None:
             stopping_distance_velocity_max_position = numpy.sqrt(self.final_velocity**2 + 2 * self.max_deceleration * (self.max_position - self.position))
             self.velocity = numpy.minimum(self.velocity, stopping_distance_velocity_max_position)
+            if self.velocity == stopping_distance_velocity_max_position:
+                self.acceleration =  -self.max_deceleration
+        if self.max_deceleration is not None and self.final_velocity is not None and self.min_position is not None:
             stopping_distance_velocity_min_position = numpy.sqrt(self.final_velocity**2 + 2 * self.max_deceleration * (self.min_position - self.position))
             self.velocity = numpy.minimum(self.velocity, stopping_distance_velocity_min_position)
-            self.acceleration = self.max_deceleration
+            if self.velocity == stopping_distance_velocity_min_position:
+                self.acceleration = -self.max_deceleration
             
     def step(self):
         self.step_velocity()
