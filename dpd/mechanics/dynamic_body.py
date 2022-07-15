@@ -18,8 +18,10 @@ class DynamicBody(KinematicBodyWithAcceleration):
     def step_acceleration(self):
         if isinstance(self.velocity, astropy.units.quantity.Quantity):
             if not self.velocity.value.any():
+                self.acceleration = self.initial_acceleration
                 return
         elif not numpy.any(self.velocity):
+            self.acceleration = self.initial_acceleration
             return
         self.acceleration = self.power / (self.mass * self.velocity)
         if self.max_acceleration is not None:

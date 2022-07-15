@@ -7,9 +7,10 @@ class KinematicBody(Body):
     A class to simulate a kinematic body. Provides methods to move the body with constant velocity.
     """
 
-    def __init__(self, velocity, max_position=None, min_position=None, *args, **kwargs):
+    def __init__(self, initial_velocity, max_position=None, min_position=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.velocity = velocity
+        self.initial_velocity = initial_velocity
+        self.velocity = initial_velocity
         self.max_position = max_position
         self.min_position = min_position
 
@@ -17,12 +18,8 @@ class KinematicBody(Body):
         self.position = self.position + self.velocity * self.model.time_unit
         if self.max_position is not None:
             self.position = numpy.minimum(self.position, self.max_position)
-            if self.position == self.max_position:
-                self.velocity = 0 * self.velocity
         if self.min_position is not None:
             self.position = numpy.maximum(self.position, self.min_position)
-            if self.position == self.min_position:
-                self.velocity = 0 * self.velocity
 
     def step(self):
         self.step_position()
