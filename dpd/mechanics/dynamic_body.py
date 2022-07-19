@@ -9,11 +9,11 @@ class DynamicBody(KinematicBodyWithAcceleration):
     """
 
     def __init__(self, power, mass, max_acceleration=None, min_acceleration=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.power = power
         self.mass = mass
         self.max_acceleration = max_acceleration
         self.min_acceleration = min_acceleration
-        super().__init__(*args, **kwargs)
 
     def step_acceleration(self):
         if isinstance(self.velocity, astropy.units.quantity.Quantity):

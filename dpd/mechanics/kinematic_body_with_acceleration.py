@@ -9,13 +9,13 @@ class KinematicBodyWithAcceleration(KinematicBody):
     """
 
     def __init__(self, initial_acceleration, max_velocity=None, min_velocity=None, max_deceleration=None, final_velocity=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.initial_acceleration = initial_acceleration
         self.acceleration = initial_acceleration
         self.max_velocity = max_velocity
         self.min_velocity = min_velocity
         self.max_deceleration = max_deceleration
         self.final_velocity = final_velocity
-        super().__init__(*args, **kwargs)
 
     def step_velocity(self):
         self.velocity = self.velocity + self.acceleration * self.model.time_unit

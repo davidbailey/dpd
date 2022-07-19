@@ -1,8 +1,9 @@
 from astropy import units
+from astropy.constants import g0
 from astropy.time import TimeDelta
 import folium
 from geopandas import GeoDataFrame
-from numpy import sqrt
+from numpy import concatenate, minimum, sqrt
 from pandas import concat, DataFrame
 from pyproj import CRS
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
@@ -89,9 +90,9 @@ class Route(GeoDataFrame):
         distances = []
         for i in range(len(self) - 1):
             distances.append(
-                self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]) * units.meter
+                self.geometry.iloc[i].distance(self.geometry.iloc[i + 1])
             )
-        return distances
+        return distances * units.meter
 
     @property
     def radius_of_curvature(self):
@@ -108,43 +109,28 @@ class Route(GeoDataFrame):
                     (self.geometry.iloc[i + 1].x, self.geometry.iloc[i + 1].y),
                     (self.geometry.iloc[i + 2].x, self.geometry.iloc[i + 2].y),
                 )[1]
-                * units.meter
             )
-        return radius_of_curvature
+        return radius_of_curvature * units.meter
 
     def speed_limit(self, radius_of_curvature):
         """
         from https://en.wikipedia.org/wiki/Minimum_railway_curve_radius
         """
         return sqrt(
-            9.81
-            * units.meter
-            / (units.second * units.second)
+            g0
             * (self.max_cant + self.max_cant_deficiency)
             * radius_of_curvature
             / self.gague
         )
 
     @property
-    def speed_limits(self, which_radius="both"):
+    def speed_limits(self):
         """
         Returns a list of maximum speeds between every pair of points along the route based on the radius of curvature.
         The length of the list is one less than the number of points on the route.
         """
-        radius_of_curvature = self.radius_of_curvature
-        speed_limits_mapped = list(map(self.speed_limit, radius_of_curvature))
-        if which_radius == "first":
-            return [None] + speed_limits_mapped
-        elif which_radius == "last":
-            return speed_limits_mapped + [None]
-        elif which_radius == "both":
-            speed_limits = [speed_limits_mapped[0]]
-            for i in range(len(speed_limits_mapped) - 1):
-                speed_limits.append(
-                    min(speed_limits_mapped[i], speed_limits_mapped[i + 1])
-                )
-            speed_limits.append(speed_limits_mapped[-1])
-            return speed_limits
+        A = self.speed_limit(self.radius_of_curvature)
+        return concatenate(([A[0]], minimum(A[:-1], A[1:]), [A[-1]]))
 
     def _drive_geometry(self, row):
         if row.distance:
@@ -156,6 +142,20 @@ class Route(GeoDataFrame):
             )
         else:
             return self.way.interpolate(row.total_distance.value)
+
+    def segments(self, dwell_time):
+        segments = []
+        stops = self.stops
+        distances = self.distances
+        speed_limits = self.speed_limits
+        segments.append({"stop_name": stops["name"][stops.index[0]], "dwell_time": dwell_time})
+        for i in range(len(stops.index) - 1):
+            segments.append({
+                    "distances": distances[stops.index[i] : stops.index[i + 1]],
+                    "speed_limits": speed_limits[stops.index[i] : stops.index[i + 1]],
+            })
+            segments.append({"stop_name": stops["name"][stops.index[i+1]], "dwell_time": dwell_time})
+        return segments
 
     def drive(self, vehicle, dwell_time, geometry=False):
         self.to_crs("North America Albers Equal Area Conic", inplace=True)
@@ -173,10 +173,8 @@ class Route(GeoDataFrame):
         for i in range(len(self.stops.index) - 1):
             segments.append(
                 vehicle.drive_between_stops(
-                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]]
-                    + [0 * units.meter / units.second],
-                    distances[self.stops.index[i] : self.stops.index[i + 1]]
-                    + [0 * units.meter],
+                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]],
+                    distances[self.stops.index[i] : self.stops.index[i + 1]],
                 )
             )
             segments.append(
