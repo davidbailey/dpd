@@ -10,7 +10,7 @@ class KinematicBodyStopper(KinematicBodyDriver):
         self.stop_name = None
 
     def end_driver(self):
-        if self.segments:
+        if self.segments is not None:
             current_segment = self.segments.pop(0)
             if "distances" in current_segment:
                 self.distances = current_segment["distances"]
