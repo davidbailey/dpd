@@ -25,7 +25,8 @@ class KinematicBodyStopper(KinematicBodyDriver):
                 self.begin_next_segment()
             elif "dwell_time" in current_segment:
                 self.dwell_time = current_segment["dwell_time"]
-                self.stop_name = current_segment["stop_name"]
+                if "stop_name" in current_segment:
+                    self.stop_name = current_segment["stop_name"]
         else:
             self.model.schedule.remove(self)
 
