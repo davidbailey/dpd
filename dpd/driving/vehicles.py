@@ -5,7 +5,6 @@ import ipywidgets as widgets
 from IPython.display import display
 from pandas import read_csv
 
-
 from .dynamic_body_stopper import DynamicBodyStopper
 
 class Vehicles:
