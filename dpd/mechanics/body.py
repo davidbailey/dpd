@@ -2,7 +2,7 @@ from mesa import Agent
 
 class Body(Agent):
     """
-    An n-dimensional body.
+    A body.
     """
 
     def __init__(self, initial_position, *args, **kwargs):
