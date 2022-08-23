@@ -1,3 +1,3 @@
 from astropy import units
 
-usd = units.def_unit("USD (2020)")
+usd2020 = units.def_unit("USD (2020)")
