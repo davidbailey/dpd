@@ -1,5 +1,7 @@
 from shapely.geometry import LineString
-from dpd.shapely import cut, linemerge
+from shapely.ops import linemerge
+
+from .cut import cut
 
 def snap_point_to_linestring(linestring, point):
     """
