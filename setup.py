@@ -23,6 +23,7 @@ setup(
         "geopandas",
         "gtfs_kit",
         "ipfn",
+        "ipywidgets",
         "matplotlib",
         "mesa",
         "movingpandas",
