@@ -282,7 +282,7 @@ class Route(GeoDataFrame):
         return route
 
     @staticmethod
-    def from_osm_relation(relation, osm=OSM(), *args, **kwargs):
+    def from_osm_relation(relation, osm=None, *args, **kwargs):
         """
         Build a route from OpenStreetMaps data
         Args:
@@ -291,6 +291,8 @@ class Route(GeoDataFrame):
         Returns:
             dpd.driving.Route: a route to drive
         """
+        if osm is None:
+            osm = OSM()
         osm.download_relation(relation)
         route = []
         ways = [

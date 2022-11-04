@@ -11,7 +11,7 @@ osm.download_relation(relation)
 
 class TestRoute(unittest.TestCase):
     def test_route(self):
-        self.route = Route.from_osm_relation(osm, relation)
+        self.route = Route.from_osm_relation(relation=relation, osm=osm)
 
 
 if __name__ == "__main__":
