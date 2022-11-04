@@ -2,12 +2,15 @@ import numpy
 
 from .body import Body
 
+
 class KinematicBody(Body):
     """
     A class to simulate a kinematic body. Provides methods to move the body with constant velocity.
     """
 
-    def __init__(self, initial_velocity, max_position=None, min_position=None, *args, **kwargs):
+    def __init__(
+        self, initial_velocity, max_position=None, min_position=None, *args, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.initial_velocity = initial_velocity
         self.velocity = initial_velocity

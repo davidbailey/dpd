@@ -89,9 +89,7 @@ class Route(GeoDataFrame):
         self.to_crs("North America Albers Equal Area Conic", inplace=True)
         distances = []
         for i in range(len(self) - 1):
-            distances.append(
-                self.geometry.iloc[i].distance(self.geometry.iloc[i + 1])
-            )
+            distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]))
         return distances * units.meter
 
     @property
@@ -148,13 +146,22 @@ class Route(GeoDataFrame):
         stops = self.stops
         distances = self.distances
         speed_limits = self.speed_limits
-        segments.append({"stop_name": stops["name"][stops.index[0]], "dwell_time": dwell_time})
+        segments.append(
+            {"stop_name": stops["name"][stops.index[0]], "dwell_time": dwell_time}
+        )
         for i in range(len(stops.index) - 1):
-            segments.append({
+            segments.append(
+                {
                     "distances": distances[stops.index[i] : stops.index[i + 1]],
                     "speed_limits": speed_limits[stops.index[i] : stops.index[i + 1]],
-            })
-            segments.append({"stop_name": stops["name"][stops.index[i+1]], "dwell_time": dwell_time})
+                }
+            )
+            segments.append(
+                {
+                    "stop_name": stops["name"][stops.index[i + 1]],
+                    "dwell_time": dwell_time,
+                }
+            )
         return segments
 
     def drive(self, vehicle, dwell_time, geometry=False):

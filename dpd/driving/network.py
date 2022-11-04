@@ -1,9 +1,13 @@
 import logging
 
+from geopandas import GeoDataFrame
+from pyproj import CRS
+from shapely.geometry import Point
 from shapely.ops import linemerge
 from tqdm import tqdm
 
 from .route import Route
+from dpd.shapely import snap_point_to_linestring
 from dpd.osm import OSM
 
 
@@ -30,25 +34,33 @@ class Network:
             )
         return network
 
-
     @staticmethod
     def from_felt_geojson(geodataframe, *args, **kwargs):
         network = Network()
-        for line_index, line in geodataframe[geodataframe["felt-type"] == "Path"].iterrows():
+        for line_index, line in geodataframe[
+            geodataframe["felt-type"] == "Path"
+        ].iterrows():
             linestring = linemerge(line.geometry)
             stops = []
-            for stop_index, stop in geodataframe[(geodataframe["felt-color"] == line["felt-color"]) & (geodataframe["felt-type"] == "Place")].iterrows():
-                linestring, new_stop = snap_point_to_linestring(linestring, stop["geometry"])
+            for stop_index, stop in geodataframe[
+                (geodataframe["felt-color"] == line["felt-color"])
+                & (geodataframe["felt-type"] == "Place")
+            ].iterrows():
+                linestring, new_stop = snap_point_to_linestring(
+                    linestring, stop["geometry"]
+                )
                 stops.append({"felt-text": stop["felt-text"], "geometry": new_stop})
-            geometry = [Point(x,y) for (x,y) in linestring.coords]
-            route = GeoDataFrame(geometry, columns=["geometry"], crs=CRS.from_epsg(4326))
-            route["name"] = ""
+            geometry = [Point(x, y) for (x, y) in linestring.coords]
+            route = GeoDataFrame(
+                geometry, columns=["geometry"], crs=CRS.from_epsg(4326)
+            )
+            route["name"] = None
             for stop in stops:
                 stop_index = list(linestring.coords).index(stop["geometry"].coords[0])
                 route.loc[stop_index, "name"] = stop["felt-text"]
-            network.add_route(
-                            line["felt-color"], Route(route, *args, **kwargs)
-                        )
+            network.add_route(line["felt-color"], Route(route, *args, **kwargs))
+        return network
+
     @staticmethod
     def from_osm_relations(relations, osm=OSM(), *args, **kwargs):
         network = Network()

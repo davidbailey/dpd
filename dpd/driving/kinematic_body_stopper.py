@@ -2,6 +2,7 @@ import numpy
 
 from .kinematic_body_driver import KinematicBodyDriver
 
+
 class KinematicBodyStopper(KinematicBodyDriver):
     def __init__(self, segments=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

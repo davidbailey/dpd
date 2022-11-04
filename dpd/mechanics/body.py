@@ -1,5 +1,6 @@
 from mesa import Agent
 
+
 class Body(Agent):
     """
     A body.
@@ -9,6 +10,6 @@ class Body(Agent):
         super().__init__(*args, **kwargs)
         self.initial_position = initial_position
         self.position = initial_position
-        
+
     def step(self):
-       super().step() 
+        super().step()

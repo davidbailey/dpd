@@ -3,12 +3,15 @@ import numpy
 
 from .kinematic_body_with_acceleration import KinematicBodyWithAcceleration
 
+
 class DynamicBody(KinematicBodyWithAcceleration):
     """
     A class to simulate a dynamic body. Provides methods to move the body with constant power.
     """
 
-    def __init__(self, power, mass, max_acceleration=None, min_acceleration=None, *args, **kwargs):
+    def __init__(
+        self, power, mass, max_acceleration=None, min_acceleration=None, *args, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.power = power
         self.mass = mass
@@ -32,4 +35,3 @@ class DynamicBody(KinematicBodyWithAcceleration):
     def step(self):
         self.step_acceleration()
         super().step()
-        

@@ -2,6 +2,7 @@ import numpy
 
 from dpd.mechanics import KinematicBody
 
+
 class KinematicBodyDriver(KinematicBody):
     def __init__(self, distances=None, speed_limits=None, *args, **kwargs):
         """
