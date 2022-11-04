@@ -1,4 +1,3 @@
-from shapely.geometry import LineString
 from shapely.ops import linemerge
 
 from .cut import cut

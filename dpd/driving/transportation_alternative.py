@@ -1,5 +1,7 @@
 import logging
 
+from astropy import units
+
 from dpd.driving import Schedule
 
 
@@ -39,7 +41,7 @@ class TransportationAlternative:
     def plot_speed_limit(self, ax):
         self.drive.speed_limit.dropna().map(lambda x: x.value).plot(ax=ax)
 
-    def plot_accessibility(self, time):
+    def plot_accessibility(self, time, ax):
         self.accessibility[
             self.accessibility["time"] < (time).to(units.second).value
         ].groupby("stop").sum()["population"].plot(
