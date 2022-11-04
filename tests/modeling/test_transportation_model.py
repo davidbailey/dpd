@@ -1,6 +1,6 @@
 import unittest
 
-from dpd.modeling import TransportationModel
+#from dpd.modeling import TransportationModel
 
 
 class TestTransportationModel(unittest.TestCase):

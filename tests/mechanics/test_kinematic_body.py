@@ -1,8 +1,8 @@
 import unittest
 
-from astropy import units
+#from astropy import units
 
-from dpd.mechanics import KinematicBody
+#from dpd.mechanics import KinematicBody
 
 
 class TestSimulatedKinematicBody(unittest.TestCase):
