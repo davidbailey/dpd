@@ -1,4 +1,6 @@
 from .body_data_collector import BodyDataCollector
 from .kinematic_body_data_collector import KinematicBodyDataCollector
-from .kinematic_body_with_acceleration_data_collector import KinematicBodyWithAccelerationDataCollector
+from .kinematic_body_with_acceleration_data_collector import (
+    KinematicBodyWithAccelerationDataCollector,
+)
 from .dynamic_body_data_collector import DynamicBodyDataCollector
