@@ -10,7 +10,7 @@ from dpd.mechanics.datacollection import KinematicBodyDataCollector
 from dpd.modeling import TransportationModel
 
 
-class TestKinematic1DInt(unittest.TestCase):
+class TestKinematicBody1DInt(unittest.TestCase):
     def test_body_1d_int(self):
         model = TransportationModel(datacollector=KinematicBodyDataCollector)
         body = KinematicBody(
