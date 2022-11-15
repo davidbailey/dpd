@@ -3,7 +3,7 @@ import numpy
 from .dynamic_body_driver import DynamicBodyDriver
 
 
-class DynamicBodyStopper(DynamicBodyDriver, KinematicBodyWithAccelerationStopper):
+class DynamicBodyStopper(DynamicBodyDriver):
     def __init__(self, segments=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.segments = segments
