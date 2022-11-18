@@ -13,4 +13,5 @@ def filter_geodataframe(gdf, filter_box):
     filter_gdf.crs = gdf.crs
     out_gdf = gpd.overlay(gdf, filter_gdf, how="intersection")
     out_gdf = out_gdf[out_gdf["geometry"] != LineString()]
+    out_gdf.index.name = gdf.index.name
     return out_gdf
