@@ -51,14 +51,22 @@ class Zones(geopandas.GeoDataFrame):
         zones["Attraction"] = 0
         return Zones(zones)
 
-    def calculate_centroid_distance_dataframe(self):
+    def add_aea_centroid_column(self):
         """
-        Calculate a dataframe containing the distance between the centroid of all zones.
+        Adds a new column containing the centroid of all zones.
         """
         self.to_crs(CRS.from_string("North America Albers Equal Area Conic"))
         self["aea_centroid"] = self.geometry.map(
             lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
         )
+        return self
+
+    def calculate_centroid_distance_dataframe(self):
+        """
+        Calculate a dataframe containing the distance between the centroid of all zones.
+        """
+        if not "aea_centroid" in self.columns:
+            self.add_aea_centroid_column()
         return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
 
     def calculate_cost_dataframe(self, beta=None, centroid_distance_dataframe=None):
