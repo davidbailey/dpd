@@ -12,9 +12,9 @@ setup(
     packages=find_packages(),
     license="Public Domain",
     install_requires=[
-        "cartopy==0.19.0.post1",
         "astropy",
         "bs4",
+        "cartopy",
         "flask",
         "folium",
         "forex_python",
