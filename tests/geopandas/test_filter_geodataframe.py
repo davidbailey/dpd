@@ -12,7 +12,9 @@ class Test_filter_geodataframe(unittest.TestCase):
         geodataframe = gpd.GeoDataFrame([polygon], columns=["geometry"])
         filter_box = [-10, -10, 5, 5]
         filtered_geodataframe = filter_geodataframe(geodataframe, filter_box)
-        self.assertEqual((0.0, 0.0, 10.0, 10.0), filtered_geodataframe.geometry[0].bounds)
+        self.assertEqual(
+            (0.0, 0.0, 10.0, 10.0), filtered_geodataframe.geometry[0].bounds
+        )
 
 
 if __name__ == "__main__":
