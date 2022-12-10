@@ -12,7 +12,6 @@ class TestBicycle(unittest.TestCase):
             y=0 * units.meter,
             theta=0 * units.degree,
             velocity=1 * units.meter / units.second,
-            acceleration=0 * units.meter / units.second**2,
             vehicle_length=29.5 * units.imperial.foot,
         )
         radius = truck.get_radius_from_vehicle_length_and_steering_angle(
