@@ -1,5 +1,5 @@
 import geopandas as gpd
-from shapely.geometry import Polygon, LineString, box
+from shapely.geometry import Polygon, box
 
 
 def filter_geodataframe(gdf, filter_box):
