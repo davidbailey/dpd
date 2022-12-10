@@ -65,7 +65,7 @@ class Zones(geopandas.GeoDataFrame):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
-        if not "aea_centroid" in self.columns:
+        if "aea_centroid" not in self.columns:
             self.add_aea_centroid_column()
         return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
 

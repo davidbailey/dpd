@@ -28,13 +28,13 @@ class Vehicles:
         self.vehicle = self.create_vehicle(value.new)
 
     def create_vehicle(self, index):
-        driver_max_velocity = self.vehicles.loc[index]["Maximum speed"].split(" ")[
-            0
-        ] * units.Unit(self.vehicles.loc[index]["Maximum speed"].split(" ")[1])
-        power = self.vehicles.loc[index]["Power"].split(" ")[0] * units.Unit(
+        driver_max_velocity = int(
+            self.vehicles.loc[index]["Maximum speed"].split(" ")[0]
+        ) * units.Unit(self.vehicles.loc[index]["Maximum speed"].split(" ")[1])
+        power = int(self.vehicles.loc[index]["Power"].split(" ")[0]) * units.Unit(
             self.vehicles.loc[index]["Power"].split(" ")[1]
         )
-        mass = self.vehicles.loc[index]["Mass"].split(" ")[0] * units.Unit(
+        mass = int(self.vehicles.loc[index]["Mass"].split(" ")[0]) * units.Unit(
             self.vehicles.loc[index]["Mass"].split(" ")[1]
         )
         return partial(

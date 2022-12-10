@@ -12,5 +12,5 @@ def filter_geodataframe(gdf, filter_box):
     )
     filter_gdf.crs = gdf.crs
     out_gdf = gdf.sjoin(filter_gdf, how="inner")
-    out_gdf = out_gdf[out_gdf["geometry"] != LineString()]
+    out_gdf = out_gdf.loc[:, out_gdf.columns != "index_right"]
     return out_gdf
