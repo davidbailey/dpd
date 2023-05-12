@@ -24,5 +24,5 @@ class TransportationModel(Model):
     def get_dataframe(self):
         mvdf = self.datacollector.get_model_vars_dataframe()
         mvdf.index.set_names("Step", inplace=True)
-        avdf = model.datacollector.get_agent_vars_dataframe()
+        avdf = self.datacollector.get_agent_vars_dataframe()
         return avdf.merge(mvdf, left_index=True, right_index=True)
