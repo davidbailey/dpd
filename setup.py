@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="dpd",
-    version="0.66",
+    version="0.67",
     description="A Python Transportation Toolkit",
     author="David Bailey",
     author_email="david@davidabailey.com",
