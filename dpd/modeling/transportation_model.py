@@ -21,7 +21,7 @@ class TransportationModel(Model):
             self.step()
             self.datacollector.collect(self)
 
-     def get_dataframe(self):
+    def get_dataframe(self):
         mvdf = self.datacollector.get_model_vars_dataframe()
         mvdf.index.set_names("Step", inplace=True)
         avdf = model.datacollector.get_agent_vars_dataframe()
