@@ -33,7 +33,7 @@ class KinematicBodyWithAccelerationStopper(KinematicBodyWithAccelerationDriver):
 
     def step(self):
         if self.dwell_time is not None:
-            self.dwell_time -= 1 * self.model.time_unit
+            self.dwell_time = self.dwell_time - 1 * self.model.time_unit
             if self.dwell_time <= 0 * self.model.time_unit:
                 self.dwell_time = None
                 self.stop_name = None
