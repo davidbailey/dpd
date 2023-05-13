@@ -164,58 +164,6 @@ class Route(GeoDataFrame):
             )
         return segments
 
-    def drive(self, vehicle, dwell_time, geometry=False):
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
-        distances = self.distances
-        speed_limits = self.speed_limits
-        segments = [
-            DataFrame.from_dict(
-                {
-                    "distance": [0 * units.meter, 0 * units.meter],
-                    "time": [0 * units.second, dwell_time],
-                    "name": [self.stops.name.iloc[0], self.stops.name.iloc[0]],
-                }
-            ),
-        ]
-        for i in range(len(self.stops.index) - 1):
-            segments.append(
-                vehicle.drive_between_stops(
-                    speed_limits[self.stops.index[i] : self.stops.index[i + 1]],
-                    distances[self.stops.index[i] : self.stops.index[i + 1]],
-                )
-            )
-            segments.append(
-                DataFrame.from_dict(
-                    {
-                        "distance": [0 * units.meter, 0 * units.meter],
-                        "time": [0 * units.second, dwell_time],
-                        "name": [
-                            self.stops.name[self.stops.index[i + 1]],
-                            self.stops.name[self.stops.index[i + 1]],
-                        ],
-                    }
-                )
-            )
-        drive = concat(segments, ignore_index=True)
-        if geometry:
-            drive["geometry"] = drive.apply(self._drive_geometry, axis=1)
-        return drive
-
-    def trip(self, vehicle, dwell_time):
-        trip = self.drive(vehicle, dwell_time)
-        trip["total_time"] = trip.time.cumsum()
-        trip["timedelta"] = trip.total_time.map(lambda x: TimeDelta(x).to_datetime())
-        trip["total_distance"] = trip.distance.cumsum()
-        trip["geometry"] = trip.apply(
-            lambda row: self.way.interpolate(row.total_distance.value), axis=1
-        )
-        trip.set_index("timedelta", inplace=True)
-        return Trip(
-            GeoDataFrame(trip, crs=self.crs)[
-                ["total_time", "total_distance", "name", "geometry"]
-            ]
-        )
-
     def add_stop(self, geometry, name):
         """
         Adds a stop at the given geometry named name.
