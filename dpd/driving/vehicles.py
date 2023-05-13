@@ -40,13 +40,9 @@ class Vehicles:
         mass = int(self.vehicles.loc[index]["Mass"].split(" ")[0]) * units.Unit(
             self.vehicles.loc[index]["Mass"].split(" ")[1]
         )
-        initial_position = 0 * units.meter,
-        initial_velocity = 0 * units.meter / units.second,
         return partial(
             DynamicBodyStopper,
             driver_max_velocity=driver_max_velocity,
             power=power,
             mass=mass,
-            initial_position=initial_position,
-            initial_velocity=initial_velocity,
         )
