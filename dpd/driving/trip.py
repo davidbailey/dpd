@@ -4,7 +4,7 @@ from astropy import units
 from astropy.visualization import quantity_support
 from geopandas import GeoDataFrame
 from movingpandas import Trajectory
-from pandas import MultiIndex
+from pandas import concat, MultiIndex
 from shapely.geometry import Point
 
 from dpd.utils import timestring_to_timeobject
@@ -24,7 +24,10 @@ class Trip(GeoDataFrame):
             [self.name.dropna().drop_duplicates(), ["Arrival", "Departure"]],
             names=["Stop", "Arriva/Departure"],
         )
-        return self.dropna().reset_index().set_index(index)
+        return concat([
+            self.dropna().drop_duplicates(subset=["name"], keep="first"),
+            self.dropna().drop_duplicates(subset=["name"], keep="last")
+        ]).sort_index().reset_index().set_index(index)
 
     def in_vehicle_travel_time(self, origin_stop, destination_stop):
         return (
