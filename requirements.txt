@@ -19,7 +19,7 @@ matplotlib
 mesa
 movingpandas
 networkx
-numpy
+numpy=1.23.5
 pandas
 pyproj
 pyrosm
