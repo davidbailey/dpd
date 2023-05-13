@@ -24,6 +24,7 @@ class Vehicles:
         display(vehicle_widget)
         if vehicle is None:
             vehicle = self.vehicles.index[0]
+        vehicle_widget.value = vehicle
         self.vehicle = self.create_vehicle(vehicle)
 
     def vehicle_dropdown_observer(self, value):
