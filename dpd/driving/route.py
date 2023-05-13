@@ -1,10 +1,9 @@
 from astropy import units
 from astropy.constants import g0
-from astropy.time import TimeDelta
 import folium
 from geopandas import GeoDataFrame
 from numpy import concatenate, minimum, sqrt
-from pandas import concat, DataFrame
+from pandas import DataFrame
 from pyproj import CRS
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
@@ -13,7 +12,6 @@ from shapely.ops import linemerge, nearest_points
 from dpd.geometry import circle_from_three_points, GeometricDict
 from dpd.osm import OSM
 from .stop import Stop
-from .trip import Trip
 
 
 class Route(GeoDataFrame):
