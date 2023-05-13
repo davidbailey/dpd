@@ -9,7 +9,7 @@ from .dynamic_body_stopper import DynamicBodyStopper
 
 
 class Vehicles:
-    def __init__(self, url):
+    def __init__(self, url, vehicle=None):
         self.vehicles = read_csv(url)
         self.vehicles.index = self.vehicles.Manufacturer + " " + self.vehicles.Model
         self.vehicles.sort_index(inplace=True)
@@ -22,7 +22,9 @@ class Vehicles:
         )
         vehicle_widget.observe(self.vehicle_dropdown_observer, names="value")
         display(vehicle_widget)
-        self.vehicle = self.create_vehicle(self.vehicles.index[0])
+        if vehicle is None:
+            vehicle = self.vehicles.index[0]
+        self.vehicle = self.create_vehicle(vehicle)
 
     def vehicle_dropdown_observer(self, value):
         self.vehicle = self.create_vehicle(value.new)
