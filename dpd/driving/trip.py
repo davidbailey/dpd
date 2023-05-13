@@ -25,10 +25,17 @@ class Trip(GeoDataFrame):
             [self.name.dropna().drop_duplicates(), ["Arrival", "Departure"]],
             names=["Stop", "Arriva/Departure"],
         )
-        return concat([
-            self.dropna().drop_duplicates(subset=["name"], keep="first"),
-            self.dropna().drop_duplicates(subset=["name"], keep="last")
-        ]).sort_index().reset_index().set_index(index)
+        return (
+            concat(
+                [
+                    self.dropna().drop_duplicates(subset=["name"], keep="first"),
+                    self.dropna().drop_duplicates(subset=["name"], keep="last"),
+                ]
+            )
+            .sort_index()
+            .reset_index()
+            .set_index(index)
+        )
 
     def in_vehicle_travel_time(self, origin_stop, destination_stop):
         return (

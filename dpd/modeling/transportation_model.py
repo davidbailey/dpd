@@ -7,7 +7,7 @@ class TransportationModel(Model):
     def __init__(self, agent_reporters=None, time_unit=1):
         self.datacollector = DataCollector(
             agent_reporters=agent_reporters,
-            model_reporters={"time": lambda m: m.schedule.time * m.time_unit}
+            model_reporters={"time": lambda m: m.schedule.time * m.time_unit},
         )
         self.time_unit = time_unit
         self.schedule = RandomActivation(self)

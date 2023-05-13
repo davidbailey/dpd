@@ -6,6 +6,5 @@ class Population:
     def __init__(self):
         super().__init__()
 
-
     def from_zones():
         pass
