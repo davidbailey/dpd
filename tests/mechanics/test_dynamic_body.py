@@ -6,13 +6,13 @@ import numpy
 from numpy.testing import assert_array_equal
 
 from dpd.mechanics import DynamicBody
-from dpd.mechanics.datacollection import DynamicBodyDataCollector
+from dpd.mechanics.datacollection import DYNAMIC_BODY_AGENT_REPORTERS
 from dpd.modeling import TransportationModel
 
 
 class TestDynamicBody1DInt(unittest.TestCase):
     def test_body_1d_int(self):
-        model = TransportationModel(datacollector=DynamicBodyDataCollector)
+        model = TransportationModel(agent_reporters=DYNAMIC_BODY_AGENT_REPORTERS)
         body = DynamicBody(
             model=model,
             unique_id=uuid4(),
@@ -33,7 +33,7 @@ class TestDynamicBody1DInt(unittest.TestCase):
 class TestDynamicBody1DQuantity(unittest.TestCase):
     def test_body_1d_quantity(self):
         model = TransportationModel(
-            datacollector=DynamicBodyDataCollector,
+            agent_reporters=DYNAMIC_BODY_AGENT_REPORTERS,
             time_unit=units.second,
         )
         body = DynamicBody(
@@ -55,7 +55,7 @@ class TestDynamicBody1DQuantity(unittest.TestCase):
 
 class TestDynamicBody2DInt(unittest.TestCase):
     def test_body_2d_int(self):
-        model = TransportationModel(datacollector=DynamicBodyDataCollector)
+        model = TransportationModel(agent_reporters=DYNAMIC_BODY_AGENT_REPORTERS)
         body = DynamicBody(
             model=model,
             unique_id=uuid4(),
@@ -76,7 +76,7 @@ class TestDynamicBody2DInt(unittest.TestCase):
 class TestDynamicBody2DQuantity(unittest.TestCase):
     def test_body_2d_quantity(self):
         model = TransportationModel(
-            datacollector=DynamicBodyDataCollector,
+            agent_reporters=DYNAMIC_BODY_AGENT_REPORTERS,
             time_unit=units.second,
         )
         body = DynamicBody(

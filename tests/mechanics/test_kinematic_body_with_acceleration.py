@@ -6,14 +6,14 @@ import numpy
 from numpy.testing import assert_array_equal
 
 from dpd.mechanics import KinematicBodyWithAcceleration
-from dpd.mechanics.datacollection import KinematicBodyWithAccelerationDataCollector
+from dpd.mechanics.datacollection import KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS
 from dpd.modeling import TransportationModel
 
 
 class TestKinematicBodyWithAcceleration1DInt(unittest.TestCase):
     def test_body_1d_int(self):
         model = TransportationModel(
-            datacollector=KinematicBodyWithAccelerationDataCollector
+            agent_reporters=KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS
         )
         body = KinematicBodyWithAcceleration(
             model=model,
@@ -31,7 +31,7 @@ class TestKinematicBodyWithAcceleration1DInt(unittest.TestCase):
 class TestKinematicBodyWithAcceleration1DQuantity(unittest.TestCase):
     def test_body_1d_quantity(self):
         model = TransportationModel(
-            datacollector=KinematicBodyWithAccelerationDataCollector,
+            agent_reporters=KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS,
             time_unit=units.second,
         )
         body = KinematicBodyWithAcceleration(
@@ -50,7 +50,7 @@ class TestKinematicBodyWithAcceleration1DQuantity(unittest.TestCase):
 class TestKinematicBodyWithAcceleration2DInt(unittest.TestCase):
     def test_body_2d_int(self):
         model = TransportationModel(
-            datacollector=KinematicBodyWithAccelerationDataCollector
+            agent_reporters=KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS
         )
         body = KinematicBodyWithAcceleration(
             model=model,
@@ -68,7 +68,7 @@ class TestKinematicBodyWithAcceleration2DInt(unittest.TestCase):
 class TestKinematicBodyWithAcceleration2DQuantity(unittest.TestCase):
     def test_body_2d_quantity(self):
         model = TransportationModel(
-            datacollector=KinematicBodyWithAccelerationDataCollector,
+            agent_reporters=KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS,
             time_unit=units.second,
         )
         body = KinematicBodyWithAcceleration(
