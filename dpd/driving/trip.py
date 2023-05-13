@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from astropy import units
+from astropy.time import TimeDelta
 from astropy.visualization import quantity_support
 from geopandas import GeoDataFrame
 from movingpandas import Trajectory
@@ -91,3 +92,18 @@ class Trip(GeoDataFrame):
                     }
                 )
         return Trip(GeoDataFrame(new_trip).set_index("timedelta"))
+
+    @staticmethod
+    def from_model(df, route, include_geometry=True):
+        df["total_distance"] = df["position"]
+        df["total_time"] = df["time"]
+        df["timedelta"] = df.time.map(lambda x: TimeDelta(x).to_datetime())
+        df.set_index("timedelta", inplace=True)
+        columns = ["name", "total_time", "total_distance"]
+        if include_geometry:
+            route.to_crs("North America Albers Equal Area Conic", inplace=True)
+            df["geometry"] = df.apply(
+                lambda row: route.way.interpolate(row.position.value), axis=1
+            )
+            columns.append("geometry")
+        return Trip(GeoDataFrame(df, crs=route.crs)[columns])
