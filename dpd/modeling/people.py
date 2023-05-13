@@ -54,10 +54,10 @@ class People(AgentBasedDict):
             person = mode(self.model, person.home_geometry, route)
             self.add_person(person)
 
-    def post_people(self, url):
+    def post_people(self, url, timeout=60):
         people = self.to_geopandas()
         people.to_crs("EPSG:4326")
-        return requests.post(url, data={"people": people.to_json()})
+        return requests.post(url, data={"people": people.to_json()}, timeout=timeout)
 
     def get_agent_vars_geodataframe(self, start_time=datetime(1970, 1, 1, 0, 0, 0)):
         gdf = geopandas.GeoDataFrame(self.data_collector.get_agent_vars_dataframe())

@@ -73,8 +73,8 @@ class Link:
             self.segments.insert(-1, Sidewalk(self, segment_number))
             segment_number += 1
 
-    def update_segments_from_streetmix(self, url):
-        r = requests.get(url)
+    def update_segments_from_streetmix(self, url, timeout=60):
+        r = requests.get(url, timeout=timeout)
         street = r.json()
         self.segments = [None, None]
         segment_number = 0

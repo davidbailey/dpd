@@ -7,7 +7,7 @@ import requests
 from pyproj import CRS
 
 
-def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
+def get_uscensus_data(year, state, data=["NAME"], with_geometry=False, timeout=600):
     """Gets the specified data from the US Census API and returns it as a Pandas DataFrame.
 
     Args:
@@ -27,7 +27,7 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False):
         + "&for=tract:*&in=state:"
         + state
     )
-    request = requests.get(url)
+    request = requests.get(url, timeout=timeout)
     dataframe = pandas.DataFrame(
         request.json()[1:], columns=request.json()[0], dtype="int"
     )

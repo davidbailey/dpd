@@ -22,8 +22,8 @@ class OSM:
         self.ways = {}
         self.relations = {}
 
-    def execute_query(self, query, retry_attempts=4):
-        r = requests.get(self.url, params={"data": query})
+    def execute_query(self, query, retry_attempts=4, timeout=600):
+        r = requests.get(self.url, params={"data": query}, timeout=timeout)
         if "application/json" not in r.headers.get("Content-Type"):
             if retry_attempts:
                 # sometimes we run into a rate limit so let's back off a bit

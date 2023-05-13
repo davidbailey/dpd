@@ -3,7 +3,7 @@ import os
 import requests
 
 
-def download_file(url, redownload=False):
+def download_file(url, redownload=False, timeout=600):
     """
     Download a file locally. Does not download the file if it already exists.
 
@@ -17,7 +17,7 @@ def download_file(url, redownload=False):
     local_filename = url.split("/")[-1]
     if redownload or not os.path.isfile(local_filename):
         logging.info("Downloading %s..." % (local_filename))
-        with requests.get(url, stream=True) as r:
+        with requests.get(url, stream=True, timeout=timeout) as r:
             with open(local_filename, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     if chunk:

@@ -6,7 +6,7 @@ import requests
 import pandas
 
 
-def get_wikipedia_table(url, number=0, styled=False):
+def get_wikipedia_table(url, number=0, styled=False, timeout=60):
     """
     Get a table from wikipedia and return it as a Pandas DataFrame.
 
@@ -17,7 +17,7 @@ def get_wikipedia_table(url, number=0, styled=False):
     Returns:
         pandas.DataFrame: A dataframe containing the table
     """
-    request = requests.get(url)
+    request = requests.get(url, timeout=timeout)
     soup = bs4.BeautifulSoup(request.content, "html.parser")
     if styled:
         rows = list(

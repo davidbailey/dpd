@@ -5,7 +5,7 @@ import bs4
 import requests
 
 
-def get_wikipedia_coordinates(url):
+def get_wikipedia_coordinates(url, timeout=60):
     """
     Get the latitude, longitude coordinates from a wikipedia page and return it as a tuple.
 
@@ -15,7 +15,7 @@ def get_wikipedia_coordinates(url):
     Returns:
         (latitude, longitude): a tuple containing the coordinates
     """
-    request = requests.get(url)
+    request = requests.get(url, timeout=timeout)
     soup = bs4.BeautifulSoup(request.content, "html.parser")
     if soup.find_all("span", attrs={"class": "latitude"}):
         latitude = soup.find_all("span", attrs={"class": "latitude"})[0].contents[0]
