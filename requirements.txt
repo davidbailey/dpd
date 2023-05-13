@@ -20,7 +20,7 @@ mesa
 movingpandas
 networkx
 numpy==1.23.5
-pandas
+pandas==1.5.3
 pyproj
 pyrosm
 pytest
