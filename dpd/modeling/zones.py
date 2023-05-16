@@ -147,22 +147,28 @@ class Zones(GeoDataFrame):
 
     def polygons_to_points(self, num=10):
         if not "Albers_Equal_Area_Conic" in self.crs.name:
-            raise ValueError("CRS does not contain Albers_Equal_Area_Conic. Results will not be accurate")
+            raise ValueError(
+                "CRS does not contain Albers_Equal_Area_Conic. Results will not be accurate"
+            )
         points = self.geometry.map(partial(uniform_points_in_polygon, num=num))
         num_points_in_polygon = points.map(len)
         production = self["Production"] / num_points_in_polygon
         attraction = self["Attraction"] / num_points_in_polygon
-        production_attraction_sum = self["ProductionAttractionSum"] / num_points_in_polygon
+        production_attraction_sum = (
+            self["ProductionAttractionSum"] / num_points_in_polygon
+        )
         data = []
         for index in points.index:
             for point in points[index]:
-                data.append({
-                    "GEOID": index,
-                    "geometry": point,
-                    "Production": production[index],
-                    "Attraction": attraction[index],
-                    "ProductionAttractionSum": production_attraction_sum[index]
-                })
+                data.append(
+                    {
+                        "GEOID": index,
+                        "geometry": point,
+                        "Production": production[index],
+                        "Attraction": attraction[index],
+                        "ProductionAttractionSum": production_attraction_sum[index],
+                    }
+                )
         return GeoDataFrame(data=data, crs=zones.crs)
 
     def accessibility_zone(self, zone, route, mode):
