@@ -146,7 +146,7 @@ class Zones(GeoDataFrame):
             )
 
     def polygons_to_points(self, num=10):
-        if not "Albers_Equal_Area_Conic" in self.crs.name:
+        if "Albers_Equal_Area_Conic" not in self.crs.name:
             raise ValueError(
                 "CRS does not contain Albers_Equal_Area_Conic. Results will not be accurate"
             )
@@ -169,7 +169,7 @@ class Zones(GeoDataFrame):
                         "ProductionAttractionSum": production_attraction_sum[index],
                     }
                 )
-        return GeoDataFrame(data=data, crs=zones.crs)
+        return GeoDataFrame(data=data, crs=self.crs)
 
     def accessibility_zone(self, zone, route, mode):
         points = uniform_points_in_polygon(zone.geometry)
