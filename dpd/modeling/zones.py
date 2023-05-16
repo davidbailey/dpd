@@ -1,14 +1,11 @@
 from functools import partial
 
-from astropy import units
 import folium
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 import networkx
-from pandas import DataFrame
 from pyproj import CRS
 from shapely.geometry import Point
-from tqdm import tqdm
 
 from dpd.shapely import uniform_points_in_polygon
 from dpd.uscensus import get_uscensus_data
