@@ -52,28 +52,6 @@ class Route(GeoDataFrame):
             stops_dict[self.loc[stop]["name"]] = Stop(self.loc[stop]["geometry"])
         return stops_dict
 
-    def accessibility(self, points, mode):
-        """
-        Computes the accessibility from each point in points to each stop in route.stops.
-        """
-        stops_dict = self.stops_dict
-        stops_dict.to_crs("North America Albers Equal Area Conic")
-        accessibility = []
-        for point in points:
-            for stop in stops_dict:
-                accessibility.append(
-                    {
-                        "x": point.coords[0][0],
-                        "y": point.coords[0][1],
-                        "stop": stop,
-                        "accessibility": stops_dict[stop].accessibility(
-                            point.coords[0][0], point.coords[0][1], mode
-                        ),
-                    }
-                )
-        dataframe = DataFrame(accessibility)
-        return dataframe.set_index(["x", "y", "stop"])
-
     @property
     def way(self):
         return LineString(self["geometry"])
