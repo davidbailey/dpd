@@ -1,6 +1,8 @@
+from functools import partial
+
 from astropy import units
 import folium
-import geopandas
+from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 import networkx
 from pandas import DataFrame
@@ -15,7 +17,7 @@ from .cost_dataframe import CostDataFrame
 from .origin_destination_dataframe import OriginDestinationDataFrame
 
 
-class Zones(geopandas.GeoDataFrame):
+class Zones(GeoDataFrame):
     """
     A class to store four-step model zones.
     """
