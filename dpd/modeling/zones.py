@@ -171,54 +171,6 @@ class Zones(GeoDataFrame):
                 )
         return GeoDataFrame(data=data, crs=self.crs)
 
-    def accessibility_zone(self, zone, route, mode):
-        points = uniform_points_in_polygon(zone.geometry)
-        return route.accessibility(points, mode)
-
-    def accessibility(
-        self,
-        route,
-        time=15 * units.minute,
-        mode="walking",
-        production_or_attraction="Production",
-    ):
-        stops_dict = route.stops_dict
-        stops_dict.to_crs("North America Albers Equal Area Conic")
-        for stop in stops_dict:
-            stops_dict[stop].geometry = stops_dict[stop].accessibility_radius(
-                time, mode
-            )
-        stops_dict.to_crs(CRS.from_epsg(4326))
-        self.to_crs(CRS.from_epsg(4326), inplace=True)
-        indices = []
-        for index, row in self.iterrows():
-            for stop in stops_dict:
-                if row.geometry.intersection(stops_dict[stop].geometry).area > 0:
-                    indices.append(index)
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
-        accessibility = []
-        for zone_index, zone in tqdm(
-            self.filter(indices, axis=0).iterrows(), total=len(indices)
-        ):
-            accessibility_zone = self.accessibility_zone(zone, route, mode)
-            accessibility_zone["accessibility"] = accessibility_zone[
-                "accessibility"
-            ].map(lambda x: x.value)
-            accessibility_zone_min = accessibility_zone.loc[
-                accessibility_zone.groupby(["x", "y"])["accessibility"].idxmin()
-            ]
-            for stop_index, row in accessibility_zone_min.iterrows():
-                accessibility.append(
-                    {
-                        "zone": zone_index,
-                        "stop": stop_index[2],
-                        "time": row["accessibility"],
-                        "population": zone[production_or_attraction]
-                        / len(accessibility_zone),
-                    }
-                )
-        return DataFrame(accessibility)
-
     def plot_density(
         self, folium_map, production_or_attraction="Production", *args, **kwargs
     ):
