@@ -15,17 +15,17 @@ class TripDataFrame(pandas.DataFrame):
 
 
     @staticmethod
-    def from_gravity_model(origin_population, destination_population, distance_dataframe, function="inverse", G=1, a=1, b=1, d=1):
+    def from_gravity_model(origin_population, destination_population, distance_dataframe, function="inverse", G=1, a=1, b=1, d=1, *args, **kwargs):
         if function == "inverse":
             trip_array = G * outer((origin_population**a), (destination_population**b)) / distance_dataframe**d
         elif function == "exponential":
             trip_array = G * outer((origin_population**a), (destination_population**b)) * exp(-d * distance_dataframe)
         else:
             raise NotImplementedError("Function %s not implemented" % (function))
-        return TripDataFrame(data=trip_array, index=origin_population.index, columns=destination_population.index)
+        return TripDataFrame(data=trip_array, index=origin_population.index, columns=destination_population.index, *args, **kwargs)
                     
     @staticmethod
-    def from_ipfn(zones, cost_dataframe):
+    def from_ipfn(zones, cost_dataframe, *args, **kwargs):
         # TODO fix this method
         cost_dataframe["origin_zone"] = cost_dataframe.index
         cost_dataframe = cost_dataframe.melt(id_vars=["origin_zone"])
@@ -40,12 +40,13 @@ class TripDataFrame(pandas.DataFrame):
         trips = IPF.iteration()
         return TripDataFrame(
             trips.pivot(
-                index="origin_zone", columns="destination_zone", values="total"
+                index="origin_zone", columns="destination_zone", values="total",
+                *args, **kwargs
             ).stack()
         )
 
     @staticmethod
-    def from_lodes(st, year):
+    def from_lodes(st, year, *args, **kwargs):
         od = pandas.read_csv(download_lodes_data("od", st, "main", "JT00", year))
         xwalk = pandas.read_csv(download_lodes_xwalk(st))
         xwalk.set_index("tabblk2010", inplace=True)
@@ -60,7 +61,7 @@ class TripDataFrame(pandas.DataFrame):
             suffixes=("_w", "_h"),
         )
         od_xwalk = od_xwalk.groupby(["trct_w", "trct_h"]).sum()
-        return TripDataFrame(od_xwalk)
+        return TripDataFrame(od_xwalk, *args, **kwargs)
 
     def add_geometry_from_zones(self, zones, method=random_point_in_polygon):
         (self["home_geometry"], self["work_geometry"]) = list(
