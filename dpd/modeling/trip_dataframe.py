@@ -18,17 +18,41 @@ class TripDataFrame(pandas.DataFrame):
     * Often built from DistanceDataFrame using a GravityModel or IPFN
     """
 
-
     @staticmethod
-    def from_gravity_model(origin_population, destination_population, distance_dataframe, function="inverse", G=1, a=1, b=1, d=1, *args, **kwargs):
+    def from_gravity_model(
+        origin_population,
+        destination_population,
+        distance_dataframe,
+        function="inverse",
+        G=1,
+        a=1,
+        b=1,
+        d=1,
+        *args,
+        **kwargs
+    ):
         if function == "inverse":
-            trip_array = G * outer((origin_population**a), (destination_population**b)) / distance_dataframe**d
+            trip_array = (
+                G
+                * outer((origin_population**a), (destination_population**b))
+                / distance_dataframe**d
+            )
         elif function == "exponential":
-            trip_array = G * outer((origin_population**a), (destination_population**b)) * exp(-d * distance_dataframe)
+            trip_array = (
+                G
+                * outer((origin_population**a), (destination_population**b))
+                * exp(-d * distance_dataframe)
+            )
         else:
             raise NotImplementedError("Function %s not implemented" % (function))
-        return TripDataFrame(data=trip_array, index=origin_population.index, columns=destination_population.index, *args, **kwargs)
-                    
+        return TripDataFrame(
+            data=trip_array,
+            index=origin_population.index,
+            columns=destination_population.index,
+            *args,
+            **kwargs
+        )
+
     @staticmethod
     def from_ipfn(zones, cost_dataframe, *args, **kwargs):
         # TODO fix this method
@@ -45,8 +69,11 @@ class TripDataFrame(pandas.DataFrame):
         trips = IPF.iteration()
         return TripDataFrame(
             trips.pivot(
-                index="origin_zone", columns="destination_zone", values="total",
-                *args, **kwargs
+                index="origin_zone",
+                columns="destination_zone",
+                values="total",
+                *args,
+                **kwargs
             ).stack()
         )
 

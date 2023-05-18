@@ -16,7 +16,7 @@ from .trip_dataframe import TripDataFrame
 class Zones(GeoDataFrame):
     """
     A class to store four-step model zones.
-    
+
     * Index is an identifier
     * Columns are Geometry (Polygons), Production, Attraction
     """
@@ -59,7 +59,9 @@ class Zones(GeoDataFrame):
         centroids = self.geometry.map(
             lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
         )
-        return DistanceDataFrame.from_origins_destinations(centroids, centroids, method="haversine")
+        return DistanceDataFrame.from_origins_destinations(
+            centroids, centroids, method="haversine"
+        )
 
     def calculate_trip_dataframe_from_ipfn(self, distance_dataframe=None):
         """
