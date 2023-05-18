@@ -52,5 +52,5 @@ class DistanceDataFrame(DataFrame):
                 columns=origins.index,
                 *args, **kwargs,
             )
-        elif method="OSRM":
+        elif method=="OSRM":
             pass
