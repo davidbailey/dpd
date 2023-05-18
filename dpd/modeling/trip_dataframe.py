@@ -10,7 +10,12 @@ from dpd.shapely import random_point_in_polygon
 
 class TripDataFrame(pandas.DataFrame):
     """
-    A class to store an origin-destination matrix for the trip distribution step of a four-step model. Index defines origins. Columns define destinations.
+    A class to store an origin-destination matrix for the trip distribution step of a four-step model.
+
+    * Index is Origin
+    * Columns are Destinations
+    * Value is number of trips from origin to destination
+    * Often built from DistanceDataFrame using a GravityModel or IPFN
     """
 
 
