@@ -9,4 +9,4 @@ class Population(DataFrame):
             for destination in trip_dataframe.columns:
                 for number_of_trips in range(trip_dataframe[destination][origin]):
                     population.append({"origin": origin, "destination": destination})
-        return Population(people)
+        return Population(population)
