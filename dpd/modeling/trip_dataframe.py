@@ -1,5 +1,6 @@
 from ipfn import ipfn
 import networkx
+from numpy import outer, exp
 import pandas
 
 from dpd.osrm import route
@@ -7,14 +8,22 @@ from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 from dpd.shapely import random_point_in_polygon
 
 
-class OriginDestinationDataFrame(pandas.DataFrame):
+class TripDataFrame(pandas.DataFrame):
     """
     A class to store an origin-destination matrix for the trip distribution step of a four-step model. Index defines origins. Columns define destinations.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
+    @staticmethod
+    def from_gravity_model(origin_population, destination_population, distance_dataframe, function="inverse", G=1, a=1, b=1, d=1):
+        if function == "inverse":
+            trip_array = G * outer((origin_population**a), (destination_population**b)) / distance_dataframe**d
+        elif function == "exponential":
+            trip_array = G * outer((origin_population**a), (destination_population**b)) * exp(-d * distance_dataframe)
+        else:
+            raise NotImplementedError("Function %s not implemented" % (function))
+        return TripDataFrame(data=trip_array, index=origin_population.index, columns=destination_population.index)
+                    
     @staticmethod
     def from_ipfn(zones, cost_dataframe):
         # TODO fix this method
@@ -29,7 +38,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
         dimensions = [["origin_zone"], ["destination_zone"]]
         IPF = ipfn.ipfn(cost_dataframe, aggregates, dimensions)
         trips = IPF.iteration()
-        return OriginDestinationDataFrame(
+        return TripDataFrame(
             trips.pivot(
                 index="origin_zone", columns="destination_zone", values="total"
             ).stack()
@@ -51,7 +60,7 @@ class OriginDestinationDataFrame(pandas.DataFrame):
             suffixes=("_w", "_h"),
         )
         od_xwalk = od_xwalk.groupby(["trct_w", "trct_h"]).sum()
-        return OriginDestinationDataFrame(od_xwalk)
+        return TripDataFrame(od_xwalk)
 
     def add_geometry_from_zones(self, zones, method=random_point_in_polygon):
         (self["home_geometry"], self["work_geometry"]) = list(
