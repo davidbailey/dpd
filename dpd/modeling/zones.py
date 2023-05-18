@@ -9,14 +9,16 @@ from shapely.geometry import Point
 
 from dpd.shapely import uniform_points_in_polygon
 from dpd.uscensus import get_uscensus_data
-from .centroid_distance_dataframe import CentroidDistanceDataFrame
-from .cost_dataframe import CostDataFrame
-from .origin_destination_dataframe import OriginDestinationDataFrame
+from .distance_dataframe import DistanceDataFrame
+from .trip_dataframe import TripDataFrame
 
 
 class Zones(GeoDataFrame):
     """
     A class to store four-step model zones.
+    
+    * Index is an identifier
+    * Columns are Geometry (Polygons), Production, Attraction
     """
 
     def __init__(self, *args, **kwargs):
@@ -50,45 +52,22 @@ class Zones(GeoDataFrame):
         zones["Attraction"] = 0
         return Zones(zones)
 
-    def add_aea_centroid_column(self):
-        """
-        Adds a new column containing the centroid of all zones.
-        """
-        self.to_crs(CRS.from_string("North America Albers Equal Area Conic"))
-        self["aea_centroid"] = self.geometry.map(
-            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
-        )
-        return self
-
-    def calculate_centroid_distance_dataframe(self):
+    def calculate_distance_dataframe(self):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
-        if "aea_centroid" not in self.columns:
-            self.add_aea_centroid_column()
-        return CentroidDistanceDataFrame.from_centroids(self.aea_centroid)
-
-    def calculate_cost_dataframe(self, beta=None, centroid_distance_dataframe=None):
-        """
-        Calculate a dataframe containing the travel cost between all zones.
-        """
-        if centroid_distance_dataframe is None:
-            centroid_distance_dataframe = self.calculate_centroid_distance_dataframe()
-        return CostDataFrame.from_centroid_distance_dataframe(
-            centroid_distance_dataframe, beta
+        centroids = self.geometry.map(
+            lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
         )
+        return DistanceDataFrame.from_origins_destinations(centroids, centroids, method="haversine")
 
-    def calculate_origin_destination_dataframe(
-        self, beta=None, centroid_distance_dataframe=None, cost_dataframe=None
-    ):
+    def calculate_trip_dataframe_from_ipfn(self, distance_dataframe=None):
         """
-        Calculate an origin-destination dataframe.
+        Calculate an trip dataframe using IPFN.
         """
-        if cost_dataframe is None:
-            cost_dataframe = self.calculate_cost_dataframe(
-                beta=beta, centroid_distance_dataframe=centroid_distance_dataframe
-            )
-        return OriginDestinationDataFrame.from_ipfn(self, cost_dataframe)
+        if distance_dataframe is None:
+            distance_dataframe = self.calculate_distance_dataframe()
+        return TripDataFrame.from_ipfn(self, distance_dataframe)
 
     def production_attraction_from_lodes(
         self, origin_destination_dataframe, column="S000"
