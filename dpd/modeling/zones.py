@@ -52,7 +52,7 @@ class Zones(GeoDataFrame):
         zones["Attraction"] = 0
         return Zones(zones)
 
-    def calculate_distance_dataframe(self):
+    def calculate_distance_dataframe(self, method="haversine"):
         """
         Calculate a dataframe containing the distance between the centroid of all zones.
         """
@@ -60,7 +60,7 @@ class Zones(GeoDataFrame):
             lambda geometry: Point(geometry.centroid.y, geometry.centroid.x)
         )
         return DistanceDataFrame.from_origins_destinations(
-            centroids, centroids, method="haversine"
+            centroids, centroids, method=method
         )
 
     def calculate_trip_dataframe_from_ipfn(self, distance_dataframe=None):
