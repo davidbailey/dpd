@@ -8,3 +8,5 @@ from .agent_based_links import AgentBasedLinks
 from .people import People
 from .people_flask_app import people_flask_app
 from .mode_choice_model import ModeChoiceModel
+from .population import Population
+from .agent-based_transportation_model import AgentBasedTransportationModel

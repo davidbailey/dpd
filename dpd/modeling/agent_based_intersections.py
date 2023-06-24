@@ -18,7 +18,7 @@ class AgentBasedIntersections(AgentBasedDict):
         super().__init__(*args, **kwargs)
         for key, intersection in self.items():
             if hasattr(intersection, "type_"):
-                intersection_type = intersection["type_"]
+                intersection_type = intersection.type_
                 if intersection_type == "Signal":
                     self[key] = SignalIntersection(intersection, self.model)
                 elif intersection_type == "Stop":
