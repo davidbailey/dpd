@@ -28,7 +28,7 @@ jobs:
     - name: Lint with black
       run: black --check .
     - name: Lint with isort
-      run: isort --check .
+      run: isort --check --profile black .
     - name: Lint with bandit
       run: bandit -r .
     - name: Lint with flake8
