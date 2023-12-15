@@ -1,6 +1,7 @@
 astropy
 bandit
 black
+black[jupyter]
 bs4
 cartopy
 coverage
