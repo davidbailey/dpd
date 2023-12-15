@@ -9,7 +9,7 @@ def find_way_in_ways(ways, points, buffer_distance=None):
     for i in range(1, len(ways) + 1):
         for linestring in combinations(ways, i):
             linestring = linemerge(linestring)
-            if type(linestring) == LineString:
+            if isinstance(linestring, LineString):
                 if buffer_distance:
                     if all(
                         [

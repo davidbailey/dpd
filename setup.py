@@ -23,6 +23,7 @@ setup(
         "geopandas",
         "gtfs_kit",
         "haversine",
+        "isort",
         "ipfn",
         "ipywidgets",
         "matplotlib",

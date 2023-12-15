@@ -27,9 +27,11 @@ jobs:
       run: pip install .
     - name: Lint with black
       run: black --check .
+    - name: Lint with isort
+      run: isort --check .
     - name: Lint with bandit
       run: bandit -r .
-    - name: Lint flake8
+    - name: Lint with flake8
       run: flake8
     - name: Test with pytest
       run: |
