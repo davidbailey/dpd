@@ -27,12 +27,12 @@ jobs:
       run: pip install .
     - name: Lint with black
       run: black --check .
+    - name: Lint with isort
+      run: isort --check .
     - name: Lint with bandit
       run: bandit -r .
     - name: Lint with flake8
       run: flake8
-    - name: Lint with isort
-      run: isort .
     - name: Test with pytest
       run: |
         coverage run --source=dpd -m pytest tests/
