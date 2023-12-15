@@ -23,7 +23,6 @@ setup(
         "geopandas",
         "gtfs_kit",
         "haversine",
-        "isort",
         "ipfn",
         "ipywidgets",
         "matplotlib",
@@ -39,5 +38,14 @@ setup(
         "us",
         "werkzeug",
     ],
-    tests_requires=["bandit", "black", "black[jupyter]", "coveralls", "flake8", "pytest", "pytest-cov"],
+    tests_requires=[
+        "bandit",
+        "black",
+        "black[jupyter]",
+        "coveralls",
+        "flake8",
+        "isort",
+        "pytest",
+        "pytest-cov"
+    ],
 )
