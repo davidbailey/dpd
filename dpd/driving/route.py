@@ -171,7 +171,7 @@ class Route(GeoDataFrame):
         Note: this does a lenght calculation on an unknown crs. This may be inaccurate.
         """
         ways_merged = linemerge(ways)
-        if type(ways_merged) == MultiLineString:
+        if isinstance(ways_merged, MultiLineString):
             longest_length = 0
             for way in ways_merged:
                 if way.length > longest_length:
