@@ -1,6 +1,6 @@
-from mesa import Agent
 from uuid import uuid4
 
+from mesa import Agent
 
 from dpd.mapping import Intersection
 

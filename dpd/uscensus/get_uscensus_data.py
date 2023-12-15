@@ -1,8 +1,8 @@
 """
 A function to get data from the US Census API
 """
-import pandas
 import geopandas
+import pandas
 import requests
 from pyproj import CRS
 

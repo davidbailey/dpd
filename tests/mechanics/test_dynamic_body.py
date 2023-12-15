@@ -1,8 +1,8 @@
 import unittest
 from uuid import uuid4
 
-from astropy import units
 import numpy
+from astropy import units
 from numpy.testing import assert_array_equal
 
 from dpd.mechanics import DynamicBody

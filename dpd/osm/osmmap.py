@@ -1,16 +1,15 @@
-from collections import Counter
 import logging
 import math
+from collections import Counter
 
-from astropy import units
 import numpy as np
-from pyrosm import get_data, OSM
-from shapely.geometry import Point, LineString
+from astropy import units
+from pyrosm import OSM, get_data
+from shapely.geometry import LineString, Point
 from tqdm import tqdm
 
-
-from dpd.mapping import Intersection, Map, Link, Links
 from dpd.geometry import GeometricDict
+from dpd.mapping import Intersection, Link, Links, Map
 
 DEFAULT_SPEED = 25 * units.imperial.mile / units.hour
 DEFAULT_SPEED_UNIT = units.imperial.mile / units.hour

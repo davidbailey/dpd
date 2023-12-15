@@ -1,5 +1,5 @@
-from math import pi
 import unittest
+from math import pi
 
 from shapely.geometry import LineString, Point
 

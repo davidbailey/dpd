@@ -1,14 +1,15 @@
 from functools import partial
 
 import folium
+import networkx
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
-import networkx
 from pyproj import CRS
 from shapely.geometry import Point
 
 from dpd.shapely import uniform_points_in_polygon
 from dpd.uscensus import get_uscensus_data
+
 from .distance_dataframe import DistanceDataFrame
 from .trip_dataframe import TripDataFrame
 

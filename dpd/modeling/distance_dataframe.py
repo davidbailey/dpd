@@ -1,4 +1,4 @@
-from haversine import haversine_vector, Unit
+from haversine import Unit, haversine_vector
 from pandas import DataFrame
 
 

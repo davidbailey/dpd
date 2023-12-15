@@ -2,8 +2,8 @@
 wikipedia: a collection of functions to make interacting with wikipedia easier
 """
 import bs4
-import requests
 import pandas
+import requests
 
 
 def get_wikipedia_table(url, number=0, styled=False, timeout=60):

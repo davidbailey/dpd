@@ -1,6 +1,7 @@
 import numpy
 
 from dpd.mechanics import KinematicBodyWithAcceleration
+
 from .kinematic_body_driver import KinematicBodyDriver
 
 

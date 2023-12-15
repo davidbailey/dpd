@@ -6,9 +6,10 @@ from shapely.geometry import Point
 from shapely.ops import linemerge
 from tqdm import tqdm
 
-from .route import Route
-from dpd.shapely import snap_point_to_linestring
 from dpd.osm import OSM
+from dpd.shapely import snap_point_to_linestring
+
+from .route import Route
 
 
 class Network:

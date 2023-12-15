@@ -1,10 +1,10 @@
-from itertools import combinations
 import unittest
+from itertools import combinations
 
 from astropy import units
-from shapely.geometry import Point, LineString
+from shapely.geometry import LineString, Point
 
-from dpd.mapping import Intersection, Map, Link
+from dpd.mapping import Intersection, Link, Map
 
 
 def build_test_map():

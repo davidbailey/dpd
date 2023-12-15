@@ -1,9 +1,10 @@
+import json
+
+import geojsoncontour
+import numpy as np
 from astropy import units
 from geopandas import GeoDataFrame
-import geojsoncontour
-import json
 from matplotlib import pyplot as plt
-import numpy as np
 from shapely.geometry import Point
 
 from dpd.osrm import table

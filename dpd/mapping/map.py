@@ -3,6 +3,7 @@ import geonetworkx
 from matplotlib import pyplot as plt
 
 from dpd.geometry import GeometricDict
+
 from .links import Links
 
 

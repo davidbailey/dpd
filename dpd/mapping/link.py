@@ -12,10 +12,10 @@ Things to fix: What about a (right-hand drive) cycleway on the left side of a on
 
 import requests
 
-from .lane import Lane
 from .cycleway import Cycleway
-from .sidewalk import Sidewalk
+from .lane import Lane
 from .parking import Parking
+from .sidewalk import Sidewalk
 
 
 class Link:

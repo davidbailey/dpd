@@ -1,5 +1,6 @@
 from astropy import units
 from pandas import Series
+
 from dpd.analysis.units import usd
 
 units.imperial.enable()

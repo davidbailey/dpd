@@ -1,5 +1,5 @@
 from dpd.geometry import GeometricDict
-from dpd.mapping import Lane, Sidewalk, Cycleway
+from dpd.mapping import Cycleway, Lane, Sidewalk
 from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 
 

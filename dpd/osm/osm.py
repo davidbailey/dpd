@@ -1,12 +1,12 @@
 """
 A class to query the Overpass API
 """
-from collections import namedtuple
 import logging
+from collections import namedtuple
 from time import sleep
 
 import requests
-from shapely.geometry import Point, LineString
+from shapely.geometry import LineString, Point
 
 OSMObject = namedtuple("OSMObject", "osm, geo")
 

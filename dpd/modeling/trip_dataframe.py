@@ -1,11 +1,11 @@
-from ipfn import ipfn
 import networkx
-from numpy import outer, exp
 import pandas
+from ipfn import ipfn
+from numpy import exp, outer
 
 from dpd.osrm import route
-from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 from dpd.shapely import random_point_in_polygon
+from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 
 
 class TripDataFrame(pandas.DataFrame):

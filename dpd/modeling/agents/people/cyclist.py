@@ -1,7 +1,7 @@
+import bisect
 import logging
 
 from astropy import units
-import bisect
 
 from .pedestrian import Pedestrian
 

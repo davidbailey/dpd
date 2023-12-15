@@ -1,5 +1,5 @@
-from flask import Blueprint, Flask, Response, session
 import folium
+from flask import Blueprint, Flask, Response, session
 from jinja2 import Template
 
 

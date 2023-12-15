@@ -1,4 +1,4 @@
-from numpy import sin, cos, tan
+from numpy import cos, sin, tan
 
 
 class Bicycle:

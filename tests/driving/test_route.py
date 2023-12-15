@@ -3,7 +3,6 @@ import unittest
 from dpd.driving import Route
 from dpd.osm import OSM
 
-
 relation = 2351006
 osm = OSM()
 osm.download_relation(relation)

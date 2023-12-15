@@ -1,7 +1,7 @@
 from functools import partial
 
-from astropy import units
 import ipywidgets as widgets
+from astropy import units
 from IPython.display import display
 from pandas import read_csv
 

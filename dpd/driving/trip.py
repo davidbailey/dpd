@@ -5,7 +5,7 @@ from astropy.time import TimeDelta
 from astropy.visualization import quantity_support
 from geopandas import GeoDataFrame
 from movingpandas import Trajectory
-from pandas import concat, MultiIndex
+from pandas import MultiIndex, concat
 from shapely.geometry import Point
 
 from dpd.utils import timestring_to_timeobject

@@ -1,9 +1,10 @@
+import bisect
 import logging
 
 from astropy import units
-import bisect
 
 from dpd.mechanics import move
+
 from .pedestrian import Pedestrian
 
 

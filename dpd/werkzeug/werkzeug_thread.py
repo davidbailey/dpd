@@ -1,5 +1,6 @@
-from threading import Thread
 import webbrowser
+from threading import Thread
+
 from werkzeug.serving import make_server
 
 

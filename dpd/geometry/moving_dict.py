@@ -1,5 +1,6 @@
-from .geometric_dict import GeometricDict
 from movingpandas import Trajectory
+
+from .geometric_dict import GeometricDict
 
 
 class MovingDict(GeometricDict):

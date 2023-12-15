@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, request, Response
+from flask import Blueprint, Flask, Response, request
 
 index = """
 <!DOCTYPE html>

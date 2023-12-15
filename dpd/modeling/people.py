@@ -1,21 +1,22 @@
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
 
 import geopandas
 import movingpandas
 import pandas
 import requests
 from mesa.datacollection import DataCollector
-from tqdm import tqdm
 from pyproj import CRS
+from tqdm import tqdm
 
-from dpd.modeling.agents.people import Pedestrian, Cyclist, Driver
+from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
 from dpd.werkzeug import WerkzeugThread
-from .people_flask_app import people_flask_app
+
 from .agent_based_dict import AgentBasedDict
 from .agent_based_intersections import AgentBasedIntersections
 from .agent_based_links import AgentBasedLinks
 from .mode_choice_model import ModeChoiceModel
+from .people_flask_app import people_flask_app
 
 
 class People(AgentBasedDict):
