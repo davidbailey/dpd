@@ -39,5 +39,5 @@ setup(
         "us",
         "werkzeug",
     ],
-    tests_requires=["bandit", "black", "coveralls", "flake8", "pytest", "pytest-cov"],
+    tests_requires=["bandit", "black", "black[jupyter]", "coveralls", "flake8", "pytest", "pytest-cov"],
 )
