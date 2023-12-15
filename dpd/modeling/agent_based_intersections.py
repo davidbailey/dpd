@@ -1,7 +1,5 @@
-from dpd.modeling.agents.intersections.stop_intersection import \
-    StopIntersection
-from dpd.modeling.agents.intersections.yield_intersection import \
-    YieldIntersection
+from dpd.modeling.agents.intersections.stop_intersection import StopIntersection
+from dpd.modeling.agents.intersections.yield_intersection import YieldIntersection
 
 from .agent_based_dict import AgentBasedDict
 

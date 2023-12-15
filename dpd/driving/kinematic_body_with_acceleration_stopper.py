@@ -1,7 +1,6 @@
 import numpy
 
-from .kinematic_body_with_acceleration_driver import \
-    KinematicBodyWithAccelerationDriver
+from .kinematic_body_with_acceleration_driver import KinematicBodyWithAccelerationDriver
 
 
 class KinematicBodyWithAccelerationStopper(KinematicBodyWithAccelerationDriver):

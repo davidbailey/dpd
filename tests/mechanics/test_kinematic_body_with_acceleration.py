@@ -6,8 +6,9 @@ from astropy import units
 from numpy.testing import assert_array_equal
 
 from dpd.mechanics import KinematicBodyWithAcceleration
-from dpd.mechanics.datacollection import \
-    KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS
+from dpd.mechanics.datacollection import (
+    KINEMATIC_BODY_WITH_ACCELERATION_AGENT_REPORTERS,
+)
 from dpd.modeling import TransportationModel
 
 

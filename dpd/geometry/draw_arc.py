@@ -1,7 +1,6 @@
 import numpy
 
-from .circle_center_from_points_and_radius import \
-    circle_center_from_points_and_radius
+from .circle_center_from_points_and_radius import circle_center_from_points_and_radius
 
 
 def draw_arc(start_point, end_point, radius, right_handed, number_of_points):
