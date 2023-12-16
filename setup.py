@@ -46,6 +46,6 @@ setup(
         "flake8",
         "isort",
         "pytest",
-        "pytest-cov"
+        "pytest-cov",
     ],
 )

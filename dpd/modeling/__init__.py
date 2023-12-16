@@ -1,4 +1,4 @@
-from .agent-based_transportation_model import AgentBasedTransportationModel
+from .agent_based_transportation_model import AgentBasedTransportationModel
 from .agent_based_dict import AgentBasedDict
 from .agent_based_intersections import AgentBasedIntersections
 from .agent_based_links import AgentBasedLinks
