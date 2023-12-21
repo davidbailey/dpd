@@ -2,6 +2,9 @@ version: 2
 formats: []
 
 build:
+  os: "ubuntu-latest"
+   tools:
+     python: "3.9"
   image: latest
   apt_packages:
     - python3-dev
@@ -12,7 +15,6 @@ build:
     - gdal-bin
     - libgdal-dev
 python:
-  version: 3
   install:
     - requirements: docs/requirements.txt
   system_packages: true
