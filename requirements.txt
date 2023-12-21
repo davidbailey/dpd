@@ -22,8 +22,8 @@ matplotlib
 mesa
 movingpandas
 networkx
-numpy==1.23.5
-pandas==1.5.3
+numpy
+pandas
 pyproj
 pyrosm
 pytest
