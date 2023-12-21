@@ -5,7 +5,7 @@ from dpd.modeling import ModeChoiceModel
 
 class TestModeChoiceModel(unittest.TestCase):
     def test_mode_choice_model(self):
-        self.model = ModeChoiceModel()
+        self.model = ModeChoiceModel(modes=[], probabilities=[])
 
 
 if __name__ == "__main__":
