@@ -60,8 +60,8 @@ class OSMMap(Map):
         )
 
     def create_node_tags_lookup(self):
-        ids = np.concatenate([group["id"] for group in self.osm._nodes])
-        tags = np.concatenate([group["tags"] for group in self.osm._nodes])
+        ids = self.osm._nodes["id"]
+        tags = self.osm._nodes["tags"]
         return {ids[i]: tags[i] for i in range(0, len(ids))}
 
     def build_intersections(self, intersections):
