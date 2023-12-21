@@ -2,7 +2,6 @@ import logging
 import math
 from collections import Counter
 
-import numpy as np
 from astropy import units
 from pyrosm import OSM, get_data
 from shapely.geometry import LineString, Point
