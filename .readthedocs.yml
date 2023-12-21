@@ -17,4 +17,3 @@ build:
 python:
   install:
     - requirements: docs/requirements.txt
-  system_packages: true
