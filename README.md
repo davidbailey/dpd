@@ -8,7 +8,6 @@
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
 
 ## Documentation
---------
 
 Documentation is available at https://dpd.readthedocs.io/en/latest/.
 
