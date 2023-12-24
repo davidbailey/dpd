@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: OSSF Scorecard action
+      uses: ossf/scorecard-action@v2.3.1
     - uses: actions/setup-python@v4
       with:
         python-version: "3.9"
