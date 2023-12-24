@@ -29,8 +29,7 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False, timeout=6
     )
     request = requests.get(url, timeout=timeout)
     dataframe = pandas.DataFrame(
-        request.json()[1:], columns=request.json()[0], dtype="int"
-    )
+        request.json()[1:], columns=request.json()[0])
     if with_geometry:
         geometry = geopandas.read_file(
             "https://www2.census.gov/geo/tiger/TIGER"
