@@ -7,6 +7,37 @@
 
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
 
+## Documentation
+--------
+
+Documentation is available at https://dpd.readthedocs.io/en/latest/.
+
+## Getting Started
+
+### Prerequisities
+
+```bash
+apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
+```
+
+### Installation
+
+```bash
+pip install git+https://github.com/davidbailey/dpd.git
+```
+
+### Testing
+
+```bash
+black --check .
+isort --check --profile black .
+bandit -r .
+flake8
+python -m pytest tests/
+```
+
+### Usage
+
 * Analysis - The starting point is a decision - made up of one or more alternatives (e.g. Should we build a train, bus, bike path, or nothing?). Each alternative is made up of one or mote activities (e.g. design, build, operations, maintenance) which each have a start time, end time, cost, and benefit. The alternative class has the ability to compute a benefit-cost ratio, plot cash flow diagrams and create timelines. The decision class compares alternatives via multiple-criteria analysis. These tools show the relative merits (pros and cons) for each alternative. E.g. [Analysis](https://dpd.readthedocs.io/en/latest/notebooks/analysis.html)
 
 The two primary sources for cost/benefit information are Driving and Modeling.
@@ -30,15 +61,5 @@ There are also several supporting submodules that can be used by the above modul
 * Werkzeug - a class to run a Werkzeug server in a thread.
 * Wikipedia - functions for gathering data from Wikipedia. E.g. [Wikipedia](https://dpd.readthedocs.io/en/latest/notebooks/wikipedia.html)
 
-Installation
---------
-
-```bash
-sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
-pip install git+https://github.com/davidbailey/dpd.git
-```
-
-Documentation
---------
-
-Documentation is available at https://dpd.readthedocs.io/en/latest/.
+## License
+This project is licensed under the [MIT License](LICENSE.md).
