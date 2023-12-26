@@ -1,20 +1,20 @@
 from astropy import units
 from pandas import Series
 
-from dpd.analysis.units import person, usd
+from dpd.analysis.units import person, usd2020
 
 # https://www.transportation.gov/sites/dot.gov/files/2022-03/Benefit%20Cost%20Analysis%20Guidance%202022%20%28Revised%29.pdf
 
 Value_of_Reduced_Fatalities_and_Injuries = Series(
     [
-        3900 * usd,
-        77200 * usd,
-        151100 * usd,
-        554800 * usd,
-        11600000 * usd,
-        210300 * usd,
-        302600 * usd,
-        12837400 * usd,
+        3900 * usd2020,
+        77200 * usd2020,
+        151100 * usd2020,
+        554800 * usd2020,
+        11600000 * usd2020,
+        210300 * usd2020,
+        302600 * usd2020,
+        12837400 * usd2020,
     ],
     index=[
         "O - No Injury",
@@ -31,14 +31,14 @@ Value_of_Reduced_Fatalities_and_Injuries = Series(
 
 Value_of_Travel_Time_Savings = Series(
     [
-        16.20 * usd / (person * units.hour),
-        29.40 * usd / (person * units.hour),
-        17.80 * usd / (person * units.hour),
-        32.40 * usd / (person * units.hour),
-        32.00 * usd / (person * units.hour),
-        33.60 * usd / (person * units.hour),
-        50.70 * usd / (person * units.hour),
-        52.50 * usd / (person * units.hour),
+        16.20 * usd2020 / (person * units.hour),
+        29.40 * usd2020 / (person * units.hour),
+        17.80 * usd2020 / (person * units.hour),
+        32.40 * usd2020 / (person * units.hour),
+        32.00 * usd2020 / (person * units.hour),
+        33.60 * usd2020 / (person * units.hour),
+        50.70 * usd2020 / (person * units.hour),
+        52.50 * usd2020 / (person * units.hour),
     ],
     index=[
         "General Travel Time - Personal",

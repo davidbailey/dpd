@@ -1,2 +1,2 @@
 from .person import person
-from .usd import usd
+from .usd import usd2020
