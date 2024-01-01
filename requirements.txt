@@ -14,10 +14,12 @@ geojsoncontour
 geonetworkx
 geopandas
 gtfs_kit
+h3
 haversine
 isort
 ipfn
 ipywidgets
+lonboard
 matplotlib
 mesa
 movingpandas
@@ -30,5 +32,6 @@ pytest
 pytest-cov
 requests
 shapely
+tobler
 us
 werkzeug
