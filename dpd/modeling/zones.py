@@ -149,30 +149,3 @@ class Zones(GeoDataFrame):
                     }
                 )
         return GeoDataFrame(data=data, crs=self.crs)
-
-    def plot_density(
-        self, folium_map, production_or_attraction="Production", *args, **kwargs
-    ):
-        self.to_crs(CRS.from_epsg(4326), inplace=True)
-        folium.Choropleth(
-            geo_data=self.to_json(),
-            data=self,
-            columns=[production_or_attraction, production_or_attraction + " Density"],
-            key_on="feature.properties." + production_or_attraction,
-            fill_color="OrRd",
-            nan_fill_color="white",
-            fill_opacity=0.7,
-            line_opacity=0.2,
-            threshold_scale=[
-                0,
-                2500,
-                5000,
-                7500,
-                10000,
-                12500,
-                self[production_or_attraction + " Density"].max(),
-            ],
-            legend_name=production_or_attraction + " density (people/square kilometer)",
-            *args,
-            **kwargs
-        ).add_to(folium_map)
