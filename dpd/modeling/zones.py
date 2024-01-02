@@ -1,10 +1,12 @@
 from functools import partial
 
+from astropy.units import m
 import networkx
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from shapely.geometry import Point
 
+from dpd.analysis.units import person
 from dpd.shapely import uniform_points_in_polygon
 from dpd.uscensus import get_uscensus_data
 
@@ -22,17 +24,15 @@ class Zones(GeoDataFrame):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.Production = self.Production.fillna(0).apply(int)
-        self.Attraction = self.Attraction.fillna(0).apply(int)
         self["ProductionAttractionSum"] = self.Production + self.Attraction
-        self["Production Density"] = self.Production / self.ALAND * 1000000
-        self["Attraction Density"] = self.Attraction / self.ALAND * 1000000
+        self["Production Density"] = self.Production / self.ALAND
+        self["Attraction Density"] = self.Attraction / self.ALAND
         self["ProductionAttractionSum Density"] = (
-            self.ProductionAttractionSum / self.ALAND * 1000000
+            self.ProductionAttractionSum / self.ALAND
         )
 
     @staticmethod
-    def from_uscensus(state, year):
+    def from_uscensus(state, year, include_units=False):
         # TODO add a way to specify the level to get the geometry for. e.g. currently we only support census tract, but we may want to do a county-level analysis.
         zones = get_uscensus_data(
             year, state, ["NAME", "B01003_001E", "B08604_001E"], with_geometry=True
@@ -48,7 +48,12 @@ class Zones(GeoDataFrame):
             inplace=True,
         )
         zones["Production"] = zones.Production.apply(int)
-        zones["Attraction"] = 0
+        zones["Attraction"] = zones.Attraction.apply(int)
+        if include_units:
+            zones.Production = zones.Production.map(lambda x: x * person)
+            zones.Attraction = zones.Attraction.map(lambda x: x * person)
+            zones.ALAND = zones.ALAND.map(lambda x: x * m**2)
+            zones.AWATER = zones.AWATER.map(lambda x: x * m**2)
         return Zones(zones)
 
     def calculate_distance_dataframe(self, method="haversine"):
