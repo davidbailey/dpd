@@ -173,7 +173,7 @@ class Route(GeoDataFrame):
         ways_merged = linemerge(ways)
         if isinstance(ways_merged, MultiLineString):
             longest_length = 0
-            for way in ways_merged:
+            for way in ways_merged.geoms:
                 if way.length > longest_length:
                     longest_length = way.length
                     longest_way = way
