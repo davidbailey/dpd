@@ -42,7 +42,7 @@ class Route(GeoDataFrame):
 
     @property
     def stops(self):
-        return self[self["name"].notnull()]
+        return self[self["name"] != "nan"]
 
     @property
     def stops_dict(self):

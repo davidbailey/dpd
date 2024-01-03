@@ -47,8 +47,8 @@ class Zones(GeoDataFrame):
             },
             inplace=True,
         )
-        zones["Production"] = zones.Production.apply(int)
-        zones["Attraction"] = zones.Attraction.apply(int)
+        zones["Production"] = zones.Production.fillna(0).apply(int)
+        zones["Attraction"] = zones.Attraction.fillna(0).apply(int)
         if include_units:
             zones.Production = zones.Production.map(lambda x: x * person)
             zones.Attraction = zones.Attraction.map(lambda x: x * person)
