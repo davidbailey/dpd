@@ -39,7 +39,7 @@ def get_uscensus_data(year, state, data=["NAME"], with_geometry=False, timeout=6
             + state
             + "_tract.zip"
         )
-        geometry.crs = CRS.from_epsg(3857)
+        geometry.crs = CRS.from_epsg(4269)
 
         dataframe = pandas.merge(
             dataframe,
