@@ -38,7 +38,7 @@ setup(
         "pyproj",
         "requests",
         "shapely",
-        "tobler >= 0.11.2",
+        "tobler",
         "us",
         "werkzeug",
     ],
