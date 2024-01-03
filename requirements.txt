@@ -20,6 +20,7 @@ isort
 ipfn
 ipywidgets
 lonboard
+mapclassify
 matplotlib
 mesa
 movingpandas

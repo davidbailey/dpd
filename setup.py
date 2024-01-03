@@ -27,6 +27,7 @@ setup(
         "ipfn",
         "ipywidgets",
         "lonboard",
+        "mapclassify",
         "matplotlib",
         "mesa",
         "movingpandas",
