@@ -1,7 +1,7 @@
 from functools import partial
 
-from astropy.units import m
 import networkx
+from astropy.units import m
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from shapely.geometry import Point
