@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 from geopandas import GeoDataFrame
 from pyproj import CRS
@@ -72,7 +71,6 @@ class Network:
             network.add_route(
                 relation, Route.from_osm_relation(relation, *args, **kwargs)
             )
-            sleep(1)
         return network
 
     @staticmethod
