@@ -33,17 +33,16 @@ class Zones(GeoDataFrame):
             self.ProductionAttractionSum / self.ALAND
         )
 
-    def h3fy_interpolated(
-        self, extensive_variables=None, intensive_variables=None, *args, **kwargs
-    ):
-        h3_zones = h3fy(self, *args, **kwargs)
-        interpolated = area_interpolate(
-            source_df=self,
-            target_df=h3_zones,
-            extensive_variables=extensive_variables,
-            intensive_variables=intensive_variables,
+    def h3fy_area_interpolated(self, h3fy_kwds=None, area_interpolate_kwds=None):
+        if h3fy_kwds is None:
+            h3fy_kwds = {}
+        if area_interpolate_kwds is None:
+            area_interpolate_kwds = {}
+        h3fy_zones = h3fy(self, **h3fy_kwds)
+        area_interpolate_zones = area_interpolate(
+            source_df=self, target_df=h3fy_zones, **area_interpolate_kwds
         )
-        return Zones(interpolated)
+        return Zones(area_interpolate_zones)
 
     @staticmethod
     def from_uscensus(state, year, include_units=False):
