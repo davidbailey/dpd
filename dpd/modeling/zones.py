@@ -5,6 +5,8 @@ from astropy.units import m
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from shapely.geometry import Point
+from tobler.util import h3fy
+from tobler.area_weighted import area_interpolate
 
 from dpd.analysis.units import person
 from dpd.shapely import uniform_points_in_polygon
@@ -30,6 +32,15 @@ class Zones(GeoDataFrame):
         self["ProductionAttractionSum Density"] = (
             self.ProductionAttractionSum / self.ALAND
         )
+
+    def h3fy_interpolated(self, *args, **kwargs):
+        h3_zones = h3fy(self, *args, **kwargs)
+        interpolated = area_interpolate(
+            source_df=self,
+            target_df=h3_zones,
+            intensive_variables=["Production", "Attraction", "ALAND"],
+        )
+        return = Zones(interpolated)
 
     @staticmethod
     def from_uscensus(state, year, include_units=False):
