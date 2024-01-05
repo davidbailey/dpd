@@ -40,7 +40,7 @@ class Zones(GeoDataFrame):
             target_df=h3_zones,
             intensive_variables=["Production", "Attraction", "ALAND"],
         )
-        return = Zones(interpolated)
+        return Zones(interpolated)
 
     @staticmethod
     def from_uscensus(state, year, include_units=False):
