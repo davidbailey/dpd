@@ -34,12 +34,8 @@ class Zones(GeoDataFrame):
         )
 
     def h3fy_interpolated(
-            self,
-            extensive_variables=None,
-            intensive_variables=None,
-            *args,
-            **kwargs
-        ):
+        self, extensive_variables=None, intensive_variables=None, *args, **kwargs
+    ):
         h3_zones = h3fy(self, *args, **kwargs)
         interpolated = area_interpolate(
             source_df=self,
