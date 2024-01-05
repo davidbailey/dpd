@@ -5,8 +5,8 @@ from astropy.units import m
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from shapely.geometry import Point
-from tobler.util import h3fy
 from tobler.area_weighted import area_interpolate
+from tobler.util import h3fy
 
 from dpd.analysis.units import person
 from dpd.shapely import uniform_points_in_polygon
