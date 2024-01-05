@@ -40,9 +40,7 @@ class Zones(GeoDataFrame):
             area_interpolate_kwds = {}
         h3fy_zones = h3fy(self, **h3fy_kwds)
         area_interpolate_zones = area_interpolate(
-            source_df=self,
-            target_df=h3fy_zones,
-            **area_interpolate_kwds
+            source_df=self, target_df=h3fy_zones, **area_interpolate_kwds
         )
         return Zones(area_interpolate_zones)
 
