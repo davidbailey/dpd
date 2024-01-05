@@ -33,12 +33,12 @@ class Zones(GeoDataFrame):
             self.ProductionAttractionSum / self.ALAND
         )
 
-    def h3fy_interpolated(self, *args, **kwargs):
+    def h3fy_interpolated(self, intensive_variables, *args, **kwargs):
         h3_zones = h3fy(self, *args, **kwargs)
         interpolated = area_interpolate(
             source_df=self,
             target_df=h3_zones,
-            intensive_variables=["Production", "Attraction", "ALAND"],
+            intensive_variables=intensive_variables,
         )
         return Zones(interpolated)
 
