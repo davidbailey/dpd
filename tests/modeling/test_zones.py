@@ -10,7 +10,7 @@ BETA = 0.001
 class TestZones(unittest.TestCase):
     def test_zones(self):
         zones = Zones.from_uscensus(ST, YEAR)
-        zones["Attraction"] = zones["Production"]
+        zones["Worker Population"] = zones["Total Population"]
         # od = zones.calculate_origin_destination_dataframe(beta=BETA) # TODO figure out why this is broken
 
 
