@@ -103,13 +103,13 @@ class Zones(GeoDataFrame):
         self["Worker Population"] = origin_destination_dataframe.groupby(
             "trct_w"
         ).sum()[column]
-        zones["Total Population + Worker Population"] = (
-            zones["Total Population"] + zones["Worker Population"]
+        self["Total Population + Worker Population"] = (
+            self["Total Population"] + self["Worker Population"]
         )
-        zones["Total Population Density"] = zones["Total Population"] / zones["ALAND"]
-        zones["Worker Population Density"] = zones["Worker Population"] / zones["ALAND"]
-        zones["Total Population + Worker Population Density"] = (
-            zones["Total Population + Worker Population"] / zones["ALAND"]
+        self["Total Population Density"] = self["Total Population"] / self["ALAND"]
+        self["Worker Population Density"] = self["Worker Population"] / self["ALAND"]
+        self["Total Population + Worker Population Density"] = (
+            self["Total Population + Worker Population"] / self["ALAND"]
         )
         return Zones(self)
 
