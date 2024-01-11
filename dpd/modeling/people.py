@@ -79,8 +79,8 @@ class People(AgentBasedDict):
         number_of_rounds=10,
         post_people_url=None,
     ):
-        self.intersections.to_crs(epsg=4087)
-        self.links.to_crs(epsg=4087)
+        self.intersections.to_crs("EPSG:4087")
+        self.links.to_crs("EPSG:4087")
         self.crs = self.links.crs
         self.data_collector.collect(self.model)
         if post_people_url:
