@@ -44,8 +44,8 @@ def build_test_map():
 class TestPeople(unittest.TestCase):
     def test_people(self):
         self.map_ = build_test_map()
-        self.map_.intersections.crs = crs = "EPSG:4087"
-        self.map_.links.crs = crs = "EPSG:4087"
+        self.map_.intersections.crs = "EPSG:4087"
+        self.map_.links.crs = "EPSG:4087"
         self.people = People(self.map_)
         p1 = Driver(
             self.people.model,
