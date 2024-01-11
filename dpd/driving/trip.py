@@ -108,7 +108,7 @@ class Trip(GeoDataFrame):
         df.set_index("timedelta", inplace=True)
         columns = ["name", "total_time", "total_distance"]
         if include_geometry:
-            route.to_crs("North America Albers Equal Area Conic", inplace=True)
+            route.to_crs(epsg=4087, inplace=True)
             df["geometry"] = df.apply(
                 lambda row: route.way.interpolate(row.position.value), axis=1
             )

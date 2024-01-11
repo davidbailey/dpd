@@ -141,9 +141,9 @@ class Zones(GeoDataFrame):
             )
 
     def polygons_to_points(self, num=10):
-        if "Albers_Equal_Area_Conic" not in self.crs.name:
+        if "WGS 84" not in self.crs.name:
             raise ValueError(
-                "CRS does not contain Albers_Equal_Area_Conic. Results will not be accurate"
+                "CRS does not contain WGS 84. Results will not be accurate"
             )
         points = self.geometry.map(partial(uniform_points_in_polygon, num=num))
         num_points_in_polygon = points.map(len)

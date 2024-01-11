@@ -61,7 +61,7 @@ class Route(GeoDataFrame):
         Returns a list of distances between every pair of points along the route.
         The length of the list is one less than the number of points on the route.
         """
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        self.to_crs(epsg=4087, inplace=True)
         distances = []
         for i in range(len(self) - 1):
             distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]))
@@ -73,7 +73,7 @@ class Route(GeoDataFrame):
         Returns a list of the radii of curvature between every three points along the route.
         The lenght of the list is two less than the number of points on the route.
         """
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        self.to_crs(epsg=4087, inplace=True)
         radius_of_curvature = []
         for i in range(len(self) - 2):
             radius_of_curvature.append(
@@ -242,7 +242,7 @@ class Route(GeoDataFrame):
         return route
 
     def plot_accessibility_contourf(self, folium_map, times, mode):
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        self.to_crs(epsg=4087, inplace=True)
         stops_dict = self.stops_dict
         for stop in stops_dict:
             features = stops_dict[stop].accessibility_contourf_features(
@@ -252,7 +252,7 @@ class Route(GeoDataFrame):
             folium.GeoJson(data=features).add_to(folium_map)
 
     def plot_accessibility_radius(self, folium_map, times, mode):
-        self.to_crs("North America Albers Equal Area Conic", inplace=True)
+        self.to_crs(epsg=4087, inplace=True)
         stops_dict = self.stops_dict
         for stop in stops_dict:
             features = stops_dict[stop].accessibility_radius_features(

@@ -34,9 +34,9 @@ class DistanceDataFrame(DataFrame):
         """
         if method == "distance":
             for name in [origins.crs.name, destinations.crs.name]:
-                if "Albers_Equal_Area_Conic" not in name:
+                if "WGS 84" not in name:
                     raise ValueError(
-                        "CRS does not contain Albers_Equal_Area_Conic. Results will not be accurate"
+                        "CRS does not contain WGS 84. Results will not be accurate"
                     )
             data = []
             for index in destinations.index:

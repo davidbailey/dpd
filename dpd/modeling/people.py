@@ -6,7 +6,6 @@ import movingpandas
 import pandas
 import requests
 from mesa.datacollection import DataCollector
-from pyproj import CRS
 from tqdm import tqdm
 
 from dpd.modeling.agents.people import Cyclist, Driver, Pedestrian
@@ -80,9 +79,8 @@ class People(AgentBasedDict):
         number_of_rounds=10,
         post_people_url=None,
     ):
-        aea = CRS.from_string("North America Albers Equal Area Conic")
-        self.intersections.to_crs(aea)
-        self.links.to_crs(aea)
+        self.intersections.to_crs(epsg=4087)
+        self.links.to_crs(epsg=4087)
         self.crs = self.links.crs
         self.data_collector.collect(self.model)
         if post_people_url:
