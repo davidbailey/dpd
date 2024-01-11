@@ -26,12 +26,6 @@ class Zones(GeoDataFrame):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self["ProductionAttractionSum"] = self.Production + self.Attraction
-        self["Production Density"] = self.Production / self.ALAND
-        self["Attraction Density"] = self.Attraction / self.ALAND
-        self["ProductionAttractionSum Density"] = (
-            self.ProductionAttractionSum / self.ALAND
-        )
 
     def h3fy_area_interpolated(self, h3fy_kwds=None, area_interpolate_kwds=None):
         if h3fy_kwds is None:
@@ -55,18 +49,24 @@ class Zones(GeoDataFrame):
         zones.rename(
             columns={
                 "NAME_x": "Name",
-                "B01003_001E": "Production",
-                "B08604_001E": "Attraction",
+                "B01003_001E": "Total Population",
+                "B08604_001E": "Worker Population",
             },
             inplace=True,
         )
-        zones["Production"] = zones.Production.fillna(0).apply(int)
-        zones["Attraction"] = zones.Attraction.fillna(0).apply(int)
+        zones["Total Population"] = zones["Total Population"].fillna(0).apply(int)
+        zones["Worker Population"] = zones["Worker Population"].fillna(0).apply(int)
         if include_units:
-            zones.Production = zones.Production.map(lambda x: x * person)
-            zones.Attraction = zones.Attraction.map(lambda x: x * person)
-            zones.ALAND = zones.ALAND.map(lambda x: x * m**2)
-            zones.AWATER = zones.AWATER.map(lambda x: x * m**2)
+            zones["Total Population"] = zones["Total Population"].map(lambda x: x * person)
+            zones["Worker Population"] = zones["Worker Population"].map(lambda x: x * person)
+            zones["ALAND"] = zones["ALAND"].map(lambda x: x * m**2)
+            zones["AWATER"] = zones["AWATER"].map(lambda x: x * m**2)
+        zones["Total Population + Worker Population"] = zones["Total Population"] + zones["Worker Population"]
+        zones["Total Population Density"] = zones["Total Population"] / zones["ALAND"]
+        zones["Worker Population Density"] = zones["Worker Population"] / zones["ALAND"]
+        zones["Total Population + Worker Population Density"] = (
+            zones["Total Population + Worker Population"] / zones["ALAND"]
+        )
         return Zones(zones)
 
     def calculate_distance_dataframe(self, method="haversine"):
@@ -91,12 +91,18 @@ class Zones(GeoDataFrame):
     def production_attraction_from_lodes(
         self, origin_destination_dataframe, column="S000"
     ):
-        self["Production"] = origin_destination_dataframe.groupby("trct_h").sum()[
+        self["Total Population"] = origin_destination_dataframe.groupby("trct_h").sum()[
             column
         ]
-        self["Attraction"] = origin_destination_dataframe.groupby("trct_w").sum()[
+        self["Worker Population"] = origin_destination_dataframe.groupby("trct_w").sum()[
             column
         ]
+        zones["Total Population + Worker Population"] = zones["Total Population"] + zones["Worker Population"]
+        zones["Total Population Density"] = zones["Total Population"] / zones["ALAND"]
+        zones["Worker Population Density"] = zones["Worker Population"] / zones["ALAND"]
+        zones["Total Population + Worker Population Density"] = (
+            zones["Total Population + Worker Population"] / zones["ALAND"]
+        )
         return Zones(self)
 
     def build_graph(self, centroid_distance_dataframe=None):
@@ -147,10 +153,10 @@ class Zones(GeoDataFrame):
             )
         points = self.geometry.map(partial(uniform_points_in_polygon, num=num))
         num_points_in_polygon = points.map(len)
-        production = self["Production"] / num_points_in_polygon
-        attraction = self["Attraction"] / num_points_in_polygon
+        production = self["Total Population"] / num_points_in_polygon
+        attraction = self["Worker Population"] / num_points_in_polygon
         production_attraction_sum = (
-            self["ProductionAttractionSum"] / num_points_in_polygon
+            self["Total Population + Worker Population"] / num_points_in_polygon
         )
         data = []
         for index in points.index:
@@ -159,9 +165,9 @@ class Zones(GeoDataFrame):
                     {
                         "GEOID": index,
                         "geometry": point,
-                        "Production": production[index],
-                        "Attraction": attraction[index],
-                        "ProductionAttractionSum": production_attraction_sum[index],
+                        "Total Population": production[index],
+                        "Worker Population": attraction[index],
+                        "Total Population + Worker Population": production_attraction_sum[index],
                     }
                 )
         return GeoDataFrame(data=data, crs=self.crs)
