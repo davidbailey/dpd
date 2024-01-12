@@ -1,9 +1,7 @@
-import folium
 from astropy import units
 from astropy.constants import g0
 from geopandas import GeoDataFrame
 from numpy import concatenate, minimum, sqrt
-from pyproj import CRS
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
@@ -186,7 +184,7 @@ class Route(GeoDataFrame):
                 0
             ]
         line = feed.build_geometry_by_shape([shape_id])[shape_id]
-        route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
+        route = Route.from_way(line, crs="EPSG:4326", *args, **kwargs)
         for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]][
             "stop_id"
         ]:
@@ -222,7 +220,7 @@ class Route(GeoDataFrame):
                 "platform",
             ]
         ]
-        route = Route.from_ways(ways, crs=CRS.from_epsg(4326), *args, **kwargs)
+        route = Route.from_ways(ways, crs="EPSG:4326", *args, **kwargs)
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
                 route.add_stop(
