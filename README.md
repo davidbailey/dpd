@@ -48,7 +48,7 @@ The two primary sources for cost/benefit information are Driving and Modeling.
 There are also several supporting submodules that can be used by the above modules and can be used on their own.
 
 * Folium - an example [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
-* Geometry - functions for computing geometric operations and classes for storing geometric objects: [Geometry](https://dpd.readthedocs.io/en/latest/notebooks/geometry.html)
+* Geometry - functions for computing geometric operations
 * Mechanics - a class for modeling a kinematic body - this is used by both Driving and Modeling
 * Geopandas - functions for working with geopandas GeoDataFrames
 * Mapping - classes for creating a map. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html)
