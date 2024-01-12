@@ -8,6 +8,7 @@ from shapely.ops import linemerge, nearest_points
 from dpd.geometry import circle_from_three_points
 from dpd.osm import OSM
 
+
 class Route(GeoDataFrame):
     """
     the route a vehicle takes

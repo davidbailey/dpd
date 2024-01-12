@@ -3,6 +3,7 @@ from pandas import DataFrame
 
 from dpd.osrm import table
 
+
 class DistanceDataFrame(DataFrame):
     """
     This is a class to compute an Origin-Destination DataFrame.
@@ -17,12 +18,7 @@ class DistanceDataFrame(DataFrame):
 
     @staticmethod
     def from_origins_destinations(
-        origins,
-        destinations,
-        method="distance",
-        distance_unit=1,
-        *args,
-        **kwargs
+        origins, destinations, method="distance", distance_unit=1, *args, **kwargs
     ):
         """
         origins (geopandas.GeoSeries): GeoSeries of list of origin points
@@ -34,15 +30,15 @@ class DistanceDataFrame(DataFrame):
         """
         if method == "distance":
             if origins.crs != destinations.crs:
-                raise ValueError( 
-                    "CRS does not match between origins and destinations. Results will not be accurate"               
+                raise ValueError(
+                    "CRS does not match between origins and destinations. Results will not be accurate"
                 )
             if origins.crs is not None and destinations.crs is not None:
-                for name in [origins.crs.name, destinations.crs.name]: 
+                for name in [origins.crs.name, destinations.crs.name]:
                     if "WGS 84" not in name:
                         raise ValueError(
                             "CRS does not contain WGS 84. Results will not be accurate"
-                        )       
+                        )
             data = []
             for index in destinations.index:
                 data.append(
@@ -67,14 +63,21 @@ class DistanceDataFrame(DataFrame):
                 **kwargs,
             )
         elif method == "OSRM":
-            source_coordinates = ";".join(map(lambda x: str(x.x) + "," + str(x.y), origins.to_list()))
-            destination_coordinates = ";".join(map(lambda x: str(x.x) + "," + str(x.y), destinations.to_list()))
+            source_coordinates = ";".join(
+                map(lambda x: str(x.x) + "," + str(x.y), origins.to_list())
+            )
+            destination_coordinates = ";".join(
+                map(lambda x: str(x.x) + "," + str(x.y), destinations.to_list())
+            )
             source_index = ";".join(map(str, range(len(origins))))
-            destinations_index = ";".join(map(str, range(len(origins), len(origins) + len(destinations))))
-            
+            destinations_index = ";".join(
+                map(str, range(len(origins), len(origins) + len(destinations)))
+            )
+
             response = table(
                 origins=source_coordinates + ";",
                 destinations=destination_coordinates,
-                options="?sources=%s&destinations=%s" % (source_index, destinations_index)
+                options="?sources=%s&destinations=%s"
+                % (source_index, destinations_index),
             )
             return response
