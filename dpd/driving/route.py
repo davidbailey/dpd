@@ -1,17 +1,12 @@
-import folium
 from astropy import units
 from astropy.constants import g0
 from geopandas import GeoDataFrame
 from numpy import concatenate, minimum, sqrt
-from pyproj import CRS
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
-from dpd.geometry import GeometricDict, circle_from_three_points
+from dpd.geometry import circle_from_three_points
 from dpd.osm import OSM
-
-from .stop import Stop
-
 
 class Route(GeoDataFrame):
     """
@@ -43,13 +38,6 @@ class Route(GeoDataFrame):
     @property
     def stops(self):
         return self[(self["name"] != "nan") & self.name.notnull()]
-
-    @property
-    def stops_dict(self):
-        stops_dict = GeometricDict(crs=self.crs)
-        for stop in self.stops.index:
-            stops_dict[self.loc[stop]["name"]] = Stop(self.loc[stop]["geometry"])
-        return stops_dict
 
     @property
     def way(self):
@@ -196,7 +184,7 @@ class Route(GeoDataFrame):
                 0
             ]
         line = feed.build_geometry_by_shape([shape_id])[shape_id]
-        route = Route.from_way(line, crs=CRS.from_epsg(4326), *args, **kwargs)
+        route = Route.from_way(line, crs="EPSG:4326", *args, **kwargs)
         for stop_id in feed.stop_times[feed.stop_times["trip_id"] == trips.iloc[0]][
             "stop_id"
         ]:
@@ -232,7 +220,7 @@ class Route(GeoDataFrame):
                 "platform",
             ]
         ]
-        route = Route.from_ways(ways, crs=CRS.from_epsg(4326), *args, **kwargs)
+        route = Route.from_ways(ways, crs="EPSG:4326", *args, **kwargs)
         for member in osm.relations[relation]["members"]:
             if member["type"] == "node":
                 route.add_stop(
@@ -240,49 +228,3 @@ class Route(GeoDataFrame):
                     osm.nodes[member["ref"]].osm["tags"]["name"],
                 )
         return route
-
-    def plot_accessibility_contourf(self, folium_map, times, mode):
-        self.to_crs(epsg=4087, inplace=True)
-        stops_dict = self.stops_dict
-        for stop in stops_dict:
-            features = stops_dict[stop].accessibility_contourf_features(
-                times, mode, crs=self.crs
-            )
-            features.to_crs(CRS.from_epsg(4326), inplace=True)
-            folium.GeoJson(data=features).add_to(folium_map)
-
-    def plot_accessibility_radius(self, folium_map, times, mode):
-        self.to_crs(epsg=4087, inplace=True)
-        stops_dict = self.stops_dict
-        for stop in stops_dict:
-            features = stops_dict[stop].accessibility_radius_features(
-                times, mode, crs=self.crs
-            )
-            features.to_crs(CRS.from_epsg(4326), inplace=True)
-            folium.GeoJson(data=features).add_to(folium_map)
-
-    def plot_folium(
-        self,
-        folium_map,
-        include_stops=True,
-        include_accessibility_contourf=False,
-        include_accessibility_radius=True,
-        include_way=True,
-        times=[5, 10, 15] * units.minute,
-        mode="walking",
-    ):
-        if include_accessibility_contourf:
-            self.plot_accessibility_contourf(folium_map, times=times, mode=mode)
-        if include_accessibility_radius:
-            self.plot_accessibility_radius(folium_map, times=times, mode=mode)
-        self.to_crs(CRS.from_epsg(4326), inplace=True)
-        if include_stops:
-            tooltip = folium.features.GeoJsonTooltip(fields=["name"])
-            geojson = folium.GeoJson(
-                self.stops[["name", "geometry"]].to_json(), tooltip=tooltip
-            )
-            geojson.add_to(folium_map)
-        if include_way:
-            folium.PolyLine(
-                list(zip(list(self.way.coords.xy[1]), list(self.way.coords.xy[0])))
-            ).add_to(folium_map)

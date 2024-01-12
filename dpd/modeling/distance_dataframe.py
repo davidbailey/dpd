@@ -1,6 +1,7 @@
 from haversine import Unit, haversine_vector
 from pandas import DataFrame
 
+from dpd.osrm import table
 
 class DistanceDataFrame(DataFrame):
     """
@@ -20,7 +21,6 @@ class DistanceDataFrame(DataFrame):
         destinations,
         method="distance",
         distance_unit=1,
-        mode="walking",
         *args,
         **kwargs
     ):
@@ -67,4 +67,14 @@ class DistanceDataFrame(DataFrame):
                 **kwargs,
             )
         elif method == "OSRM":
-            pass
+            source_coordinates = ";".join(map(lambda x: str(x.x) + "," + str(x.y), origins.to_list()))
+            destination_coordinates = ";".join(map(lambda x: str(x.x) + "," + str(x.y), destinations.to_list()))
+            source_index = ";".join(map(str, range(len(origins))))
+            destinations_index = ";".join(map(str, range(len(origins), len(origins) + len(destinations))))
+            
+            response = table(
+                origins=source_coordinates + ";",
+                destinations=destination_coordinates,
+                options="?sources=%s&destinations=%s" % (source_index, destinations_index)
+            )
+            return response
