@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/davidbailey/dpd/actions/workflows/main.yml/badge.svg)](https://github.com/davidbailey/dpd/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=trunk)](https://coveralls.io/github/davidbailey/dpd?branch=trunk)
 [![Documentation Status](https://readthedocs.org/projects/dpd/badge/?version=latest)](https://dpd.readthedocs.io/en/latest/?badge=latest)
+[![MIT License](https://img.shields.io/github/license/davidbailey/dpd.svg)](https://github.com/davidbailey/dpd/blob/trunk/LICENSE.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
