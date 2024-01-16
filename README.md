@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/davidbailey/dpd/actions/workflows/main.yml/badge.svg)](https://github.com/davidbailey/dpd/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/davidbailey/dpd/badge.svg?branch=trunk)](https://coveralls.io/github/davidbailey/dpd?branch=trunk)
 [![Documentation Status](https://readthedocs.org/projects/dpd/badge/?version=latest)](https://dpd.readthedocs.io/en/latest/?badge=latest)
+[![MIT License](https://img.shields.io/github/license/davidbailey/dpd.svg)](https://github.com/davidbailey/dpd/blob/trunk/LICENSE.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 dpd is a growing library of transportation-related tools sorted into submodules. Please let me know if you find these tools useful or interesting.
@@ -48,7 +49,7 @@ The two primary sources for cost/benefit information are Driving and Modeling.
 There are also several supporting submodules that can be used by the above modules and can be used on their own.
 
 * Folium - an example [Folium Flask App](https://dpd.readthedocs.io/en/latest/notebooks/folium_flask_app.html)
-* Geometry - functions for computing geometric operations and classes for storing geometric objects: [Geometry](https://dpd.readthedocs.io/en/latest/notebooks/geometry.html)
+* Geometry - functions for computing geometric operations
 * Mechanics - a class for modeling a kinematic body - this is used by both Driving and Modeling
 * Geopandas - functions for working with geopandas GeoDataFrames
 * Mapping - classes for creating a map. E.g. [Agent-based Transportation Model](https://dpd.readthedocs.io/en/latest/notebooks/agent-based_transportation_model.html)

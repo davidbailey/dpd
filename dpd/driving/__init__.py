@@ -10,7 +10,5 @@ from .network import Network
 from .route import Route
 from .schedule import Schedule
 from .section import Section
-from .stop import Stop
-from .transportation_alternative import TransportationAlternative
 from .trip import Trip
 from .vehicles import Vehicles

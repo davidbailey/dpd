@@ -12,10 +12,8 @@ https://github.com/davidbailey/dpd
    notebooks/driving.ipynb
    notebooks/folium_flask_app.ipynb
    notebooks/four_step_transportation_model.ipynb
-   notebooks/geometry.ipynb
    notebooks/gravity_model.ipynb
    notebooks/level_of_traffic_stress.ipynb
-   notebooks/transportation_alternative.ipynb
    notebooks/wikipedia.ipynb
    api
 
