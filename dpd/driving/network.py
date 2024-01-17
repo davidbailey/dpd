@@ -51,9 +51,7 @@ class Network:
                 )
                 stops.append({"felt-text": stop["felt-text"], "geometry": new_stop})
             geometry = [Point(x, y) for (x, y) in linestring.coords]
-            route = GeoDataFrame(
-                geometry, columns=["geometry"], crs="EPSG:4326"
-            )
+            route = GeoDataFrame(geometry, columns=["geometry"], crs="EPSG:4326")
             route["name"] = None
             for stop in stops:
                 stop_index = list(linestring.coords).index(stop["geometry"].coords[0])
