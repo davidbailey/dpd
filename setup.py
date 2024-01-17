@@ -14,7 +14,6 @@ setup(
     install_requires=[
         "astropy",
         "bs4",
-        "cartopy",
         "flask",
         "folium",
         "forex_python",
