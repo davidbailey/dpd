@@ -1,7 +1,6 @@
 import logging
 
 from geopandas import GeoDataFrame
-from pyproj import CRS
 from shapely.geometry import Point
 from shapely.ops import linemerge
 from tqdm import tqdm
@@ -53,7 +52,7 @@ class Network:
                 stops.append({"felt-text": stop["felt-text"], "geometry": new_stop})
             geometry = [Point(x, y) for (x, y) in linestring.coords]
             route = GeoDataFrame(
-                geometry, columns=["geometry"], crs=CRS.from_epsg(4326)
+                geometry, columns=["geometry"], crs="EPSG:4326"
             )
             route["name"] = None
             for stop in stops:
