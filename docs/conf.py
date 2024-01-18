@@ -21,7 +21,7 @@ import dpd  # noqa: F401,E402
 # -- Project information -----------------------------------------------------
 
 project = "dpd"
-copyright = "2020, David Bailey"
+copyright = "2023, David Bailey"
 author = "David Bailey"
 
 # The short X.Y version
