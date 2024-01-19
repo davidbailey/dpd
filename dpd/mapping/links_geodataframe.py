@@ -1,11 +1,8 @@
 from geopandas import GeoDataFrame
-from pyrosm import OSM, get_data
 
 
 class LinksGeoDataFrame(GeoDataFrame):
-    def from_pyrosm_region(region):
-        fp = get_data(region)
-        osm = OSM(fp)
+    def from_pyrosm(osm):
         network = osm.get_network(
             "all",
             extra_attributes=[
