@@ -3,6 +3,7 @@ from .intersection import Intersection
 from .lane import Lane
 from .link import Link
 from .links import Links
+from .links_geodataframe import LinksGeoDataFrame
 from .map import Map
 from .parking import Parking
 from .segment import Segment
