@@ -1,10 +1,13 @@
 from geopandas import GeoDataFrame
 
+
 def pyrosm_assumed_lanes(row):
     pass
 
+
 def pyrosm_assumed_speed(row):
     pass
+
 
 class LinksGeoDataFrame(GeoDataFrame):
     @staticmethod
