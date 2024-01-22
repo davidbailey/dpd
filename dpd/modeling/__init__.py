@@ -1,7 +1,6 @@
 from .agent_based_dict import AgentBasedDict
 from .agent_based_intersections import AgentBasedIntersections
 from .agent_based_links import AgentBasedLinks
-from .agent_based_transportation_model import AgentBasedTransportationModel
 from .contour_dataframe import contour_dataframe
 from .distance_dataframe import DistanceDataFrame
 from .mode_choice_model import ModeChoiceModel
