@@ -9,5 +9,4 @@ def curve_direction(p0, p1, p2):
         return "left_handed"
     elif cross_product > 0:
         return "right_handed"
-    else:
-        return "straight"
+    return "straight"
