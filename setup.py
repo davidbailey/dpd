@@ -10,7 +10,7 @@ setup(
     author_email="david@davidabailey.com",
     url="https://github.com/davidbailey/dpd",
     packages=find_packages(),
-    license="Public Domain",
+    license="MIT License",
     install_requires=[
         "astropy",
         "bs4",
