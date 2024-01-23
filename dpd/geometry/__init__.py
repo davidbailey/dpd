@@ -4,4 +4,3 @@ from .curve_direction import curve_direction
 from .dms_to_dd import dms_to_dd
 from .draw_arc import draw_arc
 from .geometric_dict import GeometricDict
-from .moving_dict import MovingDict
