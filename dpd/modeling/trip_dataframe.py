@@ -11,6 +11,8 @@ from dpd.uscensus import download_lodes_data, download_lodes_xwalk
 class TripDataFrame(pandas.DataFrame):
     """
     A class to store an origin-destination matrix for the trip distribution step of a four-step model.
+    This is similar to scikit-mobility's FlowDataframe:
+    https://scikit-mobility.github.io/scikit-mobility/reference/data_structures.html#module-skmob.core.flowdataframe
 
     * Index is Origin
     * Columns are Destinations
