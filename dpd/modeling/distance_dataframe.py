@@ -9,6 +9,7 @@ class DistanceDataFrame(DataFrame):
     This is a class to compute an Origin-Destination DataFrame.
     It maps a distance, cost, or time function to origins and destinations. Output is a DataFrame with origins as rows and destinations as columns.
     The result can be merged with the origins or destinations dataframe. e.g. pandas.merge(origins, accessibility, left_index=True, right_index=True)
+    This is similar to SciPy's distance matrix: https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance_matrix.html.
 
     * Index is Origins
     * Columns are Destinations
