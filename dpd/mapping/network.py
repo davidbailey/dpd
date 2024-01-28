@@ -9,7 +9,7 @@ def pyrosm_assumed_speed(row):
     pass
 
 
-class LinksGeoDataFrame(GeoDataFrame):
+class Network(GeoDataFrame):
     @staticmethod
     def from_pyrosm(osm):
         network = osm.get_network(
@@ -23,4 +23,4 @@ class LinksGeoDataFrame(GeoDataFrame):
         )
         network["assumed_lanes"] = network.apply(pyrosm_assumed_lanes, axis=1)
         network["assumed_speed"] = network.apply(pyrosm_assumed_speed, axis=1)
-        return LinksGeoDataFrame(network)
+        return Network(network)

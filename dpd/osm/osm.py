@@ -1,6 +1,7 @@
 """
 A class to query the Overpass API
 """
+
 import logging
 from collections import namedtuple
 from time import sleep

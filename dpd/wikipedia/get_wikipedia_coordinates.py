@@ -1,6 +1,7 @@
 """
 wikipedia: a collection of functions to make interacting with wikipedia easier
 """
+
 import bs4
 import requests
 

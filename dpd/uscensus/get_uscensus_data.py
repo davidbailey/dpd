@@ -1,6 +1,7 @@
 """
 A function to get data from the US Census API
 """
+
 import geopandas
 import pandas
 import requests
