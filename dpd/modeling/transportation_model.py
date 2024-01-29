@@ -5,6 +5,7 @@ from mesa.time import RandomActivation
 
 class TransportationModel(Model):
     def __init__(self, agent_reporters=None, time_unit=1):
+        super().__init__()
         self.datacollector = DataCollector(
             agent_reporters=agent_reporters,
             model_reporters={"time": lambda m: m.schedule.time * m.time_unit},
