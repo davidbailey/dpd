@@ -17,10 +17,10 @@ Route
   * geometry (shapely.Point) each point along the route
   * name (string) the name of the location of a stop along the route, blank if the point is just for geometry
 
-Uses
+* Uses
 
-* Basis for a transportation model or simulation
-* Plotting a route
+  * Basis for a transportation model or simulation
+  * Plotting a route
 
 .. csv-table::
    :header: "Index", "geometry", "name"
