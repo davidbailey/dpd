@@ -38,11 +38,11 @@ DistanceDataFrame
   * May or may not be symmetric (maybe you take a different route from 1 to 2 as from 2 to 1)
 
 .. csv-table:: Example DistanceDataFrame
-   :header: "Index", "To Zone 1", "To Zone 2", "To Zone 3"
+   :header: "Index", "(To) Zone 1", "(To) Zone 2", "(To) Zone 3"
 
-   "From Zone 1", "N/A", "10 miles", "10 km"
-   "From Zone 2", "10 miles", "N/A", "2 miles"
-   "From Zone 3", "10 km", "2 miles", "N/A"
+   "(From) Zone 1", "N/A", "10 miles", "10 km"
+   "(From) Zone 2", "10 miles", "N/A", "2 miles"
+   "(From) Zone 3", "10 km", "2 miles", "N/A"
 
 TripDataFrame
 -----------
@@ -56,11 +56,11 @@ TripDataFrame
   * May or may not be symmetric
 
 .. csv-table:: Example TripDataFrame
-   :header: "Index", "To Zone 1", "To Zone 2", "To Zone 3"
+   :header: "Index", "(To) Zone 1", "(To) Zone 2", "(To) Zone 3"
 
-   "From Zone 1", "N/A", "20 trips", "10 trips"
-   "From Zone 2", "10 trips", "N/A", "2 trips"
-   "From Zone 3", "20 trips", "2 trips", "N/A"
+   "(From) Zone 1", "N/A", "20 trips", "10 trips"
+   "(From) Zone 2", "10 trips", "N/A", "2 trips"
+   "(From) Zone 3", "20 trips", "2 trips", "N/A"
 
 Population
 -----------
