@@ -18,6 +18,14 @@ Zones
   * Basis for a transportation model or simulation
   * Plotting geometries or population densities
 
+.. csv-table::
+   :header: "Index", "geometry", "population", "area", "density"
+
+   "Zone 1", "Polygon", "1000", "10", "100"
+   "Zone 2", "Polygon", "2000", "20", "100"
+   "Zone 3", "Polygon", "1000", "20", "50"
+
+
 DistanceDataFrame
 -----------
 
