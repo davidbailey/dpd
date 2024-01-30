@@ -22,7 +22,7 @@ Route
   * Basis for a transportation model or simulation
   * Plotting a route
 
-.. csv-table::
+.. csv-table:: Example Route
    :header: "Index", "geometry", "name"
 
    "0", "Point(0,0)", "Stop 1"
