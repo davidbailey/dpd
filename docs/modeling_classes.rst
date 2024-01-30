@@ -18,7 +18,7 @@ Zones
   * Basis for a transportation model or simulation
   * Plotting geometries or population densities
 
-.. csv-table::
+.. csv-table:: Example Zones
    :header: "Index", "geometry", "population", "area", "density"
 
    "Zone 1", "Polygon", "1000", "10", "100"
