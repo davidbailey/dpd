@@ -35,8 +35,9 @@ DistanceDataFrame
 * Uses
 
   * Contains the distance from each zone to each zone. Distance can be straight line (e.g. meters) or via some other algorithm (e.g. walking time)
+  * May or may not be symmetric (maybe you take a different route from 1 to 2 as from 2 to 1)
 
-.. csv-table:: Example Zones
+.. csv-table:: Example DistanceDataFrame
    :header: "Index", "Zone 1", "Zone 2", "Zone 3"
 
    "Zone 1", "N/A", "10 miles", "10 km"
@@ -52,6 +53,14 @@ TripDataFrame
 * Uses
 
   * Contains the number of trips from each zone to each zone.
+  * May or may not be symmetric
+
+.. csv-table:: Example TripDataFrame
+   :header: "Index", "Zone 1", "Zone 2", "Zone 3"
+
+   "Zone 1", "N/A", "20 trips", "10 trips"
+   "Zone 2", "10 trips", "N/A", "2 trips"
+   "Zone 3", "20 trips", "2 trips", "N/A"
 
 Population
 -----------
