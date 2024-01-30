@@ -79,6 +79,13 @@ Population
   * Can be converted into Zones with GroupBy
   * Basis for a transportation model or simulation
 
+.. csv-table:: Example Population
+   :header: "Index", "origin", "destination"
+
+   "0", "Zone 1", "Zone 2"
+   "1", "Zone 1", "Zone 2"
+   "2", "Zone 3", "Zone 4"
+
 ContourDataFrame
 -----------
 
