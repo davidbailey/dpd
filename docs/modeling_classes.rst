@@ -1,6 +1,8 @@
-Classes
+Modeling Classes
+=======
 
 Zones
+-----------
 
 * Extends geopandas.GeoDataFrame
 * Index (string) an identifier for each zone
@@ -17,6 +19,7 @@ Zones
   * Plotting geometries or population densities
 
 DistanceDataFrame
+-----------
 
 * Extends pandas.DataFrame
 * Index (string) an identifier for each zone
@@ -26,6 +29,7 @@ DistanceDataFrame
   * Contains the distance from each zone to each zone. Distance can be straight line (e.g. meters) or via some other algorithm (e.g. walking time)
 
 TripDataFrame
+-----------
 
 * Extends pandas.DataFrame
 * Index (string) an identifier for each zone
@@ -35,6 +39,7 @@ TripDataFrame
   * Contains the number of trips from each zone to each zone.
 
 Population
+-----------
 
 * Extends pandas.DataFrame
 * Index (string) an identifier for each trip
@@ -51,6 +56,7 @@ Population
   * Basis for a transportation model or simulation
 
 ContourDataFrame
+-----------
 
 * Extends geopandas.GeoDataFrame
 * Index - an identifier for each contour line
