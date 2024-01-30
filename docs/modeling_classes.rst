@@ -99,3 +99,10 @@ ContourDataFrame
 * Uses
 
   * Plotting contour lines around points
+
+.. csv-table:: Example ContourDataFrame
+   :header: "Index", "geometry", "title"
+
+   "0", "Polygon", "<5 minutes"
+   "1", "Polygon", "5-10 minutes"
+   "2", "Polygon", "10-15 minutes"
