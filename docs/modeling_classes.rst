@@ -36,6 +36,13 @@ DistanceDataFrame
 
   * Contains the distance from each zone to each zone. Distance can be straight line (e.g. meters) or via some other algorithm (e.g. walking time)
 
+.. csv-table:: Example Zones
+   :header: "Index", "Zone 1", "Zone 2", "Zone 3"
+
+   "Zone 1", "N/A", "10 miles", "10 km"
+   "Zone 2", "10 miles", "N/A", "2 miles"
+   "Zone 3", "10 km", "2 miles", "N/A"
+
 TripDataFrame
 -----------
 
