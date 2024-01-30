@@ -30,19 +30,19 @@ DistanceDataFrame
 -----------
 
 * Extends pandas.DataFrame
-* Index (string) an identifier for each zone
-* Columns (string) an identifier for each zone
+* Index (string) an identifier for each zone (origin)
+* Columns (string) an identifier for each zone (destination)
 * Uses
 
   * Contains the distance from each zone to each zone. Distance can be straight line (e.g. meters) or via some other algorithm (e.g. walking time)
   * May or may not be symmetric (maybe you take a different route from 1 to 2 as from 2 to 1)
 
 .. csv-table:: Example DistanceDataFrame
-   :header: "Index", "Zone 1", "Zone 2", "Zone 3"
+   :header: "Index", "To Zone 1", "To Zone 2", "To Zone 3"
 
-   "Zone 1", "N/A", "10 miles", "10 km"
-   "Zone 2", "10 miles", "N/A", "2 miles"
-   "Zone 3", "10 km", "2 miles", "N/A"
+   "From Zone 1", "N/A", "10 miles", "10 km"
+   "From Zone 2", "10 miles", "N/A", "2 miles"
+   "From Zone 3", "10 km", "2 miles", "N/A"
 
 TripDataFrame
 -----------
