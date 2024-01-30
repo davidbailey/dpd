@@ -48,19 +48,19 @@ TripDataFrame
 -----------
 
 * Extends pandas.DataFrame
-* Index (string) an identifier for each zone
-* Columns (string) an identifier for each zone
+* Index (string) an identifier for each zone (origin)
+* Columns (string) an identifier for each zone (destination)
 * Uses
 
   * Contains the number of trips from each zone to each zone.
   * May or may not be symmetric
 
 .. csv-table:: Example TripDataFrame
-   :header: "Index", "Zone 1", "Zone 2", "Zone 3"
+   :header: "Index", "To Zone 1", "To Zone 2", "To Zone 3"
 
-   "Zone 1", "N/A", "20 trips", "10 trips"
-   "Zone 2", "10 trips", "N/A", "2 trips"
-   "Zone 3", "20 trips", "2 trips", "N/A"
+   "From Zone 1", "N/A", "20 trips", "10 trips"
+   "From Zone 2", "10 trips", "N/A", "2 trips"
+   "From Zone 3", "20 trips", "2 trips", "N/A"
 
 Population
 -----------
