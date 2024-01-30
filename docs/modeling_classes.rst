@@ -32,13 +32,22 @@ TripDataFrame
 Population
 
 * Extends pandas.DataFrame
-* Index
+* Index (string) an identifier for each trip
 * Columns
   * Origin (string) an identifier for each origin zone
   * Destination (string) an identifier for each destination zone
 * Uses
   * Contains a row for each trip
+  * Expanded view of a TripDataFrame
+  * Can be converted into Zones with GroupBy
+  * Basis for a transportation model or simulation
 
 ContourDataFrame
 
 * Extends geopandas.GeoDataFrame
+* Index - an identifier for each contour line
+* Columns
+  * geometry (shapely.Polygon) the geometry for each contour line
+  * title (string) an identifier for each contour line
+* Uses
+  * Plotting contour lines around points
