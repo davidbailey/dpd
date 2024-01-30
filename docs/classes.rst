@@ -1,7 +1,8 @@
 Classes
 
 Zones
-* Extends GeoDataFrame
+
+* Extends geopandas.GeoDataFrame
 * Index (string) an identifier for each zone
 * Columns
   * geometry (shapely.Geometry) a geometry (typically a polygon, but could also e.g. be a centroid) for each zone
@@ -12,3 +13,32 @@ Zones
   * Basis for a transportation model or simulation
   * Plotting geometries or population densities
 
+DistanceDataFrame
+
+* Extends pandas.DataFrame
+* Index (string) an identifier for each zone
+* Columns (string) an identifier for each zone
+* Uses
+  * Contains the distance from each zone to each zone. Distance can be straight line (e.g. meters) or via some other algorithm (e.g. walking time)
+
+TripDataFrame
+
+* Extends pandas.DataFrame
+* Index (string) an identifier for each zone
+* Columns (string) an identifier for each zone
+* Uses
+  * Contains the number of trips from each zone to each zone.
+
+Population
+
+* Extends pandas.DataFrame
+* Index
+* Columns
+  * Origin (string) an identifier for each origin zone
+  * Destination (string) an identifier for each destination zone
+* Uses
+  * Contains a row for each trip
+
+ContourDataFrame
+
+* Extends geopandas.GeoDataFrame
