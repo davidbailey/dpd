@@ -10,6 +10,3 @@ class Body(Agent):
         super().__init__(*args, **kwargs)
         self.initial_position = initial_position
         self.position = initial_position
-
-    def step(self):
-        super().step()
