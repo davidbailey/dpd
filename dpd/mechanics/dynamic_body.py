@@ -1,5 +1,6 @@
 import astropy
-from numpy import any, minimum, maximum
+import numpy
+from numpy import minimum, maximum
 
 from .kinematic_body_with_acceleration import KinematicBodyWithAcceleration
 
@@ -23,7 +24,7 @@ class DynamicBody(KinematicBodyWithAcceleration):
             if not self.velocity.value.any():
                 self.acceleration = self.initial_acceleration
                 return
-        elif not any(self.velocity):
+        elif not numpy.any(self.velocity):
             self.acceleration = self.initial_acceleration
             return
         self.acceleration = self.power / (self.mass * self.velocity)
