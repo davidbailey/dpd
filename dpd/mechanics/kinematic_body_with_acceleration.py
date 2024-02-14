@@ -1,4 +1,4 @@
-import numpy
+from numpy import maximum, minimum, sqrt
 
 from .kinematic_body import KinematicBody
 
@@ -29,11 +29,11 @@ class KinematicBodyWithAcceleration(KinematicBody):
     def step_velocity(self):
         self.velocity = self.velocity + self.acceleration * self.model.time_unit
         if self.max_velocity is not None:
-            self.velocity = numpy.minimum(self.velocity, self.max_velocity)
+            self.velocity = minimum(self.velocity, self.max_velocity)
             if self.velocity == self.max_velocity:
                 self.acceleration = 0 * self.acceleration
         if self.min_velocity is not None:
-            self.velocity = numpy.maximum(self.velocity, self.min_velocity)
+            self.velocity = maximum(self.velocity, self.min_velocity)
             if self.velocity == self.min_velocity:
                 self.acceleration = 0 * self.acceleration
         if (
@@ -41,11 +41,11 @@ class KinematicBodyWithAcceleration(KinematicBody):
             and self.final_velocity is not None
             and self.max_position is not None
         ):
-            stopping_distance_velocity_max_position = numpy.sqrt(
+            stopping_distance_velocity_max_position = sqrt(
                 self.final_velocity**2
                 + 2 * self.max_deceleration * (self.max_position - self.position)
             )
-            self.velocity = numpy.minimum(
+            self.velocity = minimum(
                 self.velocity, stopping_distance_velocity_max_position
             )
             if self.velocity == stopping_distance_velocity_max_position:
@@ -55,11 +55,11 @@ class KinematicBodyWithAcceleration(KinematicBody):
             and self.final_velocity is not None
             and self.min_position is not None
         ):
-            stopping_distance_velocity_min_position = numpy.sqrt(
+            stopping_distance_velocity_min_position = sqrt(
                 self.final_velocity**2
                 + 2 * self.max_deceleration * (self.min_position - self.position)
             )
-            self.velocity = numpy.minimum(
+            self.velocity = minimum(
                 self.velocity, stopping_distance_velocity_min_position
             )
             if self.velocity == stopping_distance_velocity_min_position:
