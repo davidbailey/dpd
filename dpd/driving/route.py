@@ -151,7 +151,7 @@ class Route(GeoDataFrame):
         route = []
         for i in range(len(way.coords)):
             route.append({"geometry": Point(way.coords[i][0], way.coords[i][1])})
-        return Route(route, crs=crs, *args, **kwargs)
+        return Route(route, crs=crs, geometry="geometry", *args, **kwargs)
 
     @staticmethod
     def from_ways(ways, crs, *args, **kwargs):
