@@ -19,14 +19,13 @@ class Route(GeoDataFrame):
     def __init__(
         self,
         data,
-        crs="EPSG:4326",
         gague=1.435 * units.meter,
         max_cant=0.1524 * units.meter,
         max_cant_deficiency=0.075 * units.meter,
         *args,
         **kwargs
     ):
-        super().__init__(data, crs=crs, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
         self.gague = gague
         self.max_cant = max_cant
         self.max_cant_deficiency = max_cant_deficiency
