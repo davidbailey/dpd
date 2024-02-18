@@ -96,7 +96,4 @@ class Network:
                     )
                     relations.append(element["id"])
         return Network.from_osm_relations(relations, *args, **kwargs)
-
-    def plot_folium(self, *args, **kwargs):
-        for route in tqdm(self.routes):
-            self.routes[route].plot_folium(*args, **kwargs)
+        
