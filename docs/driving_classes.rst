@@ -9,7 +9,7 @@ Network
 
 Schedule
 -----------
-* Extends geopandas.GeoSeries
+* Extends geopandas.GeoDataFrame
 
 
 Route
