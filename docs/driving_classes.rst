@@ -9,7 +9,7 @@ Network
 
 Schedule
 -----------
-* Extends geopandas.GeoDataFrame
+* Extends pandas.DataFrame
 
 
 Route
@@ -47,4 +47,9 @@ Stops
 
 Trip
 -----------
+* Extends geopandas.GeoDataFrame
 
+Trips
+-----------
+
+* Extends dict
