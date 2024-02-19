@@ -1,6 +1,14 @@
 Driving Classes
 =======
 
+
+How did we get here?
+A little history: the goal has always been to compute a trip given a route. 
+
+1. The first model was the simplest: time = distance / speed. However, this model does not include acceleration and deceleration so it is not possible to compute the result of adding or removing a stop.
+2. The next model included a stop penalty. This is more realistic, but still ignores factors like changing speed limits. Also, many vehicles do not have uniform acceleration/deceleration.
+3. The current model is based on a dynamic body simulation: instead of computing with a few formulas, this version simulates a vehicle that will speed up, slow down, etc. This works well for modeling stops, speed limits, traffic, etc.
+
 Network
 -----------
 
