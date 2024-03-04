@@ -18,12 +18,19 @@ class KinematicBody(Body):
         self.min_position = min_position
 
     def step_position(self):
-        self.position = self.position + self.velocity * self.model.time_unit
+        next_position = self.position + self.velocity * self.model.time_unit
         if self.max_position is not None:
-            self.position = minimum(self.position, self.max_position)
+            self.position = minimum(next_position, self.max_position)
+            if self.position != next_position:
+                return self.position - next_position
         if self.min_position is not None:
-            self.position = maximum(self.position, self.min_position)
+            self.position = maximum(next_position, self.min_position)
+            if self.position != next_position:
+                return next_position - self.position
+        self.position = next_position
+        return None
 
     def step(self):
-        self.step_position()
+        extra_position = self.step_position()
         super().step()
+        return {"extra_position": extra_position}
