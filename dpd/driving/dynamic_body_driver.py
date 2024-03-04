@@ -4,5 +4,4 @@ from .kinematic_body_with_acceleration_driver import KinematicBodyWithAccelerati
 
 
 class DynamicBodyDriver(DynamicBody, KinematicBodyWithAccelerationDriver):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    pass
