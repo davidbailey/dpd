@@ -17,6 +17,8 @@ jobs:
       with:
         python-version: "3.9"
         cache: "pip"
+    - name: Update apt
+      run: sudo apt update
     - name: Install apt dependencies
       run: sudo apt install python3-dev libproj-dev proj-data proj-bin libgeos-dev gdal-bin libgdal-dev
     - name: Upgrade pip
