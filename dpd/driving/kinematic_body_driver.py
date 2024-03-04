@@ -9,7 +9,7 @@ class KinematicBodyDriver(KinematicBody):
         segments (list of dict): a list of dictionaries of distances (int or float) and (optionally) speed limits (int or float) for segments along a route.
         """
         # can add a warning if max_position is in kwargs
-        super().__init__(max_position = 0, *args, **kwargs)
+        super().__init__(max_position=0, *args, **kwargs)
         self.segments = segments
         self.begin_next_segment()
 

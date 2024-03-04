@@ -96,4 +96,3 @@ class Network:
                     )
                     relations.append(element["id"])
         return Network.from_osm_relations(relations, *args, **kwargs)
-        
