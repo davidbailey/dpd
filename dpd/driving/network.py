@@ -76,14 +76,13 @@ class Network:
         Build a network from an OpenStreetMap Overpass API Query
 
         Example Query:
-            [out:json][timeout:25];
-            (
-              relation["network"="Metro Rail"];
-
-            );
-            out body;
-            >;
-            out skel qt;
+        [out:json][timeout:25];
+        (
+        relation["network"="Metro Rail"];
+        );
+        out body;
+        >;
+        out skel qt;
         """
         result = osm.execute_query(query)
         relations = []
