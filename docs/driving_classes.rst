@@ -2,7 +2,7 @@ Driving Classes
 =======
 
 
-.. uml:: dpd
+.. uml:: dpd.driving
    :classes:
 	
 
