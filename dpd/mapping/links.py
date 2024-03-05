@@ -1,5 +1,4 @@
 import folium
-
 from dpd.geometry import GeometricDict
 from dpd.geopandas import filter_geodataframe
 
