@@ -21,7 +21,7 @@ import dpd  # noqa: F401,E402
 # -- Project information -----------------------------------------------------
 
 project = "dpd"
-copyright = "2023, David Bailey"
+copyright = "2024, David Bailey"
 author = "David Bailey"
 
 # The short X.Y version
@@ -39,7 +39,7 @@ release = ""
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "nbsphinx"]
+extensions = ["nbsphinx", "sphinx.ext.autodoc", "sphinx-pyreverse"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
