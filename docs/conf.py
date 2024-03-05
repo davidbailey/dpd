@@ -42,6 +42,7 @@ release = ""
 extensions = [
     "nbsphinx",
     "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "sphinx_pyreverse",
     "matplotlib.sphinxext.plot_directive"
 ]
