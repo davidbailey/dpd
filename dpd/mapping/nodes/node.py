@@ -5,4 +5,3 @@ class Node:
 
     def new_approaching_body(self, body):
         body.end_current_node()
-
