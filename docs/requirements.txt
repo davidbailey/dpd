@@ -1,3 +1,4 @@
+graphviz
 ipykernel
 nbsphinx
 sphinx-pyreverse
