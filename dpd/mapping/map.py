@@ -1,7 +1,8 @@
 import folium
 import geonetworkx
-from dpd.geometry import GeometricDict
 from matplotlib import pyplot as plt
+
+from dpd.geometry import GeometricDict
 
 from .links import Links
 
