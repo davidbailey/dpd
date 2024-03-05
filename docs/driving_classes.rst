@@ -2,6 +2,11 @@ Driving Classes
 =======
 
 
+.. uml:: dpd.driving
+   :classes:
+	
+
+
 How did we get here?
 A little history: the goal has always been to compute a trip given a route. 
 
