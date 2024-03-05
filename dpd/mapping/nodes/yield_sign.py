@@ -9,7 +9,7 @@ class YieldSign(Node, Agent):
         self.intersection_occupied = False
 
     def step(self):
-        if intersection_occupied:
+        if self.intersection_occupied:
             self.entry_velocity = 0
         else:
             self.entry_velocity = None
