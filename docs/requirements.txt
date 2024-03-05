@@ -1,4 +1,5 @@
 ipykernel
 nbsphinx
+sphinx-pyreverse
 
 git+https://github.com/davidbailey/dpd.git
