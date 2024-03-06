@@ -5,8 +5,7 @@ import unittest
 
 class TestTransportationModel(unittest.TestCase):
     def test_transportation_model(self):
-        # self.model = TransportationModel()
-        pass
+        self.model = TransportationModel()
 
 
 if __name__ == "__main__":
