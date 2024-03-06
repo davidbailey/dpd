@@ -1,6 +1,6 @@
 from mesa import Model
 from mesa.datacollection import DataCollector
-from mesa.time import RandomActivation
+from mesa.time import BaseScheduler
 
 
 class TransportationModel(Model):
@@ -11,16 +11,13 @@ class TransportationModel(Model):
             model_reporters={"time": lambda m: m.schedule.time * m.time_unit},
         )
         self.time_unit = time_unit
-        self.schedule = RandomActivation(self)
+        self.schedule = BaseScheduler(self)
 
     def step(self):
-        self.schedule.step()
-
-    def run(self):
+        if not self.schedule.agents:
+            self.running = False
         self.datacollector.collect(self)
-        while self.schedule.agents:
-            self.step()
-            self.datacollector.collect(self)
+        self.schedule.step()
 
     def get_dataframe(self):
         mvdf = self.datacollector.get_model_vars_dataframe()
