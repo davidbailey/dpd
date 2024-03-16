@@ -1,5 +1,6 @@
 from .edges_driver import EdgesDriver
 
+
 class EdgesLanesDriver(EdgesDriver):
     def __init__(self, lane=0, *args, **kwargs):
         logging.debug("EdgesLanesDriver Init")
@@ -16,7 +17,9 @@ class EdgesLanesDriver(EdgesDriver):
         self.current_edge.lanes[self.lane].remove(self)
         if len(self.current_edge.lanes[self.lane]) > 0:
             body_behind_me = self.current_edge.lanes[self.lane][0]
-            body_behind_me.max_position = self.body.max_position # add a stopping distance (and body length) here
+            body_behind_me.max_position = (
+                self.body.max_position
+            )  # add a stopping distance (and body length) here
         super().end_current_edge(*args, **kwargs)
 
     def lane_change(self, direction=1):

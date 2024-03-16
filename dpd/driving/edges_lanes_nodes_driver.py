@@ -1,5 +1,6 @@
 from .edges_lanes_driver import EdgesLanesDriver
 
+
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
         logging.debug("EdgesLanesNodesDriver Init")
@@ -11,7 +12,9 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
     def begin_next_edge(self, *args, **kwargs):
         super().begin_next_edge(*args, **kwargs)
         if self.next_node.entry_velocity is not None:
-            self.body.final_velocity = minimum(self.body.final_velocity, self.next_node.entry_velocity)
+            self.body.final_velocity = minimum(
+                self.body.final_velocity, self.next_node.entry_velocity
+            )
 
     def end_current_edge(self, *args, **kwargs):
         logging.debug("EdgesLanesNodesDriver End Current Edge")
@@ -27,5 +30,6 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         logging.debug("EdgesLanesNodesDriver End Current Node")
         self.waiting_at_node = False
         self.begin_next_node()
-        super().end_current_edge(extra_position=None) ## update this in cases where the driver does not stop
-
+        super().end_current_edge(
+            extra_position=None
+        )  ## update this in cases where the driver does not stop
