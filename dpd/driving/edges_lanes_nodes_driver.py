@@ -1,3 +1,5 @@
+from numpy import minimum
+
 from .edges_lanes_driver import EdgesLanesDriver
 
 
