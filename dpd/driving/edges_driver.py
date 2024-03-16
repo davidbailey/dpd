@@ -1,7 +1,7 @@
 from logging import warn
 
-from numpy import inf, minimum
 from mesa import Agent
+from numpy import inf, minimum
 
 from dpd.mechanics import KinematicBody, KinematicBodyWithAcceleration
 
