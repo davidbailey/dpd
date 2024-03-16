@@ -1,4 +1,5 @@
 from .cycleway import Cycleway
+from .edge import Edge
 from .intersection import Intersection
 from .lane import Lane
 from .link import Link
