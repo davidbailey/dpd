@@ -22,7 +22,7 @@ class EdgesDriver(Agent):
         edges (list of dict): a list of dictionaries of distances (int or float) and (optionally) speed limits (int or float) for segments along a route.
         """
         super().__init__(*args, **kwargs)
-        if driver_max_velocity == None and type(body) == KinematicBody:
+        if driver_max_velocity is None and isinstance(body, KinematicBody):
             warn(
                 "driver_max_velocity is not set: Driver will not accelerate after slowing due to maxspeed. Try setting driver_max_velocity equal to initial_velocity"
             )
@@ -49,7 +49,7 @@ class EdgesDriver(Agent):
         else:
             self.body.position = 0
         self.body.max_position = self.current_edge["distance"]
-        if type(self.body) == KinematicBodyWithAcceleration:
+        if isinstance(self.body, KinematicBodyWithAcceleration):
             self.body.acceleration = self.body.initial_acceleration
         if self.driver_max_velocity is not None:
             self.body.max_velocity = minimum(

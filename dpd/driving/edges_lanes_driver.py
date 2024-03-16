@@ -29,8 +29,8 @@ class EdgesLanesDriver(EdgesDriver):
         self.current_edge.lanes[self.lane].append(self)
 
     def step(self):
-        my_index = self.current_edge.lanes[self.lane].index(self)
         """
+        my_index = self.current_edge.lanes[self.lane].index(self)
         if my_index > 0:
             if self.lane < len(self.current_edge.lanes) - 1:
                 self.change_lane()
