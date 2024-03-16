@@ -3,7 +3,6 @@ from .edges_lanes_driver import EdgesLanesDriver
 
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
-        logging.debug("EdgesLanesNodesDriver Init")
         self.nodes = nodes
         self.waiting_at_node = False
         self.begin_next_node()
@@ -17,17 +16,14 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
             )
 
     def end_current_edge(self, *args, **kwargs):
-        logging.debug("EdgesLanesNodesDriver End Current Edge")
         if not self.waiting_at_node:
             self.waiting_at_node = True
             self.next_node.new_approaching_body(self)
 
     def begin_next_node(self):
-        logging.debug("EdgesLanesNodesDriver Begin Next Node")
         self.next_node = self.nodes.pop(0)
 
     def end_current_node(self):
-        logging.debug("EdgesLanesNodesDriver End Current Node")
         self.waiting_at_node = False
         self.begin_next_node()
         super().end_current_edge(
