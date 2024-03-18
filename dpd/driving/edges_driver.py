@@ -11,7 +11,7 @@ class EdgesDriver(Agent):
         self,
         body,
         edges,
-        initial_driver_position_offset=0,
+        initial_driver_position_offset=None,
         driver_max_velocity=None,
         driver_final_velocity=None,
         *args,
@@ -28,10 +28,14 @@ class EdgesDriver(Agent):
             )
         self.body = body
         self.edges = edges
-        self.driver_position_offset = initial_driver_position_offset
+        self.distance_unit = 0 * edges[0]["distance"]
+        if initial_driver_position_offset is None:
+            self.driver_position_offset = 0 * self.distance_unit
+        else:
+            self.driver_position_offset = initial_driver_position_offset
         self.driver_max_velocity = driver_max_velocity
         self.driver_final_velocity = driver_final_velocity
-        self.begin_next_edge(extra_position=0)
+        self.begin_next_edge(extra_position=0 * self.distance_unit)
 
     @property
     def geometry(self):
@@ -47,7 +51,7 @@ class EdgesDriver(Agent):
         if extra_position:
             self.body.position = extra_position
         else:
-            self.body.position = 0
+            self.body.position = 0 * self.distance_unit
         self.body.max_position = self.current_edge["distance"]
         if isinstance(self.body, KinematicBodyWithAcceleration):
             self.body.acceleration = self.body.initial_acceleration
@@ -69,7 +73,7 @@ class EdgesDriver(Agent):
             self.begin_next_edge(extra_position=extra_position)
 
     def step(self):
-        extra_position = 0
+        extra_position = 0 * self.distance_unit
         self.body.step()
         if self.body.position == self.body.max_position:
             self.end_current_edge(extra_position=extra_position)
