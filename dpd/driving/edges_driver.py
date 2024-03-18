@@ -48,7 +48,7 @@ class EdgesDriver(Agent):
     def begin_next_edge(self, extra_position):
         self.current_edge = self.edges.pop(0)
         self.driver_position_offset += self.body.position
-        if extra_position:
+        if extra_position is not None:
             self.body.position = extra_position
         else:
             self.body.position = 0 * self.distance_unit
