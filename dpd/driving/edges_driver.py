@@ -4,7 +4,7 @@ from astropy.units import Quantity, meter
 from mesa import Agent
 from numpy import inf, minimum
 
-from dpd.mechanics import KinematicBody, KinematicBodyWithAcceleration
+from dpd.mechanics import KinematicBodyWithAcceleration
 
 
 class EdgesDriver(Agent):
@@ -23,7 +23,7 @@ class EdgesDriver(Agent):
         edges (list of dict): a list of dictionaries of distances (int or float) and (optionally) speed limits (int or float) for segments along a route.
         """
         super().__init__(*args, **kwargs)
-        if driver_max_velocity is None and isinstance(body, KinematicBody):
+        if driver_max_velocity is None and not isinstance(body, KinematicBodyWithAcceleration):
             warn(
                 "driver_max_velocity is not set: Driver will not accelerate after slowing due to maxspeed. Try setting driver_max_velocity equal to initial_velocity"
             )
