@@ -1,5 +1,6 @@
 from logging import warn
 
+from astropy.units import Quantity, meter
 from mesa import Agent
 from numpy import inf, minimum
 
@@ -39,6 +40,8 @@ class EdgesDriver(Agent):
 
     @property
     def geometry(self):
+        if isinstance(self.body.position, Quantity):
+            return self.current_edge.geometry.interpolate(self.body.position.to(meter).value)
         return self.current_edge.geometry.interpolate(self.body.position)
 
     @property
