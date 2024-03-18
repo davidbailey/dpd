@@ -23,7 +23,9 @@ class EdgesDriver(Agent):
         edges (list of dict): a list of dictionaries of distances (int or float) and (optionally) speed limits (int or float) for segments along a route.
         """
         super().__init__(*args, **kwargs)
-        if driver_max_velocity is None and not isinstance(body, KinematicBodyWithAcceleration):
+        if driver_max_velocity is None and not isinstance(
+            body, KinematicBodyWithAcceleration
+        ):
             warn(
                 "driver_max_velocity is not set: Driver will not accelerate after slowing due to maxspeed. Try setting driver_max_velocity equal to initial_velocity"
             )
@@ -41,7 +43,9 @@ class EdgesDriver(Agent):
     @property
     def geometry(self):
         if isinstance(self.body.position, Quantity):
-            return self.current_edge.geometry.interpolate(self.body.position.to(meter).value)
+            return self.current_edge.geometry.interpolate(
+                self.body.position.to(meter).value
+            )
         return self.current_edge.geometry.interpolate(self.body.position)
 
     @property
