@@ -14,13 +14,14 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
     def from_node_ids(edges_dict, nodes_dict, node_ids, *args, **kwargs):
         """
         Preplans the nodes and edges for a Driver based on Node IDs and a nodes_dict and edges_dict
-        
+
         edges_dict (dict): a dictionary with a tuple of (node_id[i], node_id[i+1] as the index for each edge value, this is often a networkx.DiGraph.edges or a pandas.DataFrame
         nodes_dict (dict): a dictionary with node_id as the index for each node value, this is often a networkx.DiGraph.nodes or a pandas.DataFrame
         node_ids ([node_id]): a list of Node IDs that describes the route a Driver takes
         """
         edges = [
-            edges_dict[(node_ids[i], node_ids[i + 1])]["object"] for i in range(len(node_ids) - 1)
+            edges_dict[(node_ids[i], node_ids[i + 1])]["object"]
+            for i in range(len(node_ids) - 1)
         ]
         nodes = [nodes_dict[node_id]["object"] for node_id in node_ids]
         return EdgesLanesNodesDriver(edges=edges, nodes=nodes, *args, **kwargs)
