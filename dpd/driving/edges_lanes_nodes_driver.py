@@ -15,8 +15,8 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         """
         Preplans the nodes and edges for a Driver based on Node IDs and a nodes_dict and edges_dict
         
-        edges_dict (dict): a dictionary with a tuple of (node_id[i], node_id[i+1] as the index for each edge value, this is often a networkx.DiGraph or a pandas.DataFrame
-        nodes_dict (dict): a dictionary with node_id as the index for each node value, this is often a networkx.DiGraph or a pandas.DataFrame
+        edges_dict (dict): a dictionary with a tuple of (node_id[i], node_id[i+1] as the index for each edge value, this is often a networkx.DiGraph.edges or a pandas.DataFrame
+        nodes_dict (dict): a dictionary with node_id as the index for each node value, this is often a networkx.DiGraph.nodes or a pandas.DataFrame
         node_ids ([node_id]): a list of Node IDs that describes the route a Driver takes
         """
         edges = [
