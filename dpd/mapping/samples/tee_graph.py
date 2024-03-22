@@ -1,5 +1,5 @@
 from networkx import DiGraph
-from shapely.geometry import Point, LineString
+from shapely.geometry import LineString, Point
 
 graph = DiGraph()
 
