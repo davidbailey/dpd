@@ -1,3 +1,4 @@
+from .add_object_to_edges_and_nodes import add_object_to_edges_and_nodes
 from .cycleway import Cycleway
 from .intersection import Intersection
 from .lane import Lane
