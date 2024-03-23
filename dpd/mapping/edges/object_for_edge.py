@@ -1,5 +1,6 @@
 from .edge import Edge
 
+
 def object_for_edge(edge):
     """
     edge
