@@ -28,7 +28,7 @@ jobs:
     - name: Install package 
       run: pip install .
     - name: Lint with black
-      run: black --check --extend-exclude "agent-based_transportation_model.ipynb" .
+      run: black --check --extend-exclude "agent-based_transportation_model_legacy.ipynb" .
     - name: Lint with isort
       run: isort --check --profile black .
     - name: Lint with bandit
