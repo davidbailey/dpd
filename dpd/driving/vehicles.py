@@ -5,7 +5,7 @@ from astropy import units
 from IPython.display import display
 from pandas import read_csv
 
-from .dynamic_body_stopper import DynamicBodyStopper
+from dpd.mechanics import DynamicBody
 
 
 class Vehicles:
@@ -31,7 +31,7 @@ class Vehicles:
         self.vehicle = self.create_vehicle(value.new)
 
     def create_vehicle(self, index):
-        driver_max_velocity = int(
+        max_velocity = int(
             self.vehicles.loc[index]["Maximum speed"].split(" ")[0]
         ) * units.Unit(self.vehicles.loc[index]["Maximum speed"].split(" ")[1])
         power = int(self.vehicles.loc[index]["Power"].split(" ")[0]) * units.Unit(
@@ -41,8 +41,8 @@ class Vehicles:
             self.vehicles.loc[index]["Mass"].split(" ")[1]
         )
         return partial(
-            DynamicBodyStopper,
-            driver_max_velocity=driver_max_velocity,
+            DynamicBody,
+            max_velocity=max_velocity,
             power=power,
             mass=mass,
         )
