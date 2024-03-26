@@ -1,3 +1,5 @@
+geoviews
+hvplot
 ipykernel
 nbsphinx
 sphinx-pyreverse
