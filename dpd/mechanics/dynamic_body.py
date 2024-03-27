@@ -1,5 +1,4 @@
 from numpy import maximum, minimum
-from numpy.linalg import norm
 
 from .kinematic_body_with_acceleration import KinematicBodyWithAcceleration
 
