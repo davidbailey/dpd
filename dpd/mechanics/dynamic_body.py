@@ -19,10 +19,7 @@ class DynamicBody(KinematicBodyWithAcceleration):
         self.min_acceleration = min_acceleration
 
     def step_acceleration(self):
-        if norm(self.velocity) == 0.0:
-            self.acceleration = self.initial_acceleration
-        else:
-            self.acceleration = self.power / (self.mass * self.velocity)
+        self.acceleration = self.power / (self.mass * self.velocity)
         if self.max_acceleration is not None:
             self.acceleration = minimum(self.acceleration, self.max_acceleration)
         if self.min_acceleration is not None:
