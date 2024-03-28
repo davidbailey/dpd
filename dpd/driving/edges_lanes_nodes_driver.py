@@ -34,9 +34,8 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
             )
 
     def end_current_edge(self, *args, **kwargs):
-        if not self.waiting_at_node:
-            self.waiting_at_node = True
-            self.next_node.new_approaching_body(self)
+        self.waiting_at_node = True
+        self.next_node.new_approaching_body(self)
 
     def begin_next_node(self):
         self.next_node = self.nodes.pop(0)
@@ -47,3 +46,7 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         super().end_current_edge(
             extra_position=None
         )  # update this in cases where the driver does not stop
+
+    def step(self):
+        if not self.waiting_at_node:
+            super().step()
