@@ -6,7 +6,7 @@ from .edges_lanes_driver import EdgesLanesDriver
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
         self.nodes = nodes
-        self.waiting_at_node = True
+        self.waiting_at_node = False
         self.begin_next_node()
         super().__init__(*args, **kwargs)
 
