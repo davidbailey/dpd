@@ -38,7 +38,7 @@ class EdgesDriver(Agent):
             self.driver_position_offset = initial_driver_position_offset
         self.driver_max_velocity = driver_max_velocity
         self.driver_final_velocity = driver_final_velocity
-        self.begin_next_edge(extra_position=0 * self.distance_unit)
+        self.start_drive()
 
     @property
     def geometry(self):
@@ -51,6 +51,9 @@ class EdgesDriver(Agent):
     @property
     def position(self):
         return self.driver_position_offset + self.body.position
+
+    def start_drive(self):
+        self.begin_next_edge(extra_position=0 * self.distance_unit)
 
     def begin_next_edge(self, extra_position):
         self.current_edge = self.edges.pop(0)
