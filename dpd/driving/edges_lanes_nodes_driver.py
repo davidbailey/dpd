@@ -6,8 +6,6 @@ from .edges_lanes_driver import EdgesLanesDriver
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
         self.nodes = nodes
-        self.waiting_at_node = False
-        self.begin_next_node()
         super().__init__(*args, **kwargs)
 
     @staticmethod
@@ -26,6 +24,11 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         nodes = [nodes_dict[node_id]["object"] for node_id in node_ids]
         return EdgesLanesNodesDriver(edges=edges, nodes=nodes, *args, **kwargs)
 
+    def start_drive(self):
+        self.begin_next_node()
+        self.no_edge = True
+        self.end_current_edge()
+
     def begin_next_edge(self, *args, **kwargs):
         super().begin_next_edge(*args, **kwargs)
         if self.next_node.entry_velocity is not None:
@@ -43,9 +46,14 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
     def end_current_node(self):
         self.waiting_at_node = False
         self.begin_next_node()
-        super().end_current_edge(
-            extra_position=None
-        )  # update this in cases where the driver does not stop
+        if self.no_edge:
+            self.no_edge = False
+            begin_next_edge(extra_position=None)
+        else:
+            super().end_current_edge(
+                extra_position=None
+            )  # update this in cases where the driver does not stop
+        
 
     def step(self):
         if not self.waiting_at_node:
