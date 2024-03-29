@@ -6,6 +6,7 @@ from .edges_lanes_driver import EdgesLanesDriver
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
         self.nodes = nodes
+        self.nodes.append(nodes[-1])
         super().__init__(*args, **kwargs)
 
     @staticmethod
