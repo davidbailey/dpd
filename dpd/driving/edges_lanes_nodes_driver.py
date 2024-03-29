@@ -6,7 +6,6 @@ from .edges_lanes_driver import EdgesLanesDriver
 class EdgesLanesNodesDriver(EdgesLanesDriver):
     def __init__(self, nodes, *args, **kwargs):
         self.nodes = nodes
-        self.nodes.append(nodes[-1])
         super().__init__(*args, **kwargs)
 
     @staticmethod
@@ -45,6 +44,9 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         self.next_node = self.nodes.pop(0)
 
     def end_current_node(self):
+        if len(self.nodes) == 0:
+            self.model.schedule.remove(self)
+            return
         self.waiting_at_node = False
         self.begin_next_node()
         if self.no_edge:
