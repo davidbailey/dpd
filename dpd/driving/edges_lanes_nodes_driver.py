@@ -48,7 +48,7 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
         self.begin_next_node()
         if self.no_edge:
             self.no_edge = False
-            begin_next_edge(extra_position=None)
+            self.begin_next_edge(extra_position=None)
         else:
             super().end_current_edge(
                 extra_position=None
