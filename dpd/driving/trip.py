@@ -113,4 +113,6 @@ class Trip(GeoDataFrame):
                 lambda row: route.way.interpolate(row.position.value), axis=1
             )
             columns.append("geometry")
-        return Trip(GeoDataFrame(df, crs=route.crs)[columns])
+            return Trip(GeoDataFrame(df, crs=route.crs)[columns])
+        return Trip(GeoDataFrame(df)[columns])
+
