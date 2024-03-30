@@ -1,8 +1,7 @@
 from .edges import object_for_edge
-from .nodes import object_for_node
 
 
-def add_object_to_edges_and_nodes(graph):
+def add_object_to_edges_and_nodes(graph, node_model):
     """
     Adds Edge and Node objects to each Edge and Node in a Graph
 
@@ -12,6 +11,6 @@ def add_object_to_edges_and_nodes(graph):
     for edge in graph.edges:
         graph.edges[edge]["object"] = object_for_edge(graph.edges[edge])
     for node in graph.nodes:
-        graph.nodes[node]["object"] = object_for_node(graph.nodes[node])
+        graph.nodes[node]["object"] = node_model.object_for_node(graph.nodes[node])
 
     return graph
