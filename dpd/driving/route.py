@@ -7,7 +7,6 @@ from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
 from dpd.geometry import circle_from_three_points
-from dpd.mapping.edges import object_for_edge
 from dpd.osm import OSM
 
 
