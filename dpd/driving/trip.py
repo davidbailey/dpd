@@ -93,7 +93,7 @@ class Trip(GeoDataFrame):
                         "geometry": Point(stop.stop_lon, stop.stop_lat),
                         "name": stop.stop_name,
                         "timedelta": time,
-                        "total_distance": row.shape_dist_traveled
+                        "total_distance": row["shape_distance_traveled"]
                         * units.Unit(feed.dist_units),
                         "total_time": (time - start_time).seconds * units.second,
                     }
