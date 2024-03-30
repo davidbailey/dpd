@@ -109,13 +109,21 @@ class Route(GeoDataFrame):
             )
         else:
             return self.way.interpolate(row.total_distance.value)
-   
-    @property        
+
+    @property
     def edges(self):
-         return GeoDataFrame(
-            [self.distances, self.speed_limits, [1 for x in range(len(self) - 1)], list(
-            map(lambda x: LineString(x), zip(self["geometry"][:-1], self["geometry"][:-1]))
-        )],
+        return GeoDataFrame(
+            [
+                self.distances,
+                self.speed_limits,
+                [1 for x in range(len(self) - 1)],
+                list(
+                    map(
+                        lambda x: LineString(x),
+                        zip(self["geometry"][:-1], self["geometry"][:-1]),
+                    )
+                ),
+            ],
             index=["length", "maxspeed", "lanes", "geometry"],
             columns=list(zip(self.index[:-1], self.index[1:])),
         ).T.set_geometry("geometry", crs=self.crs)

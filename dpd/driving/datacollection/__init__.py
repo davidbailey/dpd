@@ -1,5 +1,7 @@
 BODY_DRIVER_REPORTERS = {"position": "position"}
-KINEMATIC_BODY_DRIVER_REPORTERS = BODY_DRIVER_REPORTERS | {"velocity": lambda x: x.body.velocity}
+KINEMATIC_BODY_DRIVER_REPORTERS = BODY_DRIVER_REPORTERS | {
+    "velocity": lambda x: x.body.velocity
+}
 KINEMATIC_BODY_WITH_ACCELERATION_DRIVER_REPORTERS = KINEMATIC_BODY_DRIVER_REPORTERS | {
     "acceleration": lambda x: x.body.acceleration
 }

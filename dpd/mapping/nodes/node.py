@@ -5,6 +5,7 @@ class Node(Agent):
     """
     A node.
     """
+
     def __init__(self, geometry, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.geometry = geometry

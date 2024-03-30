@@ -56,7 +56,6 @@ class EdgesLanesNodesDriver(EdgesLanesDriver):
             super().end_current_edge(
                 extra_position=None
             )  # update this in cases where the driver does not stop
-        
 
     def step(self):
         if not self.waiting_at_node:

@@ -115,4 +115,3 @@ class Trip(GeoDataFrame):
             columns.append("geometry")
             return Trip(GeoDataFrame(df, crs=route.crs)[columns])
         return Trip(GeoDataFrame(df)[columns])
-
