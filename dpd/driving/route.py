@@ -2,10 +2,12 @@ from astropy import units
 from astropy.constants import g0
 from geopandas import GeoDataFrame
 from numpy import concatenate, minimum, sqrt
+from pandas import isna
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
 from dpd.geometry import circle_from_three_points
+from dpd.mapping.edges import object_for_edge
 from dpd.osm import OSM
 
 
@@ -29,6 +31,9 @@ class Route(GeoDataFrame):
         self.gague = gague
         self.max_cant = max_cant
         self.max_cant_deficiency = max_cant_deficiency
+        self["type"] = self["name"].map(lambda x: "node" if isna(x) else "stop")
+        self["dwell_time"] = self["type"].map(lambda x: 45 if x == "stop" else None)
+        self["distance_to_point"] = concatenate(([0], self.distances)).cumsum()
 
     @property
     def reversed(self):
@@ -104,6 +109,16 @@ class Route(GeoDataFrame):
             )
         else:
             return self.way.interpolate(row.total_distance.value)
+   
+    @property        
+    def edges(self):
+         return GeoDataFrame(
+            [self.distances, self.speed_limits, [1 for x in range(len(self) - 1)], list(
+            map(lambda x: LineString(x), zip(self["geometry"][:-1], self["geometry"][:-1]))
+        )],
+            index=["length", "maxspeed", "lanes", "geometry"],
+            columns=list(zip(self.index[:-1], self.index[1:])),
+        ).T.set_geometry("geometry", crs=self.crs)
 
     def segments(self, dwell_time):
         segments = []
