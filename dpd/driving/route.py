@@ -30,9 +30,6 @@ class Route(GeoDataFrame):
         self.gague = gague
         self.max_cant = max_cant
         self.max_cant_deficiency = max_cant_deficiency
-        self["type"] = self["name"].map(lambda x: "node" if isna(x) else "stop")
-        self["dwell_time"] = self["type"].map(lambda x: 45 if x == "stop" else None)
-        self["distance_to_point"] = concatenate(([0], self.distances)).cumsum()
 
     @property
     def reversed(self):
@@ -250,4 +247,7 @@ class Route(GeoDataFrame):
                     osm.nodes[member["ref"]].geo,
                     osm.nodes[member["ref"]].osm["tags"]["name"],
                 )
+        route["type"] = route["name"].map(lambda x: "node" if isna(x) else "stop")
+        route["dwell_time"] = route["type"].map(lambda x: 45 if x == "stop" else None)
+        route["distance_to_point"] = concatenate(([0], route.distances)).cumsum()
         return route
