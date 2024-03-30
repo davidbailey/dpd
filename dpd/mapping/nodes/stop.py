@@ -1,16 +1,14 @@
-from mesa import Agent
-
 from .node import Node
 
 
-class Stop(Node, Agent):
+class Stop(Node):
     """
     train station, bus stop
     """
 
-    def __init__(self, dwell_time, *args, **kwargs):
+    def __init__(self, dwell_time, entry_velocity=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.entry_velocity = 0
+        self.entry_velocity = entry_velocity
         self.dwell_time = dwell_time
         self.queue = {}
 
