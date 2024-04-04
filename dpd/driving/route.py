@@ -260,7 +260,4 @@ class Route(GeoDataFrame):
                     osm.nodes[member["ref"]].geo,
                     osm.nodes[member["ref"]].osm["tags"]["name"],
                 )
-        route["type"] = route["name"].map(lambda x: "node" if isna(x) else "stop")
-        route["dwell_time"] = route["type"].map(lambda x: 45 if x == "stop" else None)
-        route["distance_to_point"] = concatenate(([0], route.distances)).cumsum()
         return route
