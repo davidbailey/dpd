@@ -1,3 +1,4 @@
+from functools import lru_cache 
 from logging import warn
 
 from astropy.units import Quantity, meter
@@ -41,6 +42,7 @@ class EdgesDriver(Agent):
         self.start_drive()
 
     @property
+    @lru_cache(maxsize = 1)
     def geometry(self):
         if isinstance(self.body.position, Quantity):
             return self.current_edge.geometry.interpolate(
