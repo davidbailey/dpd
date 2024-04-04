@@ -50,11 +50,13 @@ class Route(GeoDataFrame):
         """
         Returns a list of distances between every pair of points along the route.
         """
-        self.to_crs(epsg=4087, inplace=True)
-        distances = [0]
-        for i in range(len(self) - 1):
-            distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]))
-        return distances * units.meter
+        if self.crs is not None:
+            self.to_crs(epsg=4087, inplace=True)
+        distance_to_point = [0.0] + [self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]) for i in range(len(self) - 1)]
+        if self.crs is not None:
+            return distance_to_point * units.meter
+        return distance_to_point
+        
 
     @property
     def distances(self):
