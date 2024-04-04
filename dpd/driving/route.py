@@ -1,7 +1,7 @@
 from astropy import units
 from astropy.constants import g0
 from geopandas import GeoDataFrame
-from numpy import concatenate, minimum, sqrt
+from numpy import array, concatenate, minimum, sqrt
 from pandas import isna
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
@@ -53,6 +53,7 @@ class Route(GeoDataFrame):
         if self.crs is not None:
             self.to_crs(epsg=4087, inplace=True)
         distance_to_point = [0.0] + [self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]) for i in range(len(self) - 1)]
+        distance_to_point = array(distance_to_point).cumsum()
         if self.crs is not None:
             return distance_to_point * units.meter
         return distance_to_point
