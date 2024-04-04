@@ -46,6 +46,17 @@ class Route(GeoDataFrame):
         return LineString(self["geometry"])
 
     @property
+    def distance_to_point(self):
+        """
+        Returns a list of distances between every pair of points along the route.
+        """
+        self.to_crs(epsg=4087, inplace=True)
+        distances = [0]
+        for i in range(len(self) - 1):
+            distances.append(self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]))
+        return distances * units.meter
+
+    @property
     def distances(self):
         """
         Returns a list of distances between every pair of points along the route.
