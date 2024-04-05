@@ -2,7 +2,7 @@ from astropy import units
 from astropy.constants import g0
 from geopandas import GeoDataFrame
 from numpy import concatenate, minimum, sqrt
-from pandas import isna
+from pandas import Series, isna
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point
 from shapely.ops import linemerge, nearest_points
 
@@ -44,6 +44,17 @@ class Route(GeoDataFrame):
     @property
     def way(self):
         return LineString(self["geometry"])
+
+    @property
+    def distance_to_point(self):
+        """
+        Returns a list of distances between every pair of points along the route.
+        """
+        distance_unit = 1
+        if self.crs is not None:
+            self.to_crs(epsg=4087, inplace=True)
+            distance_unit = units.meter
+        return Series([0.0 * distance_unit] + [self.geometry.iloc[i].distance(self.geometry.iloc[i + 1]) * distance_unit for i in range(len(self) - 1)], index=self.index).cumsum()
 
     @property
     def distances(self):
@@ -247,7 +258,4 @@ class Route(GeoDataFrame):
                     osm.nodes[member["ref"]].geo,
                     osm.nodes[member["ref"]].osm["tags"]["name"],
                 )
-        route["type"] = route["name"].map(lambda x: "node" if isna(x) else "stop")
-        route["dwell_time"] = route["type"].map(lambda x: 45 if x == "stop" else None)
-        route["distance_to_point"] = concatenate(([0], route.distances)).cumsum()
         return route

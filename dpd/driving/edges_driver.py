@@ -1,4 +1,4 @@
-from functools import lru_cache 
+from functools import lru_cache
 from logging import warn
 
 from astropy.units import Quantity, meter
