@@ -85,9 +85,9 @@ class Route(GeoDataFrame):
                     (self.geometry.iloc[i].x, self.geometry.iloc[i].y),
                     (self.geometry.iloc[i + 1].x, self.geometry.iloc[i + 1].y),
                     (self.geometry.iloc[i + 2].x, self.geometry.iloc[i + 2].y),
-                )[1] * units.meter
+                )[1]
             )
-        return radius_of_curvature
+        return radius_of_curvature * units.meter
 
     def speed_limit(self, radius_of_curvature):
         """
