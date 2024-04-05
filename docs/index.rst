@@ -7,6 +7,7 @@ https://github.com/davidbailey/dpd
    :maxdepth: 2
 
    notebooks/agent-based_transportation_model.ipynb
+   notebooks/agent-based_transportation_model_washington_dc.ipynb
    notebooks/analysis.ipynb
    notebooks/density_and_public_transportation.ipynb
    notebooks/driving.ipynb
