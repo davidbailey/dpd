@@ -30,6 +30,7 @@ setup(
         "mapclassify",
         "matplotlib",
         "mesa",
+        "mesa-geo",
         "movingpandas",
         "networkx",
         "numpy",
