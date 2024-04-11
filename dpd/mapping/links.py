@@ -8,9 +8,7 @@ class Links(GeometricDict):
     A class to hold Links.
     """
 
-    def plot_folium(
-        self, folium_map, columns=["geometry", "segments"], **kwargs
-    ):
+    def plot_folium(self, folium_map, columns=["geometry", "segments"], **kwargs):
         gdf = self.to_geodataframe(columns)
         gdf["name"] = gdf.index
         gdf["number_of_segments"] = gdf["segments"].map(
