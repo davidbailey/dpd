@@ -6,8 +6,6 @@ from matplotlib import pyplot as plt
 from pyproj import Transformer
 from shapely.ops import transform
 
-from dpd.geopandas import filter_geodataframe
-
 
 class GeometricDict(UserDict):
     """
@@ -49,12 +47,9 @@ class GeometricDict(UserDict):
         gdf = self.to_geodataframe(columns=columns)
         return gdf.to_json()
 
-    def plot(self, columns=["geometry"], filter_box=None, **kwargs):
+    def plot(self, columns=["geometry"], **kwargs):
         gdf = self.to_geodataframe(columns)
-        if filter_box:
-            plot_gdf = filter_geodataframe(gdf, filter_box=filter_box)
-        else:
-            plot_gdf = gdf
+        plot_gdf = gdf
         plot_gdf.plot(**kwargs)
         for idx, row in plot_gdf.iterrows():
             plt.annotate(
@@ -63,13 +58,10 @@ class GeometricDict(UserDict):
                 horizontalalignment="center",
             )
 
-    def plot_folium(self, folium_map, columns=["geometry"], filter_box=None, **kwargs):
+    def plot_folium(self, folium_map, columns=["geometry"], **kwargs):
         gdf = self.to_geodataframe(columns)
         gdf["name"] = gdf.index
-        if filter_box:
-            plot_gdf = filter_geodataframe(gdf, filter_box)
-        else:
-            plot_gdf = gdf
+        plot_gdf = gdf
         tooltip = folium.features.GeoJsonTooltip(fields=["name"])
         geojson = folium.GeoJson(
             plot_gdf[["name", "geometry"]].to_json(), tooltip=tooltip, **kwargs
