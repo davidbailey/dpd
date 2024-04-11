@@ -1,7 +1,6 @@
 import folium
 
 from dpd.geometry import GeometricDict
-from dpd.geopandas import filter_geodataframe
 
 
 class Links(GeometricDict):
@@ -10,7 +9,7 @@ class Links(GeometricDict):
     """
 
     def plot_folium(
-        self, folium_map, columns=["geometry", "segments"], filter_box=None, **kwargs
+        self, folium_map, columns=["geometry", "segments"], **kwargs
     ):
         gdf = self.to_geodataframe(columns)
         gdf["name"] = gdf.index
@@ -20,10 +19,7 @@ class Links(GeometricDict):
         gdf["segment_types"] = gdf["segments"].map(
             lambda segments: str(list(map(type, segments)))
         )
-        if filter_box:
-            plot_gdf = filter_geodataframe(gdf, filter_box)
-        else:
-            plot_gdf = gdf
+        plot_gdf = gdf
         style_function = lambda x: {  # noqa: E731
             "weight": x["properties"]["number_of_segments"]
         }
