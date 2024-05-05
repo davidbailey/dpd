@@ -1,7 +1,7 @@
 from astropy import units
 from pandas import Series
 
-from dpd.analysis.units import usd
+from dpd.analysis.units import usd2020
 
 units.imperial.enable()
 
@@ -31,7 +31,7 @@ LightRail = Series(
 HeavyRail = Series(
     [
         2 * units.imperial.mile / units.imperial.mile,
-        4214 * usd / units.imperial.foot,
+        4214 * usd2020 / units.imperial.foot,
     ],
     index=[
         "Rail Miles / Mile",
