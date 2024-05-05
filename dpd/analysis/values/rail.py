@@ -13,7 +13,7 @@ LightRail = Series(
         2 * units.imperial.mile / units.imperial.mile,
         2110 / units.imperial.mile,
         2110 * 4 / units.imperial.mile,
-        121000 * units.imperial.pounds / units.imperial.mile,
+        121000 * units.imperial.pound / units.imperial.mile,
         38 / units.imperial.mile,
     ],
     index=[
